@@ -130,3 +130,140 @@ body {
     align-items: center;
   }
 }
+
+/* Character Stats Page Styles */
+.character-stats-page {
+  min-height: 100vh;
+  background: url('/textures/planks.png') repeat;
+  padding: 40px 20px;
+}
+
+.character-stats-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.character-stats-title {
+  font-size: 3rem;
+  text-align: center;
+  color: #333;
+  margin-bottom: 40px;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+}
+
+.character-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.character-profile {
+  background: #7d7d7d;
+  border: 4px solid;
+  border-color: #555555 #a5a5a5 #a5a5a5 #555555;
+  box-shadow: inset 2px 2px 0px rgba(255, 255, 255, 0.3), inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-frame {
+  margin-bottom: 20px;
+}
+
+.profile-image-border {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  border: 8px solid #8b4513;
+  box-shadow: inset 2px 2px 0px rgba(139, 69, 19, 0.3), inset -2px -2px 0px rgba(0, 0, 0, 0.5);
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.profile-info {
+  color: white;
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.profile-level {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.character-details {
+  background: #7d7d7d;
+  border: 4px solid;
+  border-color: #555555 #a5a5a5 #a5a5a5 #555555;
+  box-shadow: inset 2px 2px 0px rgba(255, 255, 255, 0.3), inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+}
+
+.character-description {
+  background: #ffffec;
+  color: #333;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 3px solid #8b4513;
+  box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.3), inset -1px -1px 0px rgba(0, 0, 0, 0.2);
+  font-family: "MinecraftFont", "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.achievements {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.achievement-box {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #555;
+  padding: 15px;
+  text-align: center;
+  box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.1), inset -1px -1px 0px rgba(0, 0, 0, 0.3);
+}
+
+.achievement-title {
+  color: #ffd700;
+  font-size: 12px;
+  margin-bottom: 8px;
+  font-family: "MinecraftFont", "Courier New", monospace;
+}
+
+.achievement-text {
+  color: white;
+  font-size: 11px;
+  font-family: "MinecraftFont", "Courier New", monospace;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .character-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .character-stats-title {
+    font-size: 2rem;
+  }
+  
+  .profile-image-border {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .achievements {
+    grid-template-columns: 1fr;
+  }
+}
