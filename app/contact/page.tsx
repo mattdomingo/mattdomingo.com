@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import emailjs from '@emailjs/browser'
 import MinecraftNavbar from "@/components/minecraft-navbar"
@@ -15,6 +15,50 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [cooldownEndTime, setCooldownEndTime] = useState<number | null>(null)
+  const [remainingTime, setRemainingTime] = useState<number>(0)
+
+  // Check for existing cooldown on component mount
+  useEffect(() => {
+    const storedCooldownEnd = localStorage.getItem('contactFormCooldownEnd')
+    if (storedCooldownEnd) {
+      const endTime = parseInt(storedCooldownEnd)
+      const now = Date.now()
+      if (endTime > now) {
+        setCooldownEndTime(endTime)
+        setRemainingTime(Math.ceil((endTime - now) / 1000))
+      } else {
+        localStorage.removeItem('contactFormCooldownEnd')
+      }
+    }
+  }, [])
+
+  // Update remaining time every second during cooldown
+  useEffect(() => {
+    if (cooldownEndTime) {
+      const interval = setInterval(() => {
+        const now = Date.now()
+        const remaining = Math.ceil((cooldownEndTime - now) / 1000)
+        
+        if (remaining <= 0) {
+          setCooldownEndTime(null)
+          setRemainingTime(0)
+          localStorage.removeItem('contactFormCooldownEnd')
+          clearInterval(interval)
+        } else {
+          setRemainingTime(remaining)
+        }
+      }, 1000)
+
+      return () => clearInterval(interval)
+    }
+  }, [cooldownEndTime])
+
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -30,6 +74,13 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Check if user is in cooldown
+    if (cooldownEndTime && Date.now() < cooldownEndTime) {
+      setSubmitStatus('error')
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitStatus('idle')
 
@@ -61,6 +112,12 @@ export default function ContactPage() {
 
       setSubmitStatus('success')
       setFormData({ name: '', email: '', message: '' })
+      
+      // Set 10-minute cooldown
+      const cooldownEnd = Date.now() + 600000 // 10 minutes in milliseconds
+      setCooldownEndTime(cooldownEnd)
+      setRemainingTime(600) // 10 minutes in seconds
+      localStorage.setItem('contactFormCooldownEnd', cooldownEnd.toString())
     } catch (error) {
       console.error('Failed to send message:', error)
       setSubmitStatus('error')
@@ -163,22 +220,36 @@ export default function ContactPage() {
 
                 <button 
                   type="submit" 
-                  disabled={isSubmitting}
-                  className={`send-message-btn minecraft-text ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={isSubmitting || (cooldownEndTime !== null && Date.now() < cooldownEndTime)}
+                  className={`send-message-btn minecraft-text ${
+                    (isSubmitting || (cooldownEndTime !== null && Date.now() < cooldownEndTime)) 
+                      ? 'opacity-50 cursor-not-allowed' 
+                      : ''
+                  }`}
                 >
-                  {isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}
+                  {isSubmitting 
+                    ? 'SENDING...' 
+                    : cooldownEndTime !== null && Date.now() < cooldownEndTime
+                      ? `COOLDOWN: ${formatTime(remainingTime)}`
+                      : 'SEND MESSAGE'
+                  }
                 </button>
 
                 {/* Status Messages */}
                 {submitStatus === 'success' && (
                   <div className="status-message success minecraft-text">
                     ✅ Message sent successfully! I&apos;ll get back to you soon.
+                    <br />
+                    <small>⏰ You can send another message in 10 minutes.</small>
                   </div>
                 )}
                 
                 {submitStatus === 'error' && (
                   <div className="status-message error minecraft-text">
-                    ❌ Failed to send message. Please try again or email me directly.
+                    {cooldownEndTime !== null && Date.now() < cooldownEndTime
+                      ? `⏰ Please wait ${formatTime(remainingTime)} before sending another message.`
+                      : '❌ Failed to send message. Please try again or email me directly.'
+                    }
                   </div>
                 )}
               </form>
