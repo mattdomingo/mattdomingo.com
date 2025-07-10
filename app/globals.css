@@ -1425,7 +1425,7 @@ body {
   padding: 10px;
   font-family: "MinecraftFont", "Courier New", monospace;
   font-size: 10px;
-  color: #ffffff;
+  color: #000000;
   outline: none;
 }
 
@@ -1468,6 +1468,54 @@ body {
   box-shadow: 
     inset -2px -2px 0px rgba(255, 255, 255, 0.3), 
     inset 2px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+/* Status Messages */
+.status-message {
+  margin-top: 15px;
+  padding: 15px 20px;
+  border: 3px solid;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.3), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  font-size: 14px;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+  animation: fadeIn 0.3s ease-in;
+}
+
+.status-message.success {
+  background: #4CAF50;
+  border-color: #5CBF60 #3E8E41 #3E8E41 #5CBF60;
+  color: white;
+}
+
+.status-message.error {
+  background: #F44336;
+  border-color: #F55A4E #D32F2F #D32F2F #F55A4E;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Page Transition Styles */
+.page-transition-wrapper {
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+/* Prevent layout shift during transitions */
+body {
+  overflow-x: hidden;
 }
 
 /* Social Links Section */

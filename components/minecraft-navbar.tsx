@@ -1,6 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 export default function MinecraftNavbar() {
   const pathname = usePathname()
@@ -17,22 +18,22 @@ export default function MinecraftNavbar() {
     <nav className="minecraft-navbar">
       <div className="minecraft-navbar-container">
         <div className="minecraft-navbar-brand">
-          <a href="/" className="minecraft-navbar-logo">
+          <Link href="/" className="minecraft-navbar-logo">
             <span className="navbar-logo-icon">⛏️</span>
             <span className="navbar-logo-text">MATT DOMINGO</span>
-          </a>
+          </Link>
         </div>
         
         <div className="minecraft-navbar-menu">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className={`minecraft-navbar-item ${pathname === item.href ? 'active' : ''}`}
             >
               <span className="navbar-item-icon">{item.icon}</span>
               <span className="navbar-item-text">{item.label}</span>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

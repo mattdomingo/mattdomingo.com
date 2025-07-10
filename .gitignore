@@ -118,3 +118,33 @@ temp/
 
 # Turborepo
 .turbo
+
+# Production build
+/build
+
+# Miscellaneous
+*.tgz
+*.tar.gz
+
+# Local development
+.env.local.example
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# MacOS
+.DS_Store
+
+# Testing
+/coverage
+*.lcov
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.backup
+*.bak

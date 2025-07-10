@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import MinecraftNavbar from "@/components/minecraft-navbar"
+import PageTransition from "@/components/page-transition"
 
 export default function ResumePage() {
   const [isLoading, setIsLoading] = useState(true)
@@ -31,7 +32,8 @@ export default function ResumePage() {
   return (
     <>
       <MinecraftNavbar />
-      <div className="resume-viewer-page page-with-navbar">
+      <PageTransition>
+        <div className="resume-viewer-page page-with-navbar">
         <div className="resume-viewer-container">
           <div className="resume-header">
             <h1 className="resume-title minecraft-text">RESUME VIEWER</h1>
@@ -62,7 +64,7 @@ export default function ResumePage() {
 
           <div className="resume-fallback">
             <p className="minecraft-text">
-              Can't view the PDF? 
+              Can&apos;t view the PDF? 
               <button 
                 onClick={handleDownload}
                 className="download-fallback-btn minecraft-text"
@@ -72,7 +74,8 @@ export default function ResumePage() {
             </p>
           </div>
         </div>
-      </div>
+        </div>
+      </PageTransition>
     </>
   )
 } 
