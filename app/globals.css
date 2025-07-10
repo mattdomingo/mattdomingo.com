@@ -1124,6 +1124,297 @@ body {
   border-color: #777 #333 #333 #777;
 }
 
+/* Trading Post Contact Page Styles */
+.trading-post-page {
+  min-height: 100vh;
+  background: url('/textures/planks.png') repeat;
+  background-size: 64px 64px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.trading-post-title {
+  font-size: 4rem;
+  text-align: center;
+  color: #333;
+  margin-bottom: 40px;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.1em;
+}
+
+.trading-post-container {
+  max-width: 1200px;
+  width: 100%;
+  background: rgba(139, 69, 19, 0.9);
+  border: 4px solid;
+  border-color: #654321 #8B4513 #8B4513 #654321;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.3), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.trading-post-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+/* Left Side - Trade Section */
+.trade-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.trade-with-me-box {
+  background: rgba(0, 0, 0, 0.8);
+  border: 3px solid;
+  border-color: #333 #666 #666 #333;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.1), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+}
+
+.trade-section-title {
+  color: white;
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
+
+.trade-description {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+}
+
+.resume-download-box {
+  background: rgba(0, 0, 0, 0.8);
+  border: 3px solid;
+  border-color: #333 #666 #666 #333;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.1), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  text-align: center;
+}
+
+.resume-section-title {
+  color: white;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
+
+.resume-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.resume-view-btn,
+.resume-download-btn {
+  border: 3px solid;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.2), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  color: white;
+  padding: 10px 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+}
+
+.resume-view-btn {
+  background: #28a745;
+  border-color: #34ce57 #1e7e34 #1e7e34 #34ce57;
+}
+
+.resume-view-btn:hover {
+  background: #34ce57;
+  transform: translateY(-1px);
+}
+
+.resume-download-btn {
+  background: #8B4513;
+  border-color: #A0522D #654321 #654321 #A0522D;
+}
+
+.resume-download-btn:hover {
+  background: #A0522D;
+  transform: translateY(-1px);
+}
+
+.resume-view-btn:active,
+.resume-download-btn:active {
+  transform: translateY(1px);
+  box-shadow: 
+    inset -2px -2px 0px rgba(255, 255, 255, 0.2), 
+    inset 2px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+/* Right Side - Contact Form */
+.contact-form-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3);
+}
+
+.form-input,
+.form-textarea {
+  background: #D3D3D3;
+  border: 2px solid;
+  border-color: #999 #CCC #CCC #999;
+  box-shadow: 
+    inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  font-family: "MinecraftFont", "Courier New", monospace;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #666 #AAA #AAA #666;
+  box-shadow: 
+    inset 1px 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(0, 123, 255, 0.3);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.send-message-btn {
+  background: #4A90E2;
+  border: 3px solid;
+  border-color: #5BA0F2 #2E70B2 #2E70B2 #5BA0F2;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.3), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  color: white;
+  padding: 15px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+  margin-top: 10px;
+}
+
+.send-message-btn:hover {
+  background: #5BA0F2;
+  transform: translateY(-1px);
+}
+
+.send-message-btn:active {
+  transform: translateY(1px);
+  box-shadow: 
+    inset -2px -2px 0px rgba(255, 255, 255, 0.3), 
+    inset 2px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+/* Social Links Section */
+.find-me-section {
+  text-align: center;
+}
+
+.find-me-title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border: 3px solid;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.3), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  transform: translateY(-2px);
+}
+
+.social-link:active {
+  transform: translateY(1px);
+  box-shadow: 
+    inset -2px -2px 0px rgba(255, 255, 255, 0.3), 
+    inset 2px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+.social-link.github {
+  background: #333;
+  border-color: #555 #111 #111 #555;
+  color: white;
+}
+
+.social-link.linkedin {
+  background: #0077B5;
+  border-color: #0088CC #005580 #005580 #0088CC;
+  color: white;
+}
+
+.social-link.twitter {
+  background: #1DA1F2;
+  border-color: #42AAFF #0D8BD9 #0D8BD9 #42AAFF;
+  color: white;
+}
+
+.social-link.email {
+  background: #DC3545;
+  border-color: #E85B6B #B21E2B #B21E2B #E85B6B;
+  color: white;
+}
+
+.social-icon {
+  width: 24px;
+  height: 24px;
+}
+
 /* Responsive design for builds gallery */
 @media (max-width: 1024px) {
   .builds-gallery-title {
@@ -1132,6 +1423,15 @@ body {
 
   .projects-grid {
     gap: 30px;
+  }
+
+  .trading-post-main {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .trading-post-title {
+    font-size: 3rem;
   }
 }
 
@@ -1157,6 +1457,38 @@ body {
   .project-image-container {
     height: 150px;
   }
+
+  /* Trading Post Mobile Styles */
+  .trading-post-title {
+    font-size: 2.5rem;
+  }
+
+  .trading-post-container {
+    padding: 20px;
+    margin: 0 10px 30px 10px;
+  }
+
+  .trading-post-main {
+    gap: 15px;
+  }
+
+  .find-me-title {
+    font-size: 1.5rem;
+  }
+
+  .social-links {
+    gap: 15px;
+  }
+
+  .social-link {
+    width: 50px;
+    height: 50px;
+  }
+
+  .social-icon {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1175,5 +1507,238 @@ body {
   .filter-button {
     padding: 4px 8px;
     font-size: 11px;
+  }
+
+  /* Trading Post Small Mobile Styles */
+  .trading-post-page {
+    padding: 20px 10px;
+  }
+
+  .trading-post-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .trading-post-container {
+    padding: 15px;
+    margin: 0 5px 20px 5px;
+  }
+
+  .trading-post-main {
+    gap: 15px;
+  }
+
+  .trade-with-me-box,
+  .resume-download-box {
+    padding: 15px;
+  }
+
+  .trade-section-title {
+    font-size: 16px;
+  }
+
+  .resume-section-title {
+    font-size: 14px;
+  }
+
+  .find-me-title {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+
+  .social-links {
+    gap: 10px;
+  }
+
+  .social-link {
+    width: 45px;
+    height: 45px;
+  }
+
+  .social-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .send-message-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}
+
+/* Resume Viewer Page Styles */
+.resume-viewer-page {
+  min-height: 100vh;
+  background: url('/textures/dirt.png') repeat;
+  padding: 120px 20px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.resume-viewer-container {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.resume-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 4px solid;
+  border-color: #555555 #a5a5a5 #a5a5a5 #555555;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.3), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.resume-title {
+  font-size: 3rem;
+  color: white;
+  margin: 0;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.8);
+}
+
+.resume-controls {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.resume-control-btn {
+  padding: 12px 20px !important;
+  font-size: 14px !important;
+  text-decoration: none !important;
+  display: inline-block;
+  text-align: center;
+}
+
+.resume-viewer-frame {
+  position: relative;
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid;
+  border-color: #555555 #a5a5a5 #a5a5a5 #555555;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.3), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  min-height: 800px;
+}
+
+.resume-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 18px;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
+
+.resume-pdf-viewer {
+  width: 100%;
+  height: 800px;
+  border: none;
+  background: white;
+  border-radius: 4px;
+}
+
+.resume-fallback {
+  text-align: center;
+  background: rgba(139, 69, 19, 0.9);
+  border: 3px solid;
+  border-color: #A0522D #654321 #654321 #A0522D;
+  box-shadow: 
+    inset 2px 2px 0px rgba(255, 255, 255, 0.2), 
+    inset -2px -2px 0px rgba(0, 0, 0, 0.3);
+  padding: 15px;
+}
+
+.resume-fallback p {
+  color: white;
+  margin: 0;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+}
+
+.download-fallback-btn {
+  background: none;
+  border: none;
+  color: #4A90E2;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 10px;
+  padding: 0;
+  font-size: inherit;
+}
+
+.download-fallback-btn:hover {
+  color: #5BA0F2;
+}
+
+/* Resume Viewer Mobile Styles */
+@media (max-width: 768px) {
+  .resume-viewer-page {
+    padding: 110px 15px 15px 15px;
+  }
+
+  .resume-header {
+    flex-direction: column;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .resume-title {
+    font-size: 2.5rem;
+  }
+
+  .resume-controls {
+    justify-content: center;
+  }
+
+  .resume-pdf-viewer {
+    height: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .resume-viewer-page {
+    padding: 100px 10px 10px 10px;
+  }
+
+  .resume-header {
+    padding: 15px;
+    margin-top: 10px;
+  }
+
+  .resume-title {
+    font-size: 2rem;
+  }
+
+  .resume-viewer-frame {
+    padding: 15px;
+    min-height: 500px;
+  }
+
+  .resume-pdf-viewer {
+    height: 500px;
+  }
+
+  .resume-control-btn {
+    padding: 10px 15px !important;
+    font-size: 12px !important;
   }
 }
