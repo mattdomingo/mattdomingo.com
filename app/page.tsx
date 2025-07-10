@@ -7,6 +7,10 @@ export default function HomePage() {
 
   const lookingForWorkPhrases = [
     "Also try... hiring me!",
+    "Also try... hiring me!",
+    "Also try... hiring me!",
+    "Also try... hiring me!",
+    "Also try... hiring me!",
     "Looking for opportunities!",
     "Open to new roles!",
     "Seeking employment!",
