@@ -115,15 +115,36 @@ body {
 
 .landing-page {
   min-height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 60px 40px;
   text-align: center;
-  max-width: 1400px;
-  margin: 0 auto;
   position: relative;
+  background: url('/textures/landing1.gif') center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.landing-page > * {
+  max-width: 1400px;
+  width: 100%;
+}
+
+.landing-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('/textures/landing1.gif') center center;
+  background-size: cover;
+  background-attachment: fixed;
+  filter: blur(2px);
+  z-index: -1;
 }
 
 /* Minecraft-style splash text */
@@ -146,15 +167,15 @@ body {
 
 @keyframes minecraftPulse {
   0% {
-    transform: translate(-50%, -50%) translateX(510px) translateY(-210px) rotate(-20deg) scale(1);
+    transform: translate(-50%, -50%) translateX(510px) translateY(-210px) rotate(-20deg) scale(1.3);
     opacity: 0.8;
   }
   50% {
-    transform: translate(-50%, -50%) translateX(510px) translateY(-210px) rotate(-20deg) scale(1.1);
+    transform: translate(-50%, -50%) translateX(510px) translateY(-210px) rotate(-20deg) scale(1.4);
     opacity: 1;
   }
   100% {
-    transform: translate(-50%, -50%) translateX(510px) translateY(-210px) rotate(-20deg) scale(1);
+    transform: translate(-50%, -50%) translateX(510px) translateY(-210px) rotate(-20deg) scale(1.3);
     opacity: 0.8;
   }
 }
@@ -273,7 +294,7 @@ body {
 .character-stats-title {
   font-size: 5rem;
   text-align: center;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 60px;
   text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
 }
@@ -446,7 +467,7 @@ body {
 .skills-inventory-title {
   font-size: 4rem;
   text-align: center;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 40px;
   text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
   font-family: "MinecraftFont", "Courier New", monospace;
@@ -958,9 +979,36 @@ body {
 /* Builds Gallery Page Styles */
 .builds-gallery-page {
   min-height: 100vh;
+  padding: 40px 20px;
+  position: relative;
+  background: url('/textures/portal.gif') repeat;
+  background-size: 150px 150px;
+  animation: slowScrollDownPortal 50s linear infinite;
+  overflow: hidden;
+}
+
+.builds-gallery-page::before,
+.builds-gallery-page::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: url('/textures/portal.gif') repeat;
   background-size: 100px 100px;
-  padding: 40px 20px;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.builds-gallery-page::before {
+  animation: slowScrollDownPortal2 70s linear infinite;
+  opacity: 0.8;
+}
+
+.builds-gallery-page::after {
+  animation: slowScrollDownPortal3 40s linear infinite;
+  opacity: 0.6;
 }
 
 .builds-gallery-container {
@@ -971,7 +1019,7 @@ body {
 .builds-gallery-title {
   font-size: 4rem;
   text-align: center;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 60px;
   text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
   letter-spacing: 0.1em;
@@ -1127,18 +1175,97 @@ body {
 /* Trading Post Contact Page Styles */
 .trading-post-page {
   min-height: 100vh;
-  background: url('/textures/planks.png') repeat;
-  background-size: 64px 64px;
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: url('/textures/planks.png') repeat;
+}
+
+
+
+@keyframes bgShift1 {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-50px, -100px); }
+  50% { transform: translate(-200px, -50px); }
+  75% { transform: translate(-150px, -150px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes bgShift2 {
+  0% { transform: translate(100px, 50px); }
+  33% { transform: translate(50px, -75px); }
+  66% { transform: translate(-100px, 25px); }
+  100% { transform: translate(100px, 50px); }
+}
+
+@keyframes bgShift3 {
+  0% { background-position: 0 0; }
+  25% { background-position: -75px -25px; }
+  50% { background-position: -150px -150px; }
+  75% { background-position: -25px -100px; }
+  100% { background-position: 0 0; }
+}
+
+@keyframes slowScrollDown {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100vh; }
+}
+
+@keyframes slowScrollDown2 {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes slowScrollDown3 {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes slowScrollDownPortal {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100vh; }
+}
+
+@keyframes slowScrollDownPortal2 {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes slowScrollDownPortal3 {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes portalShift1 {
+  0% { transform: translate(0, 0); }
+  30% { transform: translate(-60px, -80px); }
+  60% { transform: translate(-120px, -30px); }
+  90% { transform: translate(-40px, -120px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes portalShift2 {
+  0% { transform: translate(50px, 25px); }
+  25% { transform: translate(20px, -50px); }
+  50% { transform: translate(-80px, 10px); }
+  75% { transform: translate(-30px, -90px); }
+  100% { transform: translate(50px, 25px); }
+}
+
+@keyframes portalShift3 {
+  0% { background-position: 0 0; }
+  20% { background-position: -40px -60px; }
+  40% { background-position: -100px -20px; }
+  60% { background-position: -20px -100px; }
+  80% { background-position: -80px -80px; }
+  100% { background-position: 0 0; }
 }
 
 .trading-post-title {
   font-size: 4rem;
   text-align: center;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 40px;
   text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
   letter-spacing: 0.1em;
@@ -1282,7 +1409,7 @@ body {
 }
 
 .form-label {
-  color: #333;
+  color: #ffffff;
   font-size: 14px;
   font-weight: bold;
   text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3);
@@ -1297,8 +1424,8 @@ body {
     inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   padding: 10px;
   font-family: "MinecraftFont", "Courier New", monospace;
-  font-size: 14px;
-  color: #333;
+  font-size: 10px;
+  color: #ffffff;
   outline: none;
 }
 
@@ -1350,7 +1477,7 @@ body {
 
 .find-me-title {
   font-size: 2rem;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 30px;
   text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
 }
@@ -1398,9 +1525,9 @@ body {
   color: white;
 }
 
-.social-link.twitter {
-  background: #1DA1F2;
-  border-color: #42AAFF #0D8BD9 #0D8BD9 #42AAFF;
+.social-link.instagram {
+  background: #8B3DFF;
+  border-color: #A855F7 #6B21A8 #6B21A8 #A855F7;
   color: white;
 }
 
@@ -1575,11 +1702,39 @@ body {
 /* Resume Viewer Page Styles */
 .resume-viewer-page {
   min-height: 100vh;
-  background: url('/textures/dirt.png') repeat;
   padding: 120px 20px 20px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  background: url('/textures/end.gif') repeat;
+  background-size: 800px 800px;
+  animation: slowScrollDown 60s linear infinite;
+  overflow: hidden;
+}
+
+.resume-viewer-page::before,
+.resume-viewer-page::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/textures/end.gif') repeat;
+  background-size: 200px 200px;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.resume-viewer-page::before {
+  animation: slowScrollDown2 80s linear infinite;
+  opacity: 0.7;
+}
+
+.resume-viewer-page::after {
+  animation: slowScrollDown3 45s linear infinite;
+  opacity: 0.6;
 }
 
 .resume-viewer-container {
