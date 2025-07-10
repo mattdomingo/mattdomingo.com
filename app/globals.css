@@ -401,60 +401,99 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .character-layout {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .character-stats-container {
+    padding: 20px 15px;
   }
   
   .character-stats-title {
-    font-size: 3.5rem;
-  }
-  
-  .profile-image-border {
-    width: 220px;
-    height: 220px;
-  }
-  
-  .profile-name {
-    font-size: 2rem;
-  }
-  
-  .profile-level {
-    font-size: 1.4rem;
-  }
-  
-  .character-description {
-    font-size: 16px;
-    padding: 30px;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
   }
   
   .character-layout {
-    gap: 40px;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .character-profile {
+    padding: 30px 20px;
+  }
+  
+  .profile-image-border {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .profile-name {
+    font-size: 1.8rem;
+  }
+  
+  .profile-level {
+    font-size: 1.2rem;
+  }
+  
+  .character-details {
+    padding: 25px 20px;
+  }
+  
+  .character-description {
+    font-size: 14px;
+    padding: 25px 20px;
+    line-height: 1.6;
+    margin-bottom: 30px;
   }
   
   .achievements {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .achievement-box {
+    padding: 20px 15px;
   }
 
   .skills-inventory-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+  }
+  
+  .skills-filter-container {
+    gap: 6px;
+    margin-bottom: 25px;
+    padding: 0 15px;
+  }
+  
+  .skills-filter-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .minecraft-inventory {
+    padding: 25px 15px;
   }
   
   .skills-grid {
     grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
   }
   
-  .skills-filter-button {
-    padding: 6px 12px;
-    font-size: 10px;
+  .minecraft-item {
+    min-height: 80px;
+    padding: 10px;
+  }
+  
+  .minecraft-item-empty {
+    min-height: 80px;
   }
   
   .minecraft-item .skill-icon {
-    font-size: 20px;
+    font-size: 24px;
+    margin-bottom: 6px;
   }
   
   .minecraft-item .skill-name {
-    font-size: 9px;
+    font-size: 10px;
   }
 }
 
@@ -642,8 +681,79 @@ body {
 }
 
 @media (max-width: 480px) {
+  .character-stats-container {
+    padding: 15px 10px;
+  }
+  
+  .character-stats-title {
+    font-size: 2rem;
+    margin-bottom: 25px;
+  }
+  
+  .character-layout {
+    gap: 25px;
+    margin-bottom: 30px;
+  }
+  
+  .character-profile {
+    padding: 20px 15px;
+  }
+  
+  .profile-image-border {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .profile-name {
+    font-size: 1.5rem;
+  }
+  
+  .profile-level {
+    font-size: 1rem;
+  }
+  
+  .character-details {
+    padding: 20px 15px;
+  }
+  
+  .character-description {
+    font-size: 12px;
+    padding: 20px 15px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+  }
+  
+  .achievement-box {
+    padding: 15px 10px;
+  }
+  
+  .achievement-title {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .achievement-text {
+    font-size: 12px;
+  }
+
   .skills-inventory-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    margin-bottom: 25px;
+  }
+  
+  .skills-filter-container {
+    gap: 4px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+  
+  .skills-filter-button {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+  
+  .minecraft-inventory {
+    padding: 20px 10px;
   }
   
   .skills-grid {
@@ -654,7 +764,7 @@ body {
   
   .minecraft-item {
     min-height: 60px;
-    padding: 8px;
+    padding: 6px;
   }
   
   .minecraft-item-empty {
@@ -662,11 +772,98 @@ body {
   }
   
   .minecraft-item .skill-icon {
-    font-size: 24px;
+    font-size: 20px;
+    margin-bottom: 4px;
   }
   
   .minecraft-item .skill-name {
-    font-size: 10px;
+    font-size: 8px;
+    line-height: 1.1;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 360px) {
+  .character-stats-container {
+    padding: 10px 8px;
+  }
+  
+  .character-stats-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+  
+  .character-layout {
+    gap: 20px;
+    margin-bottom: 25px;
+  }
+  
+  .character-profile,
+  .character-details {
+    padding: 15px 10px;
+  }
+  
+  .profile-image-border {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .profile-name {
+    font-size: 1.3rem;
+  }
+  
+  .profile-level {
+    font-size: 0.9rem;
+  }
+  
+  .character-description {
+    font-size: 11px;
+    padding: 15px 12px;
+    line-height: 1.4;
+    margin-bottom: 20px;
+  }
+  
+  .skills-inventory-title {
+    font-size: 1.7rem;
+    margin-bottom: 20px;
+  }
+  
+  .skills-filter-container {
+    padding: 0 8px;
+    margin-bottom: 15px;
+  }
+  
+  .skills-filter-button {
+    padding: 5px 8px;
+    font-size: 9px;
+  }
+  
+  .minecraft-inventory {
+    padding: 15px 8px;
+  }
+  
+  .skills-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  
+  .minecraft-item {
+    min-height: 50px;
+    padding: 4px;
+  }
+  
+  .minecraft-item-empty {
+    min-height: 50px;
+  }
+  
+  .minecraft-item .skill-icon {
+    font-size: 18px;
+    margin-bottom: 3px;
+  }
+  
+  .minecraft-item .skill-name {
+    font-size: 7px;
+    line-height: 1;
   }
 }
 
@@ -945,12 +1142,25 @@ body {
 
 /* Mobile adjustments for full-page sections */
 @media (max-width: 768px) {
+  /* Disable scroll snapping for mobile - allow natural scrolling */
+  .fullpage-container {
+    scroll-snap-type: none;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .fullpage-section {
+    scroll-snap-align: none;
+    height: auto;
+    min-height: 100vh;
+  }
+  
   .character-stats-section {
-    padding: 20px 10px;
+    padding: 20px 15px;
   }
   
   .skills-section {
-    padding: 20px 10px;
+    padding: 20px 15px;
   }
   
   .scroll-arrow {
@@ -963,16 +1173,6 @@ body {
   .scroll-arrow svg {
     width: 20px;
     height: 20px;
-  }
-  
-  .character-layout {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .character-stats-title {
-    font-size: 2rem;
-    margin-bottom: 20px;
   }
 }
 
