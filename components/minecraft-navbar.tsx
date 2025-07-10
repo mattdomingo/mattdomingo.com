@@ -9,6 +9,7 @@ export default function MinecraftNavbar() {
     { href: '/', label: 'HOME', icon: '🏠' },
     { href: '/about', label: 'ABOUT', icon: '👤' },
     { href: '/projects', label: 'PROJECTS', icon: '🛠️' },
+    { href: '/resume', label: 'RESUME', icon: '📄' },
     { href: '/contact', label: 'CONTACT', icon: '📧' }
   ]
 
