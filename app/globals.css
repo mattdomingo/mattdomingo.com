@@ -1341,9 +1341,16 @@ body {
   padding: 8px 16px !important;
   font-size: 12px !important;
   border: 3px solid !important;
-  border-color: #a5a5a5 #555555 #555555 #a5a5a5 !important;
+  border-color: #6bb6ff #2563eb #2563eb #6bb6ff !important;
+  background: #3b82f6 !important;
+  color: white !important;
   text-decoration: none !important;
   transition: all 0.1s ease;
+}
+
+.project-link-btn:hover {
+  background: #2563eb !important;
+  border-color: #93c5fd #1d4ed8 #1d4ed8 #93c5fd !important;
 }
 
 .project-link-btn.live-demo {
@@ -1356,20 +1363,20 @@ body {
 }
 
 .tech-tag {
-  background: #dc143c;
+  background: #6b7280;
   color: white;
   padding: 4px 8px;
   font-size: 12px;
   border: 2px solid;
-  border-color: #ff4757 #a01526 #a01526 #ff4757;
+  border-color: #9ca3af #374151 #374151 #9ca3af;
   box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.2), inset -1px -1px 0px rgba(0, 0, 0, 0.3);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .tech-tag.extra-count {
-  background: #555;
-  border-color: #777 #333 #333 #777;
+  background: #4b5563;
+  border-color: #6b7280 #374151 #374151 #6b7280;
 }
 
 /* Trading Post Contact Page Styles */
