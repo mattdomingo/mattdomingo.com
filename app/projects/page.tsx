@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import MinecraftNavbar from "@/components/minecraft-navbar"
+import PageTransition from "@/components/page-transition"
 
 interface Project {
   id: number
@@ -107,7 +108,8 @@ export default function ProjectsPage() {
   return (
     <>
       <MinecraftNavbar />
-      <div className="builds-gallery-page page-with-navbar">
+      <PageTransition>
+        <div className="builds-gallery-page page-with-navbar">
         <div className="builds-gallery-container">
           <h1 className="builds-gallery-title minecraft-text">BUILDS GALLERY</h1>
           
@@ -180,7 +182,8 @@ export default function ProjectsPage() {
             ))}
           </div>
         </div>
-      </div>
+        </div>
+      </PageTransition>
     </>
   )
 }

@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import emailjs from '@emailjs/browser'
 import MinecraftNavbar from "@/components/minecraft-navbar"
+import PageTransition from "@/components/page-transition"
 
 export default function ContactPage() {
   const router = useRouter()
@@ -11,6 +13,8 @@ export default function ContactPage() {
     email: '',
     message: ''
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -18,14 +22,51 @@ export default function ContactPage() {
       ...prev,
       [name]: value
     }))
+    // Clear status when user starts typing again
+    if (submitStatus !== 'idle') {
+      setSubmitStatus('idle')
+    }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log('Form submitted:', formData)
-    alert('Message sent! I\'ll get back to you soon.')
-    setFormData({ name: '', email: '', message: '' })
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+
+    try {
+      // EmailJS configuration
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS configuration is missing. Please check your environment variables.')
+      }
+
+      // Template parameters for EmailJS (matching your template variables)
+      const templateParams = {
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        time: new Date().toLocaleString(), // Current date and time
+      }
+
+      // Send email using EmailJS
+      await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
+      )
+
+      setSubmitStatus('success')
+      setFormData({ name: '', email: '', message: '' })
+    } catch (error) {
+      console.error('Failed to send message:', error)
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleResumeDownload = () => {
@@ -44,7 +85,8 @@ export default function ContactPage() {
   return (
     <>
       <MinecraftNavbar />
-      <div className="trading-post-page page-with-navbar">
+      <PageTransition>
+        <div className="trading-post-page page-with-navbar">
         <h1 className="trading-post-title minecraft-text">TRADING POST</h1>
         
         <div className="trading-post-container">
@@ -54,10 +96,10 @@ export default function ContactPage() {
               <div className="trade-with-me-box">
                 <h2 className="trade-section-title minecraft-text">TRADE WITH ME</h2>
                 <p className="trade-description minecraft-text">
-                  I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+                  I&apos;m always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
                 </p>
                 <p className="trade-description minecraft-text">
-                  Fill out the form with your message, and I'll get back to you as soon as possible!
+                  Fill out the form with your message, and I&apos;ll get back to you as soon as possible!
                 </p>
               </div>
               
@@ -119,9 +161,26 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <button type="submit" className="send-message-btn minecraft-text">
-                  SEND MESSAGE
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className={`send-message-btn minecraft-text ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  {isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}
                 </button>
+
+                {/* Status Messages */}
+                {submitStatus === 'success' && (
+                  <div className="status-message success minecraft-text">
+                    ✅ Message sent successfully! I&apos;ll get back to you soon.
+                  </div>
+                )}
+                
+                {submitStatus === 'error' && (
+                  <div className="status-message error minecraft-text">
+                    ❌ Failed to send message. Please try again or email me directly.
+                  </div>
+                )}
               </form>
             </div>
           </div>
@@ -153,7 +212,8 @@ export default function ContactPage() {
             </a>
           </div>
         </div>
-      </div>
+        </div>
+      </PageTransition>
     </>
   )
 }
