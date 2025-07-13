@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import MinecraftNavbar from "@/components/minecraft-navbar"
 import PageTransition from "@/components/page-transition"
 
@@ -98,12 +99,17 @@ const allTechnologies = [
 
 export default function ProjectsPage() {
   const [selectedFilter, setSelectedFilter] = useState("All")
+  const router = useRouter()
 
   const filteredProjects = selectedFilter === "All" 
     ? projects 
     : projects.filter(project => 
         project.technologies.some(tech => tech === selectedFilter)
       )
+
+  const handleProjectClick = (projectId: number) => {
+    router.push(`/projects/${projectId}`)
+  }
 
   return (
     <>
@@ -131,7 +137,11 @@ export default function ProjectsPage() {
           {/* Projects Grid */}
           <div className="projects-grid">
             {filteredProjects.map((project) => (
-              <div key={project.id} className="project-card minecraft-frame">
+              <div 
+                key={project.id} 
+                className="project-card minecraft-frame clickable-card"
+                onClick={() => handleProjectClick(project.id)}
+              >
                 <div className="project-image-container">
                   <img 
                     src={project.image} 
@@ -163,6 +173,7 @@ export default function ProjectsPage() {
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="minecraft-button project-link-btn"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       GitHub
                     </a>
@@ -172,6 +183,7 @@ export default function ProjectsPage() {
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="minecraft-button project-link-btn live-demo"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         Live Demo
                       </a>

@@ -2152,3 +2152,311 @@ body {
     font-size: 12px !important;
   }
 }
+
+/* Project Detail Pages */
+.project-detail-page {
+  min-height: 100vh;
+  background: url('/textures/nether.png') repeat;
+  background-size: 150px 150px;
+  animation: slowScrollDownPortal 60s linear infinite;
+  overflow: hidden;
+  position: relative;
+}
+
+.project-detail-page::before,
+.project-detail-page::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    url('/textures/landing1.gif') repeat,
+    url('/textures/end.gif') repeat,
+    url('/textures/portal.gif') repeat;
+}
+
+.project-detail-page::before {
+  animation: bgShift1 20s linear infinite;
+}
+
+.project-detail-page::after {
+  animation: bgShift2 25s linear infinite;
+}
+
+.project-detail-container {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.back-button {
+  margin-bottom: 30px;
+  display: inline-block;
+}
+
+.project-header {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 40px;
+  margin-bottom: 60px;
+  align-items: start;
+}
+
+.project-image-section {
+  position: relative;
+}
+
+.project-detail-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 4px solid #cfcfcf;
+  background: #2a2a2a;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.project-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.project-detail-title {
+  font-size: 3rem;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.8);
+}
+
+.project-detail-description {
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.project-links-section {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.project-section {
+  margin-bottom: 50px;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: #ffffff;
+  margin-bottom: 30px;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.8);
+  border-bottom: 3px solid #cfcfcf;
+  padding-bottom: 10px;
+}
+
+.technologies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.tech-item {
+  background: #4a4a4a;
+  border: 3px solid #cfcfcf;
+  padding: 15px;
+  text-align: center;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+}
+
+.tech-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tech-name {
+  font-size: 1.1rem;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.features-list,
+.challenges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.feature-item,
+.challenge-item {
+  background: #4a4a4a;
+  border: 3px solid #cfcfcf;
+  padding: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  transition: transform 0.2s ease;
+}
+
+.feature-item:hover,
+.challenge-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.feature-bullet,
+.challenge-bullet {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.feature-text,
+.challenge-text {
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  line-height: 1.5;
+}
+
+.loading-message,
+.error-message {
+  text-align: center;
+  padding: 100px 20px;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.error-message .back-button {
+  margin-top: 20px;
+}
+
+/* Clickable project cards */
+.clickable-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clickable-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.clickable-card:active {
+  transform: translateY(-2px);
+}
+
+/* Responsive design for project detail pages */
+@media (max-width: 1024px) {
+  .project-header {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .project-detail-title {
+    font-size: 2.5rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-detail-container {
+    padding: 30px 15px;
+  }
+  
+  .project-header {
+    margin-bottom: 40px;
+  }
+  
+  .project-detail-title {
+    font-size: 2rem;
+  }
+  
+  .project-detail-description {
+    font-size: 1.1rem;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .technologies-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+  }
+  
+  .tech-item {
+    padding: 12px;
+  }
+  
+  .tech-name {
+    font-size: 1rem;
+  }
+  
+  .feature-item,
+  .challenge-item {
+    padding: 15px;
+    gap: 12px;
+  }
+  
+  .feature-text,
+  .challenge-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-detail-container {
+    padding: 20px 10px;
+  }
+  
+  .project-detail-title {
+    font-size: 1.8rem;
+  }
+  
+  .project-detail-description {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+  
+  .technologies-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+  
+  .tech-item {
+    padding: 10px;
+  }
+  
+  .tech-name {
+    font-size: 0.9rem;
+  }
+  
+  .feature-item,
+  .challenge-item {
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .feature-text,
+  .challenge-text {
+    font-size: 0.9rem;
+  }
+  
+  .project-links-section {
+    gap: 10px;
+  }
+}

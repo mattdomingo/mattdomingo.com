@@ -90,8 +90,15 @@ export default function ContactPage() {
       const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
       const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
 
+
+
       if (!serviceId || !templateId || !publicKey) {
-        throw new Error('EmailJS configuration is missing. Please check your environment variables.')
+        const missingVars = []
+        if (!serviceId) missingVars.push('NEXT_PUBLIC_EMAILJS_SERVICE_ID')
+        if (!templateId) missingVars.push('NEXT_PUBLIC_EMAILJS_TEMPLATE_ID')
+        if (!publicKey) missingVars.push('NEXT_PUBLIC_EMAILJS_PUBLIC_KEY')
+        
+        throw new Error(`EmailJS configuration is missing: ${missingVars.join(', ')}. Please check your environment variables.`)
       }
 
       // Template parameters for EmailJS (matching your template variables)
@@ -120,6 +127,12 @@ export default function ContactPage() {
       localStorage.setItem('contactFormCooldownEnd', cooldownEnd.toString())
     } catch (error) {
       console.error('Failed to send message:', error)
+      
+      // Check if it's a configuration error
+      if (error instanceof Error && error.message.includes('EmailJS configuration is missing')) {
+        console.error('Environment variables are not properly configured in the hosting environment')
+      }
+      
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
