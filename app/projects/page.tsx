@@ -21,7 +21,7 @@ const projects: Project[] = [
     id: 1,
     title: "mattdomingo.com",
     description: "minecraft-themed portfolio",
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
+    technologies: ["Next.js", "TypeScript", "CSS", "React"],
     image: "/projects/mattdomingo-com.png",
     githubUrl: "https://github.com/mattdomingo/mattdomingo.com", // Replace with your actual repo
     //liveUrl: "https://mattdomingo.com",
@@ -58,7 +58,7 @@ const projects: Project[] = [
     id: 5,
     title: "Task Manager", 
     description: "self explanatory",
-    technologies: ["TypeScript", "Node.js", "Tailwind CSS"],
+    technologies: ["TypeScript", "Node.js", "CSS"],
     image: "/projects/task-manager.png",
     githubUrl: "https://github.com/mattdomingo/taskManager",
     featured: true
@@ -94,7 +94,7 @@ const projects: Project[] = [
 
 const allTechnologies = [
   "All", "React", "Next.js", "TypeScript", "Node.js", "Python", "JavaScript", 
-  "Tailwind CSS", "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML"
+  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML"
 ]
 
 export default function ProjectsPage() {
