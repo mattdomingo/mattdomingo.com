@@ -50,7 +50,7 @@ const projects: Project[] = [
     longDescription: "A comprehensive platform designed to streamline the internship application process. Features job tracking, application management, and automated workflow tools to help students efficiently manage their internship search.",
     technologies: ["React", "Node.js", "Python", "TypeScript"],
     image: "/projects/shipit.png",
-    githubUrl: "https://github.com/mattdomingo/taskManager",
+    githubUrl: "https://github.com/mattdomingo/shipIt",
     featured: true,
     features: [
       "Job application tracking system",
