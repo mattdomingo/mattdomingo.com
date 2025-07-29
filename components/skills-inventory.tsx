@@ -18,6 +18,7 @@ const skills = [
   { name: "Google Cloud", level: 75, type: "tool", icon: "🌤️" },
   { name: "Azure DevOps", level: 70, type: "tool", icon: "🔄" },
   { name: "CI/CD Pipeline", level: 78, type: "tool", icon: "🔧" },
+  { name: "WebSockets", level: 85, type: "tool", icon: "🔌" },
   { name: "Power Automate", level: 68, type: "tool", icon: "⚡" },
   { name: "Figma", level: 78, type: "tool", icon: "🎨" },
 ]

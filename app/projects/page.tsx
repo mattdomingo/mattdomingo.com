@@ -20,8 +20,8 @@ const projects: Project[] = [
   {
     id: 9,
     title: "TruWeaveTrader",
-    description: "algorithmic trading system with data formatters",
-    technologies: ["Go", "CI/CD"],
+    description: "blazing-fast terminal trading app with sub-150ms latency",
+    technologies: ["Go", "WebSockets", "CI/CD"],
     image: "/projects/truweavetrader.png",
     githubUrl: "https://github.com/mattdomingo/TruWeaveTrader",
     featured: true
@@ -103,7 +103,7 @@ const projects: Project[] = [
 
 const allTechnologies = [
   "All", "React", "Next.js", "TypeScript", "Node.js", "Python", "JavaScript", 
-  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "CI/CD"
+  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "WebSockets", "CI/CD"
 ]
 
 export default function ProjectsPage() {

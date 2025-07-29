@@ -207,24 +207,24 @@ const projects: Project[] = [
   {
     id: 9,
     title: "TruWeaveTrader",
-    description: "algorithmic trading system with data formatters",
-    longDescription: "A sophisticated algorithmic trading system built in Go, featuring comprehensive data formatters and processing pipelines. Designed for high-frequency trading with real-time market data analysis and automated trading strategies.",
-    technologies: ["Go", "CI/CD"],
+    description: "blazing-fast terminal trading app with sub-150ms latency",
+    longDescription: "A high-performance terminal trading application built in Go for ultra-low latency financial trading. Features real-time WebSocket streaming, intelligent caching, and comprehensive risk management with sub-150ms quote fetching and sub-100ms trade execution.",
+    technologies: ["Go", "WebSockets", "CI/CD"],
     image: "/projects/truweavetrader.png",
     githubUrl: "https://github.com/mattdomingo/TruWeaveTrader",
     featured: true,
     features: [
-      "High-performance Go-based trading engine",
-      "Real-time market data processing",
-      "Modular data formatter architecture",
-      "Dockerized deployment pipeline",
-      "TypeScript frontend dashboard"
+      "Sub-150ms quote fetching with intelligent caching",
+      "Real-time WebSocket streaming for live market data",
+      "One-command trading with comprehensive risk checks",
+      "Built-in position sizing and loss limits",
+      "Color-coded terminal interface with formatted displays"
     ],
     challenges: [
-      "Optimizing low-latency trading algorithms",
-      "Implementing reliable data formatting pipelines",
-      "Handling high-volume market data streams",
-      "Creating fault-tolerant system architecture"
+      "Achieving sub-150ms cold start performance",
+      "Implementing real-time WebSocket streaming architecture",
+      "Building comprehensive risk management system",
+      "Optimizing Go performance for financial applications"
     ]
   },
 ]
