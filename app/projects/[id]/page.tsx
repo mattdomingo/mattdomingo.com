@@ -405,7 +405,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             </div>
             {/* TODDO Section */}
             <div className="project-section">
-              <h2 className="section-title minecraft-text">To Do</h2>
+              <h2 className="section-title minecraft-text">Coming Soon...</h2>
               <div className="TODO-list">
                 {project.TODO.map((TODO, index) => (
                   <div key={index} className="feature-item minecraft-frame">
