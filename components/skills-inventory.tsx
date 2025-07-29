@@ -5,6 +5,7 @@ import { useState } from "react"
 const skills = [
   { name: "Python", level: 90, type: "language", icon: "🐍" },
   { name: "Java", level: 85, type: "language", icon: "☕" },
+  { name: "Go", level: 82, type: "language", icon: "🚀" },
   { name: "C", level: 80, type: "language", icon: "⚙️" },
   { name: "TypeScript", level: 88, type: "language", icon: "🔷" },
   { name: "JavaScript", level: 90, type: "language", icon: "🟨" },
@@ -16,6 +17,7 @@ const skills = [
   { name: "AWS", level: 80, type: "tool", icon: "☁️" },
   { name: "Google Cloud", level: 75, type: "tool", icon: "🌤️" },
   { name: "Azure DevOps", level: 70, type: "tool", icon: "🔄" },
+  { name: "CI/CD Pipeline", level: 78, type: "tool", icon: "🔧" },
   { name: "Power Automate", level: 68, type: "tool", icon: "⚡" },
   { name: "Figma", level: 78, type: "tool", icon: "🎨" },
 ]

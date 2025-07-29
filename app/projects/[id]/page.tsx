@@ -204,6 +204,29 @@ const projects: Project[] = [
       "Creating flexible classification system"
     ]
   },
+  {
+    id: 9,
+    title: "TruWeaveTrader",
+    description: "algorithmic trading system with data formatters",
+    longDescription: "A sophisticated algorithmic trading system built in Go, featuring comprehensive data formatters and processing pipelines. Designed for high-frequency trading with real-time market data analysis and automated trading strategies.",
+    technologies: ["Go", "CI/CD"],
+    image: "/projects/truweavetrader.png",
+    githubUrl: "https://github.com/mattdomingo/TruWeaveTrader",
+    featured: true,
+    features: [
+      "High-performance Go-based trading engine",
+      "Real-time market data processing",
+      "Modular data formatter architecture",
+      "Dockerized deployment pipeline",
+      "TypeScript frontend dashboard"
+    ],
+    challenges: [
+      "Optimizing low-latency trading algorithms",
+      "Implementing reliable data formatting pipelines",
+      "Handling high-volume market data streams",
+      "Creating fault-tolerant system architecture"
+    ]
+  },
 ]
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {

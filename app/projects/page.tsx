@@ -18,6 +18,15 @@ interface Project {
 
 const projects: Project[] = [
   {
+    id: 9,
+    title: "TruWeaveTrader",
+    description: "algorithmic trading system with data formatters",
+    technologies: ["Go", "CI/CD"],
+    image: "/projects/truweavetrader.png",
+    githubUrl: "https://github.com/mattdomingo/TruWeaveTrader",
+    featured: true
+  },
+  {
     id: 1,
     title: "mattdomingo.com",
     description: "minecraft-themed portfolio",
@@ -89,12 +98,12 @@ const projects: Project[] = [
     image: "/projects/label-automation.png",
     githubUrl: "https://github.com/mattdomingo/label-automation-v2", // Replace with actual repo
     featured: true
-  },
+  }
 ]
 
 const allTechnologies = [
   "All", "React", "Next.js", "TypeScript", "Node.js", "Python", "JavaScript", 
-  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML"
+  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "CI/CD"
 ]
 
 export default function ProjectsPage() {
