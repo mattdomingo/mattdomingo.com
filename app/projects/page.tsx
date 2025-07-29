@@ -20,7 +20,7 @@ const projects: Project[] = [
   {
     id: 9,
     title: "TruWeaveTrader",
-    description: "blazing-fast terminal trading app with sub-150ms latency",
+    description: "blazing-fast terminal trading app",
     technologies: ["Go", "WebSockets", "CI/CD"],
     image: "/projects/truweavetrader.png",
     githubUrl: "https://github.com/mattdomingo/TruWeaveTrader",

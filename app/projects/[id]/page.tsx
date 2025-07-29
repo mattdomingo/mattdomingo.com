@@ -17,6 +17,7 @@ interface Project {
   featured: boolean
   features: string[]
   challenges: string[]
+  TODO: string[]
 }
 
 const projects: Project[] = [
@@ -41,6 +42,8 @@ const projects: Project[] = [
       "Implementing smooth animations without performance issues",
       "Ensuring mobile responsiveness with complex layouts",
       "Integrating third-party email service securely"
+    ],
+    TODO: [
     ]
   },
   {
@@ -64,6 +67,8 @@ const projects: Project[] = [
       "Implementing real-time data synchronization",
       "Creating intuitive user workflows",
       "Handling large datasets efficiently"
+    ],
+    TODO: [
     ]
   },
   {
@@ -87,6 +92,8 @@ const projects: Project[] = [
       "Optimizing real-time collision detection",
       "Creating smooth gameplay at 60 FPS",
       "Balancing game difficulty with gravity mechanics"
+    ],
+    TODO: [
     ]
   },
   {
@@ -110,6 +117,8 @@ const projects: Project[] = [
       "Implementing accurate sentiment analysis",
       "Handling market data API limitations",
       "Creating reliable trading signals"
+    ],
+    TODO: [
     ]
   },
   {
@@ -133,6 +142,8 @@ const projects: Project[] = [
       "Implementing real-time collaboration features",
       "Creating responsive and accessible UI",
       "Optimizing database queries for performance"
+    ],
+    TODO: [
     ]
   },
   {
@@ -156,6 +167,8 @@ const projects: Project[] = [
       "Implementing background notifications",
       "Designing distraction-free interface",
       "Balancing feature richness with simplicity"
+    ],
+    TODO: [
     ]
   },
   {
@@ -179,6 +192,8 @@ const projects: Project[] = [
       "Implementing reliable data synchronization",
       "Creating efficient data transformation pipelines",
       "Ensuring data consistency across systems"
+    ],
+    TODO: [
     ]
   },
   {
@@ -202,13 +217,15 @@ const projects: Project[] = [
       "Handling various file formats",
       "Optimizing scanning performance",
       "Creating flexible classification system"
+    ],
+    TODO: [
     ]
   },
   {
     id: 9,
     title: "TruWeaveTrader",
     description: "blazing-fast terminal trading app with sub-150ms latency",
-    longDescription: "A high-performance terminal trading application built in Go for ultra-low latency financial trading. Features real-time WebSocket streaming, intelligent caching, and comprehensive risk management with sub-150ms quote fetching and sub-100ms trade execution.",
+    longDescription: "A high-performance terminal trading application for ultra-low latency financial trading. Features real-time WebSocket streaming, intelligent caching, and comprehensive risk management with sub-150ms quote fetching and sub-100ms trade execution.",
     technologies: ["Go", "WebSockets", "CI/CD"],
     image: "/projects/truweavetrader.png",
     githubUrl: "https://github.com/mattdomingo/TruWeaveTrader",
@@ -225,6 +242,14 @@ const projects: Project[] = [
       "Implementing real-time WebSocket streaming architecture",
       "Building comprehensive risk management system",
       "Optimizing Go performance for financial applications"
+    ],
+    TODO: [
+      "Automatic execution of trades",
+      "Options arbitrage",
+      "Momentum-based strategies",
+      "KPI Dashboard",
+      "Backtesting",
+      "ML-based trading",
     ]
   },
 ]
@@ -374,6 +399,18 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                   <div key={index} className="challenge-item minecraft-frame">
                     <span className="challenge-bullet minecraft-text">🔧</span>
                     <span className="challenge-text minecraft-text">{challenge}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* TODDO Section */}
+            <div className="project-section">
+              <h2 className="section-title minecraft-text">To Do</h2>
+              <div className="TODO-list">
+                {project.TODO.map((TODO, index) => (
+                  <div key={index} className="feature-item minecraft-frame">
+                    <span className="feature-bullet minecraft-text">⚡</span>
+                    <span className="feature-text minecraft-text">{TODO}</span>
                   </div>
                 ))}
               </div>
