@@ -14,7 +14,7 @@ export default function ContactPage() {
     message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error' | 'validation_error'>('idle')
   const [cooldownEndTime, setCooldownEndTime] = useState<number | null>(null)
   const [remainingTime, setRemainingTime] = useState<number>(0)
 
@@ -74,6 +74,19 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Secret navigation feature - check for "Brooke" and "puppy" (case insensitive)
+    if (formData.name.toLowerCase().trim() === 'brooke' && 
+        formData.message.toLowerCase().trim() === 'puppy') {
+      router.push('/secret')
+      return
+    }
+    
+    // Custom validation for normal form submissions
+    if (!formData.email.trim()) {
+      setSubmitStatus('validation_error')
+      return
+    }
     
     // Check if user is in cooldown
     if (cooldownEndTime && Date.now() < cooldownEndTime) {
@@ -215,7 +228,6 @@ export default function ContactPage() {
                     value={formData.email}
                     onChange={handleInputChange}
                     className="form-input"
-                    required
                   />
                 </div>
 
@@ -254,6 +266,12 @@ export default function ContactPage() {
                     ✅ Message sent successfully! I&apos;ll get back to you soon.
                     <br />
                     <small>⏰ You can send another message in 10 minutes.</small>
+                  </div>
+                )}
+                
+                {submitStatus === 'validation_error' && (
+                  <div className="status-message error minecraft-text">
+                    📧 Please enter your email address to send a message.
                   </div>
                 )}
                 
