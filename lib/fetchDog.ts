@@ -45,6 +45,57 @@ function debugLog(message: string) {
   }
 }
 
+// Rate limiting constants
+const DAILY_LIMIT = 100
+const STORAGE_KEY = 'dogPageRequests'
+
+export interface RateLimitResult {
+  allowed: boolean
+  remainingRequests: number
+  resetTime: string
+}
+
+export function checkRateLimit(): RateLimitResult {
+  if (typeof window === 'undefined') {
+    // Server-side: allow all requests
+    return { allowed: true, remainingRequests: DAILY_LIMIT, resetTime: '' }
+  }
+
+  const today = new Date().toDateString()
+  const stored = localStorage.getItem(STORAGE_KEY)
+  
+  let requestData = { date: today, count: 0 }
+  
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored)
+      if (parsed.date === today) {
+        requestData = parsed
+      }
+    } catch (error) {
+      debugLog('Failed to parse stored request data')
+    }
+  }
+
+  const isAllowed = requestData.count < DAILY_LIMIT
+  
+  if (isAllowed) {
+    requestData.count += 1
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(requestData))
+  }
+
+  // Calculate reset time (midnight)
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  tomorrow.setHours(0, 0, 0, 0)
+  
+  return {
+    allowed: isAllowed,
+    remainingRequests: Math.max(0, DAILY_LIMIT - requestData.count),
+    resetTime: tomorrow.toLocaleString()
+  }
+}
+
 export async function fetchDogOfTheDay(): Promise<DogData> {
   const apiKey = process.env.DOG_API_KEY
   
@@ -53,7 +104,7 @@ export async function fetchDogOfTheDay(): Promise<DogData> {
   }
 
   try {
-    // Step 1: Get all breeds (this guarantees breed data)
+    // Step 1: Get all breeds (no caching - fresh on every request)
     debugLog('Fetching breeds from Dog API...')
     const breedsResponse = await fetch(
       'https://api.thedogapi.com/v1/breeds',
@@ -61,8 +112,8 @@ export async function fetchDogOfTheDay(): Promise<DogData> {
         headers: {
           'x-api-key': apiKey,
         },
-        // Cache for 24 hours (86400 seconds) for daily content
-        next: { revalidate: 86400 }
+        // No caching - fresh data on every refresh
+        cache: 'no-store'
       }
     )
 
@@ -104,7 +155,8 @@ export async function fetchDogOfTheDay(): Promise<DogData> {
         {
           headers: {
             'x-api-key': apiKey,
-          }
+          },
+          cache: 'no-store'
         }
       )
 

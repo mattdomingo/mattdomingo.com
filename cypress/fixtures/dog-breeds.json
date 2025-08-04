@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Golden Retriever",
+    "bred_for": "Retrieving game",
+    "breed_group": "Sporting",
+    "life_span": "10 - 12 years",
+    "temperament": "Friendly, Intelligent, Devoted",
+    "weight": {
+      "imperial": "55 - 75",
+      "metric": "25 - 34"
+    },
+    "height": {
+      "imperial": "20 - 24", 
+      "metric": "51 - 61"
+    },
+    "reference_image_id": "golden-retriever-1",
+    "image": {
+      "id": "golden-retriever-1",
+      "url": "https://cdn2.thedogapi.com/images/golden-retriever-1.jpg",
+      "width": 800,
+      "height": 600
+    },
+    "origin": "Scotland"
+  },
+  {
+    "id": 2,
+    "name": "Labrador Retriever",
+    "bred_for": "Water retrieving",
+    "breed_group": "Sporting", 
+    "life_span": "10 - 12 years",
+    "temperament": "Outgoing, Active, Loyal",
+    "weight": {
+      "imperial": "55 - 80",
+      "metric": "25 - 36"
+    },
+    "height": {
+      "imperial": "21.5 - 24.5",
+      "metric": "55 - 62"
+    },
+    "reference_image_id": "labrador-1",
+    "image": {
+      "id": "labrador-1", 
+      "url": "https://cdn2.thedogapi.com/images/labrador-1.jpg",
+      "width": 800,
+      "height": 600
+    },
+    "origin": "Canada"
+  },
+  {
+    "id": 3,
+    "name": "German Shepherd",
+    "bred_for": "Herding sheep",
+    "breed_group": "Herding",
+    "life_span": "9 - 13 years", 
+    "temperament": "Confident, Courageous, Smart",
+    "weight": {
+      "imperial": "50 - 90",
+      "metric": "22 - 40"
+    },
+    "height": {
+      "imperial": "22 - 26",
+      "metric": "55 - 65"
+    },
+    "reference_image_id": "german-shepherd-1",
+    "image": {
+      "id": "german-shepherd-1",
+      "url": "https://cdn2.thedogapi.com/images/german-shepherd-1.jpg", 
+      "width": 800,
+      "height": 600
+    },
+    "origin": "Germany"
+  }
+] 

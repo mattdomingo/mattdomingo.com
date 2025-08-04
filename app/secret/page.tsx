@@ -1,7 +1,8 @@
-import { Suspense } from 'react'
+'use client'
+import { Suspense, useEffect, useState } from 'react'
 import MinecraftNavbar from "@/components/minecraft-navbar"
 import PageTransition from "@/components/page-transition"
-import { fetchDogOfTheDay, formatDogFacts, type DogData } from '@/lib/fetchDog'
+import { formatDogFacts, checkRateLimit, type DogData, type RateLimitResult } from '@/lib/fetchDog'
 
 function formatTodaysDate(): string {
   const today = new Date()
@@ -14,13 +15,76 @@ function formatTodaysDate(): string {
   return formatter.format(today)
 }
 
-async function DogDisplay() {
-  let dogData: DogData
-  
-  try {
-    dogData = await fetchDogOfTheDay()
-  } catch (error) {
-    console.error('Failed to fetch dog data:', error)
+function RateLimitExceeded({ rateLimitInfo }: { rateLimitInfo: RateLimitResult }) {
+  return (
+    <div className="error-container minecraft-frame">
+      <div className="error-content">
+        <h2 className="minecraft-text error-title">🐕 Woof! Daily limit reached</h2>
+        <p className="minecraft-text error-message">
+          You've reached your daily limit of 100 puppy requests! Come back tomorrow for more adorable dogs.
+        </p>
+        <div className="minecraft-text error-details">
+          <p>Requests remaining: {rateLimitInfo.remainingRequests}</p>
+          <p>Limit resets: {rateLimitInfo.resetTime}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DogDisplay() {
+  const [dogData, setDogData] = useState<DogData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [rateLimitInfo, setRateLimitInfo] = useState<RateLimitResult | null>(null)
+
+  useEffect(() => {
+    async function loadDogData() {
+      try {
+        setLoading(true)
+        setError(null)
+
+        // Check rate limit first
+        const limitCheck = checkRateLimit()
+        setRateLimitInfo(limitCheck)
+
+        if (!limitCheck.allowed) {
+          setLoading(false)
+          return
+        }
+
+        // Call our API route instead of fetchDogOfTheDay directly
+        const response = await fetch('/api/dog', {
+          cache: 'no-store' // Ensure fresh data on each request
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.error || 'Failed to fetch dog data')
+        }
+
+        const data = await response.json()
+        setDogData(data)
+      } catch (err) {
+        console.error('Failed to fetch dog data:', err)
+        setError(err instanceof Error ? err.message : 'Unknown error')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadDogData()
+  }, []) // Empty dependency array - only runs once on mount, but new data on each refresh
+
+  if (loading) {
+    return <LoadingDog />
+  }
+
+  if (rateLimitInfo && !rateLimitInfo.allowed) {
+    return <RateLimitExceeded rateLimitInfo={rateLimitInfo} />
+  }
+
+  if (error) {
     return (
       <div className="error-container minecraft-frame">
         <div className="error-content">
@@ -29,22 +93,40 @@ async function DogDisplay() {
             The puppy API seems to be napping. Please try again later!
           </p>
           <p className="minecraft-text error-details">
-            Error: {error instanceof Error ? error.message : 'Unknown error'}
+            Error: {error}
           </p>
         </div>
       </div>
     )
   }
 
+  if (!dogData) {
+    return <LoadingDog />
+  }
+
   const facts = formatDogFacts(dogData)
 
   return (
     <div className="dog-display">
+      {/* Rate limit info */}
+      {rateLimitInfo && (
+        <div className="rate-limit-info minecraft-frame" style={{ 
+          background: 'rgba(0, 0, 0, 0.7)', 
+          padding: '10px 20px', 
+          marginBottom: '20px',
+          textAlign: 'center'
+        }}>
+          <p className="minecraft-text" style={{ color: '#ffd700', margin: 0, fontSize: '14px' }}>
+            🐾 {rateLimitInfo.remainingRequests} puppy requests remaining today
+          </p>
+        </div>
+      )}
+
       {/* Dog Image */}
       <div className="dog-image-container">
         <img 
           src={dogData.imageUrl} 
-          alt={`Today&apos;s puppy: ${dogData.breedName}`}
+          alt={`Today's puppy: ${dogData.breedName}`}
           className="dog-image"
           loading="eager"
         />
@@ -61,10 +143,21 @@ async function DogDisplay() {
                 <span className="fact-value minecraft-text">{fact.value}</span>
               </div>
             ))}
-            {/* Breed ID removed from frontend display as requested */}
           </div>
         </div>
       )}
+
+      {/* Refresh hint */}
+      <div className="refresh-hint minecraft-frame" style={{ 
+        background: 'rgba(139, 69, 19, 0.8)', 
+        padding: '15px', 
+        marginTop: '20px',
+        textAlign: 'center'
+      }}>
+        <p className="minecraft-text" style={{ color: '#ffffff', margin: 0, fontSize: '14px' }}>
+          🔄 Refresh the page to see a new puppy!
+        </p>
+      </div>
     </div>
   )
 }
@@ -74,7 +167,7 @@ function LoadingDog() {
     <div className="loading-container">
       <div className="dog-image-placeholder minecraft-frame">
         <div className="loading-spinner minecraft-text">
-          🐕 Fetching today&apos;s puppy...
+          🐕 Fetching today's puppy...
         </div>
       </div>
       <div className="dog-facts-placeholder minecraft-frame">
@@ -103,9 +196,7 @@ export default function SecretPage() {
 
             {/* Dog Content */}
             <main className="secret-main">
-              <Suspense fallback={<LoadingDog />}>
-                <DogDisplay />
-              </Suspense>
+              <DogDisplay />
             </main>
           </div>
         </div>

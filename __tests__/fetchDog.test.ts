@@ -1,6 +1,33 @@
-import { formatDogFacts, type DogData } from '@/lib/fetchDog'
+import { formatDogFacts, checkRateLimit, type DogData } from '@/lib/fetchDog'
+
+// Mock localStorage for testing
+const localStorageMock = (() => {
+  let store: Record<string, string> = {}
+  return {
+    getItem: jest.fn((key: string) => store[key] || null),
+    setItem: jest.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    removeItem: jest.fn((key: string) => {
+      delete store[key]
+    }),
+    clear: jest.fn(() => {
+      store = {}
+    }),
+  }
+})()
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+})
 
 describe('fetchDog utility functions', () => {
+  beforeEach(() => {
+    // Clear localStorage mock before each test
+    localStorageMock.clear()
+    jest.clearAllMocks()
+  })
+
   describe('formatDogFacts', () => {
     it('should format all available dog facts correctly', () => {
       const mockDogData: DogData = {
@@ -86,6 +113,67 @@ describe('fetchDog utility functions', () => {
 
       expect(facts).toContainEqual({ label: 'Weight', value: '10 - 15 kg' })
       expect(facts).toContainEqual({ label: 'Height', value: '25 - 30 cm' })
+    })
+  })
+
+  describe('checkRateLimit', () => {
+    it('should allow requests when no prior requests exist', () => {
+      const result = checkRateLimit()
+      
+      expect(result.allowed).toBe(true)
+      expect(result.remainingRequests).toBe(99) // 100 - 1 (current request)
+      expect(result.resetTime).toBeTruthy()
+    })
+
+    it('should track request count correctly', () => {
+      // First request
+      const result1 = checkRateLimit()
+      expect(result1.allowed).toBe(true)
+      expect(result1.remainingRequests).toBe(99)
+
+      // Second request
+      const result2 = checkRateLimit()
+      expect(result2.allowed).toBe(true)
+      expect(result2.remainingRequests).toBe(98)
+    })
+
+    it('should block requests after reaching daily limit', () => {
+      // Mock localStorage to simulate 100 requests already made
+      const today = new Date().toDateString()
+      localStorageMock.setItem('dogPageRequests', JSON.stringify({
+        date: today,
+        count: 100
+      }))
+
+      const result = checkRateLimit()
+      
+      expect(result.allowed).toBe(false)
+      expect(result.remainingRequests).toBe(0)
+    })
+
+    it('should reset count for a new day', () => {
+      // Mock localStorage with yesterday's data
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      
+      localStorageMock.setItem('dogPageRequests', JSON.stringify({
+        date: yesterday.toDateString(),
+        count: 100
+      }))
+
+      const result = checkRateLimit()
+      
+      expect(result.allowed).toBe(true)
+      expect(result.remainingRequests).toBe(99)
+    })
+
+    it('should handle corrupted localStorage data gracefully', () => {
+      localStorageMock.setItem('dogPageRequests', 'invalid-json')
+
+      const result = checkRateLimit()
+      
+      expect(result.allowed).toBe(true)
+      expect(result.remainingRequests).toBe(99)
     })
   })
 })
