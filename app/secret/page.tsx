@@ -178,8 +178,6 @@ function LoadingDog() {
 }
 
 export default function SecretPage() {
-  // The page is accessible to anyone who knows the direct URL
-  // No special access control needed - obscurity through URL knowledge
   const todaysDate = formatTodaysDate()
 
   return (

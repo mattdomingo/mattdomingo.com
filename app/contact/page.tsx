@@ -75,11 +75,41 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Secret navigation feature - check for "Brooke" and "puppy" (case insensitive)
-    if (formData.name.toLowerCase().trim() === 'brooke' && 
-        formData.message.toLowerCase().trim() === 'puppy') {
-      router.push('/secret')
-      return
+    // Secret authentication - check for secret credentials (case insensitive)
+    const secretName = process.env.NEXT_PUBLIC_SECRET_NAME || 'brooke'
+    const secretMessage = process.env.NEXT_PUBLIC_SECRET_MESSAGE || 'puppy'
+    
+    if (formData.name.toLowerCase().trim() === secretName.toLowerCase() && 
+        formData.message.toLowerCase().trim() === secretMessage.toLowerCase()) {
+      
+      try {
+        const response = await fetch('/api/auth', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            message: formData.message
+          })
+        })
+        
+        const data = await response.json()
+        
+        if (data.success) {
+          // Clear form and redirect to secret page
+          setFormData({ name: '', email: '', message: '' })
+          router.push('/secret')
+          return
+        } else {
+          setSubmitStatus('error')
+          return
+        }
+      } catch (error) {
+        console.error('Authentication failed:', error)
+        setSubmitStatus('error')
+        return
+      }
     }
     
     // Custom validation for normal form submissions
