@@ -1201,16 +1201,6 @@ body {
   pointer-events: none;
 }
 
-.builds-gallery-page::before {
-  animation: slowScrollDownPortal2 70s linear infinite;
-  opacity: 0.8;
-}
-
-.builds-gallery-page::after {
-  animation: slowScrollDownPortal3 40s linear infinite;
-  opacity: 0.6;
-}
-
 .builds-gallery-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -1257,7 +1247,7 @@ body {
 
 .filter-button.active {
   background: #ffd700;
-  color: #333;
+  color: #33333300;
   border-color: #ffed4e #cc9900 #cc9900 #ffed4e;
 }
 
