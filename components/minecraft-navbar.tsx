@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import SpotifyWidget from '@/components/spotify-widget'
 
 export default function MinecraftNavbar() {
   const pathname = usePathname()
@@ -35,6 +36,7 @@ export default function MinecraftNavbar() {
               <span className="navbar-item-text">{item.label}</span>
             </Link>
           ))}
+          <SpotifyWidget variant="navbar" />
         </div>
       </div>
     </nav>
