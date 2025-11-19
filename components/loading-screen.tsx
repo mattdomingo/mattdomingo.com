@@ -12,7 +12,11 @@ const FUN_FACTS = [
   "Building digital experiences block by block"
 ]
 
-export default function LoadingScreen() {
+interface LoadingScreenProps {
+  progress?: number
+}
+
+export default function LoadingScreen({ progress }: LoadingScreenProps) {
   const [currentFactIndex, setCurrentFactIndex] = useState(0)
 
   useEffect(() => {
@@ -23,14 +27,22 @@ export default function LoadingScreen() {
     return () => clearInterval(interval)
   }, [])
 
+  const isIndeterminate = progress === undefined
+
   return (
     <div className="loading-screen">
       <div className="loading-content">
         <h1 className="minecraft-text loading-title">Building Terrain...</h1>
         
         <div className="loading-bar-container">
-          <div className="loading-bar-progress"></div>
+          <div 
+            className={`loading-bar-progress ${isIndeterminate ? 'indeterminate' : ''}`}
+            style={!isIndeterminate ? { width: `${progress}%`, transform: 'none', animation: 'none' } : {}}
+          ></div>
         </div>
+        {!isIndeterminate && (
+          <div className="progress-text minecraft-text">{Math.round(progress)}%</div>
+        )}
 
         <div className="fact-container">
           <p className="minecraft-text fact-label">Did you know?</p>
@@ -101,8 +113,19 @@ export default function LoadingScreen() {
           height: 100%;
           background: #7cb342;
           width: 100%;
-          animation: progressFill 3s ease-in-out infinite;
           transform-origin: left;
+          transition: width 0.2s linear;
+        }
+
+        .loading-bar-progress.indeterminate {
+          width: 100%;
+          animation: progressFill 3s ease-in-out infinite;
+        }
+
+        .progress-text {
+          color: #7cb342;
+          margin-top: -30px;
+          font-size: 1rem;
         }
 
         .fact-container {
@@ -153,4 +176,3 @@ export default function LoadingScreen() {
     </div>
   )
 }
-
