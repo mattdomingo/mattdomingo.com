@@ -4,24 +4,36 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const FUN_FACTS = [
-  "Majoring in CS @ UW-Madison",
-  "Minors in Math, Econ, and Stats",
-  "Interned at TruStage & Magnet-Schultz",
-  "Enjoys DJing and making videos",
-  "Working on my golf swing!",
-  "Building digital experiences block by block"
+  "I'm an incoming SWE @ Visa",
+  "I'm an Eagle Scout!",
+  "I enjoy EDM and like to DJ!",
+  "BEAR DOWN!",
+  "I used to be a videographer... @mattdomingomedia",
+  "I'm a washed up ex-fraternity president",
+  "I love KBBQ + Soju",
+  "I'm a huge fan of the movie 'Napoleon Dynamite"
 ]
 
 interface LoadingScreenProps {
-  progress?: number
+  readonly progress?: number
 }
 
 export default function LoadingScreen({ progress }: LoadingScreenProps) {
   const [currentFactIndex, setCurrentFactIndex] = useState(0)
 
   useEffect(() => {
+    // Set initial random fact
+    setCurrentFactIndex(Math.floor(Math.random() * FUN_FACTS.length))
+
     const interval = setInterval(() => {
-      setCurrentFactIndex((prev) => (prev + 1) % FUN_FACTS.length)
+      setCurrentFactIndex((prev) => {
+        // Ensure we don't pick the same fact twice in a row
+        let nextIndex
+        do {
+          nextIndex = Math.floor(Math.random() * FUN_FACTS.length)
+        } while (nextIndex === prev)
+        return nextIndex
+      })
     }, 2500)
 
     return () => clearInterval(interval)
@@ -37,11 +49,11 @@ export default function LoadingScreen({ progress }: LoadingScreenProps) {
         <div className="loading-bar-container">
           <div 
             className={`loading-bar-progress ${isIndeterminate ? 'indeterminate' : ''}`}
-            style={!isIndeterminate ? { width: `${progress}%`, transform: 'none', animation: 'none' } : {}}
+            style={isIndeterminate ? {} : { width: `${progress}%`, transform: 'none', animation: 'none' }}
           ></div>
         </div>
         {!isIndeterminate && (
-          <div className="progress-text minecraft-text">{Math.round(progress)}%</div>
+          <div className="progress-text minecraft-text">{Math.round(progress || 0)}%</div>
         )}
 
         <div className="fact-container">
