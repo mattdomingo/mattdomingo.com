@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import PageTransition from '@/components/page-transition'
+import LoadingScreen from '@/components/loading-screen'
 
 export default function HomePage() {
   const [lookingForWorkText, setLookingForWorkText] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const lookingForWorkPhrases = [
@@ -30,6 +32,20 @@ export default function HomePage() {
     const randomPhrase = lookingForWorkPhrases[Math.floor(Math.random() * lookingForWorkPhrases.length)]
     setLookingForWorkText(randomPhrase)
   }, [])
+
+  useEffect(() => {
+    const img = new Image()
+    img.src = '/textures/landing1.gif'
+    img.onload = () => {
+      // Add a small delay to ensure the loading screen is visible for at least a moment
+      // and to let the "building terrain" vibe sink in
+      setTimeout(() => setIsLoading(false), 800)
+    }
+    // Fallback in case image load fails or hangs
+    img.onerror = () => setIsLoading(false)
+  }, [])
+
+  if (isLoading) return <LoadingScreen />
 
   return (
     <PageTransition>
