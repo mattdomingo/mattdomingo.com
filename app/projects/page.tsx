@@ -29,6 +29,16 @@ const projects: Project[] = [
     highlighted: true
   },
   {
+    id: 11,
+    title: "brookecarmichael.com",
+    description: "portfolio website for journalism major",
+    technologies: ["JavaScript", "TypeScript", "CSS"],
+    image: "/projects/brookecarmichael.png",
+    githubUrl: "https://brookecarmichael.com",
+    liveUrl: "https://brookecarmichael.com",
+    featured: true
+  },
+  {
     id: 9,
     title: "TruWeaveTrader",
     description: "blazing-fast terminal trading app",
@@ -196,9 +206,9 @@ export default function ProjectsPage() {
                       className="minecraft-button project-link-btn"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      GitHub
+                      {project.githubUrl.includes('github.com') ? 'GitHub' : 'View Site'}
                     </a>
-                    {project.liveUrl && (
+                    {project.liveUrl && project.liveUrl !== project.githubUrl && (
                       <a 
                         href={project.liveUrl} 
                         target="_blank" 
