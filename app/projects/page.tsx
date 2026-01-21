@@ -14,9 +14,20 @@ interface Project {
   githubUrl: string
   liveUrl?: string
   featured: boolean
+  highlighted?: boolean
 }
 
 const projects: Project[] = [
+  {
+    id: 10,
+    title: "QuestGPT",
+    description: "AI-powered text-based RPG game",
+    technologies: ["Java", "Spring Boot", "React", "MySQL", "Docker", "JavaScript"],
+    image: "/projects/questgpt.png",
+    githubUrl: "https://github.com/mattdomingo/QuestGPT",
+    featured: true,
+    highlighted: true
+  },
   {
     id: 9,
     title: "TruWeaveTrader",
@@ -103,7 +114,8 @@ const projects: Project[] = [
 
 const allTechnologies = [
   "All", "React", "Next.js", "TypeScript", "Node.js", "Python", "JavaScript", 
-  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "WebSockets", "CI/CD"
+  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "WebSockets", "CI/CD",
+  "Java", "Spring Boot", "MySQL"
 ]
 
 export default function ProjectsPage() {
@@ -148,7 +160,7 @@ export default function ProjectsPage() {
             {filteredProjects.map((project) => (
               <div 
                 key={project.id} 
-                className="project-card minecraft-frame clickable-card"
+                className={`project-card minecraft-frame clickable-card ${project.highlighted ? 'highlighted-project' : ''}`}
                 onClick={() => handleProjectClick(project.id)}
               >
                 <div className="project-image-container">
