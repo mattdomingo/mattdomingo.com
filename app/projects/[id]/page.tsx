@@ -252,6 +252,40 @@ const projects: Project[] = [
       "ML-based trading",
     ]
   },
+  {
+    id: 10,
+    title: "QuestGPT",
+    description: "AI-powered text-based RPG game",
+    longDescription: "A dynamic text-based RPG game powered by AI for content generation. Built with Spring Boot and React, featuring combat systems, shop mechanics, leveling progression, and enemy scaling. Players can choose builds and fight increasingly challenging enemies in an AI-driven adventure.",
+    technologies: ["Java", "Spring Boot", "React", "MySQL", "Docker", "JavaScript"],
+    image: "/projects/questgpt.png",
+    githubUrl: "https://github.com/mattdomingo/QuestGPT",
+    featured: true,
+    features: [
+      "AI-powered dynamic content generation",
+      "Combat system with attack, dodge, rest, and run actions",
+      "Shop system with items and upgrades",
+      "Level progression with scaling enemies",
+      "Multiple build types for character customization",
+      "RESTful API for game state management"
+    ],
+    challenges: [
+      "Integrating AI for dynamic story and content generation",
+      "Managing complex game state across sessions",
+      "Implementing real-time combat mechanics",
+      "Balancing game difficulty with level scaling",
+      "Coordinating backend and frontend state synchronization"
+    ],
+    TODO: [
+      "Scaling for dodge heal and rest stamina based on player level",
+      "Additional enemy types with unique abilities",
+      "More shop item varieties",
+      "Achievement system",
+      "Leaderboards",
+      "Multiplayer battles",
+      "Quest system with side objectives"
+    ]
+  },
 ]
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {

@@ -98,12 +98,22 @@ const projects: Project[] = [
     image: "/projects/label-automation.png",
     githubUrl: "https://github.com/mattdomingo/label-automation-v2", // Replace with actual repo
     featured: true
+  },
+  {
+    id: 10,
+    title: "QuestGPT",
+    description: "AI-powered text-based RPG game",
+    technologies: ["Java", "Spring Boot", "React", "MySQL", "Docker", "JavaScript"],
+    image: "/projects/questgpt.png",
+    githubUrl: "https://github.com/mattdomingo/QuestGPT",
+    featured: true
   }
 ]
 
 const allTechnologies = [
   "All", "React", "Next.js", "TypeScript", "Node.js", "Python", "JavaScript", 
-  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "WebSockets", "CI/CD"
+  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "WebSockets", "CI/CD",
+  "Java", "Spring Boot", "MySQL"
 ]
 
 export default function ProjectsPage() {
