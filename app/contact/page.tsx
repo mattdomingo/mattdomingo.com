@@ -75,41 +75,33 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Secret authentication - check for secret credentials (case insensitive)
-    const secretName = process.env.NEXT_PUBLIC_SECRET_NAME || 'brooke'
-    const secretMessage = process.env.NEXT_PUBLIC_SECRET_MESSAGE || 'puppy'
-    
-    if (formData.name.toLowerCase().trim() === secretName.toLowerCase() && 
-        formData.message.toLowerCase().trim() === secretMessage.toLowerCase()) {
-      
-      try {
-        const response = await fetch('/api/auth', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: formData.name,
-            message: formData.message
-          })
+    // Try secret authentication first (server-side validation only)
+    try {
+      const authResponse = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          message: formData.message
         })
-        
-        const data = await response.json()
-        
-        if (data.success) {
-          // Clear form and redirect to secret page
-          setFormData({ name: '', email: '', message: '' })
-          router.push('/secret')
-          return
-        } else {
-          setSubmitStatus('error')
-          return
-        }
-      } catch (error) {
-        console.error('Authentication failed:', error)
-        setSubmitStatus('error')
+      })
+      
+      const authData = await authResponse.json()
+      
+      if (authData.success) {
+        // Clear form and redirect to secret page
+        setFormData({ name: '', email: '', message: '' })
+        router.push('/secret')
         return
       }
+      
+      // If not secret auth, continue with normal form submission
+      // (401 status indicates invalid secret credentials, continue to email form)
+    } catch (error) {
+      console.error('Authentication check failed:', error)
+      // Continue with normal form submission if auth check fails
     }
     
     // Custom validation for normal form submissions
