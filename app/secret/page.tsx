@@ -2,7 +2,13 @@
 import { Suspense, useEffect, useState } from 'react'
 import MinecraftNavbar from "@/components/minecraft-navbar"
 import PageTransition from "@/components/page-transition"
-import { formatDogFacts, checkRateLimit, type DogData, type RateLimitResult } from '@/lib/fetchDog'
+import { formatDogFacts, type DogData } from '@/lib/fetchDog'
+
+interface ServerRateLimitInfo {
+  limit: number
+  remaining: number
+  reset: number
+}
 
 function formatTodaysDate(): string {
   const today = new Date()
@@ -15,17 +21,21 @@ function formatTodaysDate(): string {
   return formatter.format(today)
 }
 
-function RateLimitExceeded({ rateLimitInfo }: { rateLimitInfo: RateLimitResult }) {
+function RateLimitExceeded({ rateLimitInfo, retryAfter }: { readonly rateLimitInfo: ServerRateLimitInfo | null, readonly retryAfter: number | null }) {
+  const resetDate = rateLimitInfo?.reset 
+    ? new Date(rateLimitInfo.reset).toLocaleString()
+    : 'tomorrow'
+    
   return (
     <div className="error-container minecraft-frame">
       <div className="error-content">
         <h2 className="minecraft-text error-title">🐕 Woof! Daily limit reached</h2>
         <p className="minecraft-text error-message">
-          You've reached your daily limit of 100 puppy requests! Come back tomorrow for more adorable dogs.
+          You've reached your daily limit of {rateLimitInfo?.limit || 100} puppy requests! Come back later for more adorable dogs.
         </p>
         <div className="minecraft-text error-details">
-          <p>Requests remaining: {rateLimitInfo.remainingRequests}</p>
-          <p>Limit resets: {rateLimitInfo.resetTime}</p>
+          <p>Limit resets: {resetDate}</p>
+          {retryAfter && <p>Try again in {retryAfter} seconds</p>}
         </div>
       </div>
     </div>
@@ -36,27 +46,38 @@ function DogDisplay() {
   const [dogData, setDogData] = useState<DogData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [rateLimitInfo, setRateLimitInfo] = useState<RateLimitResult | null>(null)
+  const [rateLimitInfo, setRateLimitInfo] = useState<ServerRateLimitInfo | null>(null)
+  const [isRateLimited, setIsRateLimited] = useState(false)
+  const [retryAfter, setRetryAfter] = useState<number | null>(null)
 
   useEffect(() => {
     async function loadDogData() {
       try {
         setLoading(true)
         setError(null)
+        setIsRateLimited(false)
 
-        // Check rate limit first
-        const limitCheck = checkRateLimit()
-        setRateLimitInfo(limitCheck)
-
-        if (!limitCheck.allowed) {
-          setLoading(false)
-          return
-        }
-
-        // Call our API route instead of fetchDogOfTheDay directly
+        // Call our API route
         const response = await fetch('/api/dog', {
           cache: 'no-store' // Ensure fresh data on each request
         })
+
+        // Parse rate limit headers from server response
+        const rateLimitHeaders = {
+          limit: Number.parseInt(response.headers.get('X-RateLimit-Limit') || '100'),
+          remaining: Number.parseInt(response.headers.get('X-RateLimit-Remaining') || '0'),
+          reset: Number.parseInt(response.headers.get('X-RateLimit-Reset') || '0')
+        }
+        setRateLimitInfo(rateLimitHeaders)
+
+        // Check if rate limited (429 status)
+        if (response.status === 429) {
+          const errorData = await response.json()
+          setIsRateLimited(true)
+          setRetryAfter(errorData.retryAfter || null)
+          setLoading(false)
+          return
+        }
 
         if (!response.ok) {
           const errorData = await response.json()
@@ -80,8 +101,8 @@ function DogDisplay() {
     return <LoadingDog />
   }
 
-  if (rateLimitInfo && !rateLimitInfo.allowed) {
-    return <RateLimitExceeded rateLimitInfo={rateLimitInfo} />
+  if (isRateLimited) {
+    return <RateLimitExceeded rateLimitInfo={rateLimitInfo} retryAfter={retryAfter} />
   }
 
   if (error) {
@@ -117,7 +138,7 @@ function DogDisplay() {
           textAlign: 'center'
         }}>
           <p className="minecraft-text" style={{ color: '#ffd700', margin: 0, fontSize: '14px' }}>
-            🐾 {rateLimitInfo.remainingRequests} puppy requests remaining today
+            🐾 {rateLimitInfo.remaining} of {rateLimitInfo.limit} puppy requests remaining today
           </p>
         </div>
       )}

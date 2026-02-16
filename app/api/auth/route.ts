@@ -1,20 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import crypto from 'crypto'
+import { rateLimit } from '@/lib/rateLimit'
+import { sanitizeString } from '@/lib/validation'
 
 // Secret credentials from environment variables
 const SECRET_NAME = process.env.SECRET_NAME
 const SECRET_MESSAGE = process.env.SECRET_MESSAGE
 
+// Rate limit: 5 attempts per 15 minutes
+const RATE_LIMIT_CONFIG = {
+  maxRequests: 5,
+  windowMs: 15 * 60 * 1000 // 15 minutes
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting
+    const rateLimitResult = rateLimit(request, RATE_LIMIT_CONFIG)
+    if (rateLimitResult instanceof NextResponse) {
+      return rateLimitResult
+    }
+
+    // Parse and validate request body
     const body = await request.json()
+    
+    if (!body || typeof body !== 'object') {
+      return NextResponse.json(
+        { success: false, message: 'Invalid request body' },
+        { status: 400 }
+      )
+    }
+
     const { name, message } = body
+
+    // Validate input types and sanitize
+    if (typeof name !== 'string' || typeof message !== 'string') {
+      return NextResponse.json(
+        { success: false, message: 'Invalid input format' },
+        { status: 400 }
+      )
+    }
+
+    const sanitizedName = sanitizeString(name, 100)
+    const sanitizedMessage = sanitizeString(message, 500)
 
     // Check credentials (case insensitive)
     if (SECRET_NAME && SECRET_MESSAGE &&
-        name.toLowerCase().trim() === SECRET_NAME.toLowerCase() && 
-        message.toLowerCase().trim() === SECRET_MESSAGE.toLowerCase()) {
+        sanitizedName.toLowerCase() === SECRET_NAME.toLowerCase() && 
+        sanitizedMessage.toLowerCase() === SECRET_MESSAGE.toLowerCase()) {
       
       // Generate a secure session token
       const sessionToken = crypto.randomBytes(32).toString('hex')
