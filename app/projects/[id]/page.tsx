@@ -313,6 +313,30 @@ const projects: Project[] = [
     ],
     TODO: []
   },
+  {
+    id: 12,
+    title: "mingo-mail",
+    description: "basic email agent used for teaching anthropicclaude builder club",
+    longDescription: "A basic email agent used for teaching anthropic claude builder club. Categorizes, summarizes, and creates drafts of emails based on urgency",
+    technologies: ["Python", "Claude Haiku"],
+    image: "/projects/mingo-mail.png",
+    githubUrl: "https://github.com/mattdomingo/mingo-mail",
+    featured: true,
+    features: [
+      "Categorizes emails based on topic",
+      "Summarizes emails",
+      "Creates drafts of emails based on urgency",
+      "Hardened security using regex, input validation, and context window limiting",
+    ],
+    challenges: [
+      "Making it simple enough for beginners to understand",
+      "Preventing prompt injection",
+      "Creating diagrams to help explain the code",
+    ],
+    TODO: [
+      "Potentially make it a widget"
+    ],
+  },
 ]
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
