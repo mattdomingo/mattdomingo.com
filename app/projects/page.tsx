@@ -29,6 +29,15 @@ const projects: Project[] = [
     highlighted: true
   },
   {
+    id: 12,
+    title: "mingo-mail",
+    description: "basic email agent used for teaching anthropicclaude builder club",
+    technologies: ["Python", "Claude"],
+    image: "/projects/mingo-mail.png",
+    githubUrl: "https://github.com/mattdomingo/mingo-mail",
+    featured: true,
+  },
+  {
     id: 11,
     title: "brookecarmichael.com",
     description: "portfolio website for journalism major",
