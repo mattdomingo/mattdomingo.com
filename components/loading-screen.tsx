@@ -6,12 +6,16 @@ import { motion, AnimatePresence } from 'framer-motion'
 const FUN_FACTS = [
   "I'm an incoming SWE @ Visa",
   "I'm an Eagle Scout!",
-  "I enjoy EDM and like to DJ!",
+  "I love EDM and DJing!",
   "BEAR DOWN!",
-  "I used to be a videographer... @mattdomingomedia",
-  "I'm a washed up ex-fraternity president",
+  "I am a videographer @mattdomingomedia",
   "I love KBBQ + Soju",
-  "I'm a huge fan of the movie 'Napoleon Dynamite"
+  "I love pottery!",
+  "I love to ski!",
+  "I do hot yoga sculpt classes!",
+  "Probably trying to fix my golf swing...",
+  "Huge F1 fan, go Red Bull!",
+  "My favorite food is sushi!"
 ]
 
 interface LoadingScreenProps {
