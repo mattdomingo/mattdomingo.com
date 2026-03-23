@@ -38,16 +38,6 @@ const projects: Project[] = [
     featured: true,
   },
   {
-    id: 11,
-    title: "brookecarmichael.com",
-    description: "portfolio website for journalism major",
-    technologies: ["JavaScript", "TypeScript", "CSS"],
-    image: "/projects/brookecarmichael.png",
-    githubUrl: "https://brookecarmichael.com",
-    liveUrl: "https://brookecarmichael.com",
-    featured: true
-  },
-  {
     id: 9,
     title: "TruWeaveTrader",
     description: "blazing-fast terminal trading app",

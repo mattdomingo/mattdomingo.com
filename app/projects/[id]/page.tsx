@@ -287,33 +287,6 @@ const projects: Project[] = [
     ]
   },
   {
-    id: 11,
-    title: "brookecarmichael.com",
-    description: "portfolio website for journalism major",
-    longDescription: "A professional portfolio website showcasing journalism work, writing samples, and multimedia projects. Built with modern web technologies to provide a clean, accessible platform for displaying articles, publications, and career achievements.",
-    technologies: ["JavaScript", "TypeScript", "CSS"],
-    image: "/projects/brookecarmichael.png",
-    githubUrl: "https://brookecarmichael.com",
-    liveUrl: "https://brookecarmichael.com",
-    featured: true,
-    features: [
-      "Clean, professional design optimized for content display",
-      "Responsive layout for all devices",
-      "Portfolio showcase for journalism work",
-      "Article and writing sample displays",
-      "Professional biography and contact sections",
-      "Optimized performance for fast loading"
-    ],
-    challenges: [
-      "Designing content-focused layout for journalism portfolio",
-      "Creating a interactive carousel for portfolio items",
-      "Creating accessible and readable typography",
-      "Implementing responsive design for various screen sizes",
-      "Optimizing images and media for web performance"
-    ],
-    TODO: []
-  },
-  {
     id: 12,
     title: "mingo-mail",
     description: "basic email agent used for teaching anthropicclaude builder club",

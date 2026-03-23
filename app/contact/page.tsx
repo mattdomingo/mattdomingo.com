@@ -75,35 +75,6 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Try secret authentication first (server-side validation only)
-    try {
-      const authResponse = await fetch('/api/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          message: formData.message
-        })
-      })
-      
-      const authData = await authResponse.json()
-      
-      if (authData.success) {
-        // Clear form and redirect to secret page
-        setFormData({ name: '', email: '', message: '' })
-        router.push('/secret')
-        return
-      }
-      
-      // If not secret auth, continue with normal form submission
-      // (401 status indicates invalid secret credentials, continue to email form)
-    } catch (error) {
-      console.error('Authentication check failed:', error)
-      // Continue with normal form submission if auth check fails
-    }
-    
     // Custom validation for normal form submissions
     if (!formData.email.trim()) {
       setSubmitStatus('validation_error')
