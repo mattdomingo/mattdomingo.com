@@ -14,7 +14,9 @@ export default function ContactPage() {
     message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error' | 'validation_error'>('idle')
+  const [submitStatus, setSubmitStatus] = useState<
+    'idle' | 'success' | 'error' | 'validation_error' | 'feature_retired'
+  >('idle')
   const [cooldownEndTime, setCooldownEndTime] = useState<number | null>(null)
   const [remainingTime, setRemainingTime] = useState<number>(0)
 
@@ -74,7 +76,31 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
+    // Same as before: POST name + message to /api/auth; on success show message instead of navigating to /secret
+    try {
+      const authResponse = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          message: formData.message,
+        }),
+      })
+
+      const authData = await authResponse.json()
+
+      if (authData.success) {
+        setSubmitStatus('feature_retired')
+        return
+      }
+    } catch (error) {
+      console.error('Authentication check failed:', error)
+      // Continue with normal form submission if auth check fails
+    }
+
     // Custom validation for normal form submissions
     if (!formData.email.trim()) {
       setSubmitStatus('validation_error')
@@ -265,6 +291,12 @@ export default function ContactPage() {
                 {submitStatus === 'validation_error' && (
                   <div className="status-message error minecraft-text">
                     📧 Please enter your email address to send a message.
+                  </div>
+                )}
+
+                {submitStatus === 'feature_retired' && (
+                  <div className="status-message error minecraft-text">
+                    Sorry, this feature is no longer available :(
                   </div>
                 )}
                 
