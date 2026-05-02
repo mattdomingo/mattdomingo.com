@@ -29,6 +29,35 @@ const projects: Project[] = [
     highlighted: true
   },
   {
+    id: 15,
+    title: "mujoco-sandbox",
+    description: "browser viewer for replaying AVP hand-tracking captures with MuJoCo physics",
+    technologies: ["TypeScript", "Three.js", "MuJoCo", "Next.js"],
+    image: "/projects/mujoco-sandbox.png",
+    githubUrl: "https://github.com/mattdomingo/mujoco-sandbox",
+    featured: true,
+    highlighted: true
+  },
+  {
+    id: 13,
+    title: "capture-enrichment",
+    description: "AI pipeline for annotating Apple Vision Pro capture sessions",
+    technologies: ["Python", "Gemini", "FFmpeg", "AWS"],
+    image: "/projects/capture-enrichment.png",
+    githubUrl: "https://github.com/mattdomingo/capture-enrichment",
+    featured: true,
+    highlighted: true
+  },
+  {
+    id: 14,
+    title: "connex",
+    description: "invite-only relationship graph explorer with Gmail-powered tie strength",
+    technologies: ["TypeScript", "React", "Express", "SQLite", "JWT"],
+    image: "/projects/connex.png",
+    githubUrl: "https://github.com/mattdomingo/connex",
+    featured: true
+  },
+  {
     id: 12,
     title: "mingo-mail",
     description: "basic email agent used for teaching anthropicclaude builder club",
@@ -112,19 +141,20 @@ const projects: Project[] = [
   },
   {
     id: 8,
-    title: "Label Automation", 
+    title: "Label Automation",
     description: "scan directory and identify sensitive files",
     technologies: ["HTML", "Python"],
     image: "/projects/label-automation.png",
     githubUrl: "https://github.com/mattdomingo/label-automation-v2", // Replace with actual repo
     featured: true
-  }
+  },
 ]
 
 const allTechnologies = [
-  "All", "React", "Next.js", "TypeScript", "Node.js", "Python", "JavaScript", 
+  "All", "React", "Next.js", "TypeScript", "Node.js", "Python", "JavaScript",
   "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "WebSockets", "CI/CD",
-  "Java", "Spring Boot", "MySQL"
+  "Java", "Spring Boot", "MySQL", "Gemini", "FFmpeg", "AWS", "Express", "SQLite", "JWT",
+  "Three.js", "MuJoCo"
 ]
 
 export default function ProjectsPage() {

@@ -310,6 +310,92 @@ const projects: Project[] = [
       "Potentially make it a widget"
     ],
   },
+  {
+    id: 13,
+    title: "capture-enrichment",
+    description: "AI pipeline for annotating Apple Vision Pro capture sessions",
+    longDescription: "Ingests Apple Vision Pro .capture packages and produces structured, timestamped activity annotations. Uses a two-pass Gemini pipeline to annotate events and segment them into semantic chapters, with JPEG thumbnail frames extracted at each event's timecode via FFmpeg.",
+    technologies: ["Python", "Gemini", "FFmpeg", "AWS"],
+    image: "/projects/capture-enrichment.png",
+    githubUrl: "https://github.com/mattdomingo/capture-enrichment",
+    featured: true,
+    features: [
+      "Two-pass Gemini pipeline: parallel chunk annotation then semantic chapter segmentation",
+      "Structured telemetry context: head movement, pinch gestures, tracked objects, transcript",
+      "Overlapping chunk processing with cross-boundary event deduplication",
+      "JPEG thumbnail extraction at each event timecode via FFmpeg",
+      "Lightweight static viewer for browsing sessions and thumbnails side-by-side"
+    ],
+    challenges: [
+      "Deduplicating events at chunk overlap boundaries without discarding real events",
+      "Extracting meaningful telemetry signals (pinch gestures, head movement) from raw CSV data",
+      "Managing Gemini file upload lifecycle and retrying on rate limit responses",
+      "Aligning telemetry timestamps with video chunks across multiple data sources"
+    ],
+    TODO: [
+      "AWS Lambda container deployment for scalable cloud processing",
+      "AWS Step Functions for parallel chunk annotation on long sessions",
+      "Async concurrent Pass 1 chunk processing via asyncio",
+      "Sub-second thumbnail precision using millisecond-level event timestamps"
+    ]
+  },
+  {
+    id: 14,
+    title: "connex",
+    description: "invite-only relationship graph explorer with Gmail-powered tie strength",
+    longDescription: "An invite-only relationship graph app for mapping real-world connections. Full-stack TypeScript MVP with degree-based access gating, Gmail sync for tie-strength scoring, and interactive force-directed graph visualization using d3-force.",
+    technologies: ["TypeScript", "React", "Express", "SQLite", "JWT"],
+    image: "/projects/connex.png",
+    githubUrl: "https://github.com/mattdomingo/connex",
+    featured: true,
+    features: [
+      "Interactive force-directed graph visualization with d3-force",
+      "Degree-based access gating: free tier sees up to 2nd-degree connections",
+      "Gmail sync for computing tie-strength scores from email metadata only",
+      "Invite-only registration with code expiration and per-code usage limits",
+      "Google OAuth for both authentication and Gmail integration",
+      "AES-256-GCM encrypted OAuth token storage at rest"
+    ],
+    challenges: [
+      "Separating entitlement policy from BFS traversal to allow clean monetization hooks",
+      "Encrypting OAuth tokens at rest without exposing keys in logs or API responses",
+      "Handling pending vs accepted connections consistently across graph traversal and shortest-path",
+      "Designing tie-strength scoring that rewards bidirectional communication over one-sided threads"
+    ],
+    TODO: [
+      "Wire degree gating to a real subscription and payment system",
+      "Automated fuzzy email-to-person matching on new user signup",
+      "Streaming graph updates as Gmail sync progresses in real time"
+    ]
+  },
+  {
+    id: 15,
+    title: "mujoco-sandbox",
+    description: "browser viewer for replaying AVP hand-tracking captures with MuJoCo physics",
+    longDescription: "Browser-based viewer for replaying Holos .capture folders with MuJoCo WASM physics and Three.js rendering. Drives a humanoid model from Apple Vision Pro hand-tracking data with synchronized video playback, inverse kinematics overlays, and live pressure HUDs.",
+    technologies: ["TypeScript", "Three.js", "MuJoCo", "Next.js"],
+    image: "/projects/mujoco-sandbox.png",
+    githubUrl: "https://github.com/mattdomingo/mujoco-sandbox",
+    featured: true,
+    features: [
+      "MuJoCo WASM physics with raw mocap and physics-resolved rendering modes",
+      "Synchronized video playback aligned frame-accurately to capture timeline",
+      "Humanoid inverse kinematics overlay driven by hand and device pose data",
+      "Ball pressure and inter-hand pressure HUDs updated in real time",
+      "Folder drag-and-drop with play, pause, and timeline scrubbing controls",
+      "Playwright end-to-end tests with a dedicated MuJoCo WASM integration test harness"
+    ],
+    challenges: [
+      "Initializing MuJoCo WASM in the browser with SharedArrayBuffer (COOP/COEP headers required)",
+      "Aligning hand-tracking CSV timestamps with video playback at frame-accurate precision",
+      "Graceful fallback to raw capture rendering when MuJoCo fails to initialize",
+      "Building a Playwright test harness for physics simulation in a headless browser"
+    ],
+    TODO: [
+      "Support for full-body pose reconstruction beyond arms and torso",
+      "WebXR playback mode for immersive capture review"
+    ]
+  },
 ]
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
