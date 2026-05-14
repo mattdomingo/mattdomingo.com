@@ -12,6 +12,7 @@ interface Project {
   longDescription: string
   technologies: string[]
   image: string
+  video?: string
   githubUrl: string
   liveUrl?: string
   featured: boolean
@@ -375,6 +376,7 @@ const projects: Project[] = [
     longDescription: "Browser-based viewer for replaying Holos .capture folders with MuJoCo WASM physics and Three.js rendering. Drives a humanoid model from Apple Vision Pro hand-tracking data with synchronized video playback, inverse kinematics overlays, and live pressure HUDs.",
     technologies: ["TypeScript", "Three.js", "MuJoCo", "Next.js"],
     image: "/projects/mujoco-sandbox.png",
+    video: "/projects/mujoco-sandbox.webm",
     githubUrl: "https://github.com/mattdomingo/mujoco-sandbox",
     featured: true,
     features: [
@@ -474,11 +476,25 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             {/* Project Header */}
             <div className="project-header">
               <div className="project-image-section">
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  className="project-detail-image"
-                />
+                {project.video ? (
+                  <video
+                    className="project-detail-image"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    poster={project.image}
+                  >
+                    <source src={project.video} type="video/webm" />
+                    <source src={project.video.replace('.webm', '.mp4')} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="project-detail-image"
+                  />
+                )}
               </div>
               
               <div className="project-title-section">

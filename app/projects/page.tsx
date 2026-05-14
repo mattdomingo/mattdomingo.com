@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import MinecraftNavbar from "@/components/minecraft-navbar"
 import PageTransition from "@/components/page-transition"
@@ -11,6 +11,7 @@ interface Project {
   description: string
   technologies: string[]
   image: string
+  video?: string
   githubUrl: string
   liveUrl?: string
   featured: boolean
@@ -34,6 +35,7 @@ const projects: Project[] = [
     description: "browser viewer for replaying AVP hand-tracking captures with MuJoCo physics",
     technologies: ["TypeScript", "Three.js", "MuJoCo", "Next.js"],
     image: "/projects/mujoco-sandbox.png",
+    video: "/projects/mujoco-sandbox.webm",
     githubUrl: "https://github.com/mattdomingo/mujoco-sandbox",
     featured: true,
     highlighted: true
@@ -160,12 +162,31 @@ const allTechnologies = [
 export default function ProjectsPage() {
   const [selectedFilter, setSelectedFilter] = useState("All")
   const router = useRouter()
+  const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map())
 
-  const filteredProjects = selectedFilter === "All" 
-    ? projects 
-    : projects.filter(project => 
+  const filteredProjects = selectedFilter === "All"
+    ? projects
+    : projects.filter(project =>
         project.technologies.some(tech => tech === selectedFilter)
       )
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target as HTMLVideoElement
+          if (entry.isIntersecting) {
+            video.play().catch(() => {})
+          } else {
+            video.pause()
+          }
+        })
+      },
+      { threshold: 0.3 }
+    )
+    videoRefs.current.forEach((video) => observer.observe(video))
+    return () => observer.disconnect()
+  }, [filteredProjects])
 
   const handleProjectClick = (projectId: number) => {
     router.push(`/projects/${projectId}`)
@@ -203,11 +224,30 @@ export default function ProjectsPage() {
                 onClick={() => handleProjectClick(project.id)}
               >
                 <div className="project-image-container">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="project-image"
-                  />
+                  {project.video ? (
+                    <video
+                      ref={(el) => {
+                        if (el) videoRefs.current.set(project.id, el)
+                        else videoRefs.current.delete(project.id)
+                      }}
+                      className="project-image"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="none"
+                      poster={project.image}
+                    >
+                      <source src={project.video} type="video/webm" />
+                      <source src={project.video.replace('.webm', '.mp4')} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="project-image"
+                    />
+                  )}
                 </div>
                 
                 <div className="project-info">
