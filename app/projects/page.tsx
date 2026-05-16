@@ -23,7 +23,7 @@ const projects: Project[] = [
     id: 10,
     title: "QuestGPT",
     description: "AI-powered text-based RPG game",
-    technologies: ["Java", "Spring Boot", "React"],
+    technologies: ["Java", "Spring Boot", "React", "SQL", "MySQL"],
     image: "/projects/questgpt.png",
     githubUrl: "https://github.com/mattdomingo/QuestGPT",
     featured: true,
@@ -33,7 +33,7 @@ const projects: Project[] = [
     id: 15,
     title: "mujoco-sandbox",
     description: "browser viewer for replaying AVP hand-tracking captures with MuJoCo physics",
-    technologies: ["TypeScript", "Three.js", "MuJoCo"],
+    technologies: ["TypeScript", "Next.js", "Three.js", "MuJoCo"],
     image: "/projects/mujoco-sandbox.png",
     video: "/projects/mujoco-sandbox.webm",
     githubUrl: "https://github.com/mattdomingo/mujoco-sandbox",
@@ -44,7 +44,7 @@ const projects: Project[] = [
     id: 13,
     title: "capture-enrichment",
     description: "AI pipeline for annotating Apple Vision Pro capture sessions",
-    technologies: ["Python", "Gemini", "FFmpeg"],
+    technologies: ["Python", "Gemini", "FFmpeg", "AWS"],
     image: "/projects/capture-enrichment.png",
     githubUrl: "https://github.com/mattdomingo/capture-enrichment",
     featured: true,
@@ -63,7 +63,7 @@ const projects: Project[] = [
     id: 14,
     title: "connex",
     description: "invite-only relationship graph explorer with Gmail-powered tie strength",
-    technologies: ["TypeScript", "React", "Express"],
+    technologies: ["TypeScript", "React", "Express", "SQLite"],
     image: "/projects/connex.png",
     githubUrl: "https://github.com/mattdomingo/connex",
     featured: true
@@ -72,7 +72,7 @@ const projects: Project[] = [
     id: 12,
     title: "mingo-mail",
     description: "basic email agent used for teaching anthropicclaude builder club",
-    technologies: ["Python", "Claude"],
+    technologies: ["Python", "Claude API"],
     image: "/projects/mingo-mail.png",
     githubUrl: "https://github.com/mattdomingo/mingo-mail",
     featured: true,
@@ -81,7 +81,7 @@ const projects: Project[] = [
     id: 9,
     title: "TruWeaveTrader",
     description: "blazing-fast terminal trading app",
-    technologies: ["Go", "WebSockets", "CI/CD"],
+    technologies: ["Go", "WebSockets", "Alpaca API"],
     image: "/projects/truweavetrader.png",
     githubUrl: "https://github.com/mattdomingo/TruWeaveTrader",
     featured: true
@@ -90,7 +90,7 @@ const projects: Project[] = [
     id: 1,
     title: "mattdomingo.com",
     description: "minecraft-themed portfolio",
-    technologies: ["Next.js", "TypeScript", "React"],
+    technologies: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
     image: "/projects/mattdomingo-com.png",
     githubUrl: "https://github.com/mattdomingo/mattdomingo.com", // Replace with your actual repo
     //liveUrl: "https://mattdomingo.com",
@@ -100,16 +100,16 @@ const projects: Project[] = [
     id: 2,
     title: "ShipIt",
     description: "one-stop shop for the internship hunt",
-    technologies: ["React", "Node.js", "Python"],
+    technologies: ["Python", "FastAPI", "React Native", "Expo"],
     image: "/projects/shipit.png",
-    githubUrl: "https://github.com/mattdomingo/taskManager",
+    githubUrl: "https://github.com/mattdomingo/shipIt",
     featured: true
   },
   {
     id: 3,
     title: "Gravity Pong", 
     description: "classic pong game with a twist",
-    technologies: ["C++"],
+    technologies: ["C++", "SDL3", "CMake"],
     image: "/projects/gravity-pong.png",
     githubUrl: "https://github.com/mattdomingo/GravityPong",
     featured: true
@@ -118,7 +118,7 @@ const projects: Project[] = [
     id: 4,
     title: "NewsTrader", 
     description: "news fetching and trading recommendations",
-    technologies: ["C", "Python", "JavaScript"],
+    technologies: ["C", "Python", "React", "Hugging Face"],
     image: "/projects/newstrader.png",
     githubUrl: "https://github.com/mattdomingo/newstrader",
     featured: true
@@ -127,7 +127,7 @@ const projects: Project[] = [
     id: 5,
     title: "Task Manager", 
     description: "self explanatory",
-    technologies: ["TypeScript", "Node.js", "CSS"],
+    technologies: ["TypeScript", "React", "Vite"],
     image: "/projects/task-manager.png",
     githubUrl: "https://github.com/mattdomingo/taskManager",
     featured: true
@@ -136,7 +136,7 @@ const projects: Project[] = [
     id: 6,
     title: "PomoTask", 
     description: "pomodoro timer with task management",
-    technologies: ["TypeScript", "Node.js", "Docker"],
+    technologies: ["TypeScript", "React", "Vite", "Docker"],
     image: "/projects/pomotask.png",
     githubUrl: "https://github.com/mattdomingo/pomoTask",
     featured: true
@@ -145,7 +145,7 @@ const projects: Project[] = [
     id: 7,
     title: "Sheets Project", 
     description: "data pipeline for google sheets integration",
-    technologies: ["SQL", "JSON", "YAML"],
+    technologies: ["SQL", "BigQuery", "Google Cloud Scheduler"],
     image: "/projects/sheets-project.png",
     githubUrl: "https://github.com/mattdomingo/sheetsProject",
     featured: true
@@ -154,7 +154,7 @@ const projects: Project[] = [
     id: 8,
     title: "Label Automation",
     description: "scan directory and identify sensitive files",
-    technologies: ["HTML", "Python"],
+    technologies: ["Python", "Tesseract OCR", "Tkinter"],
     image: "/projects/label-automation.png",
     githubUrl: "https://github.com/mattdomingo/label-automation-v2", // Replace with actual repo
     featured: true
@@ -162,8 +162,8 @@ const projects: Project[] = [
 ]
 
 const allTechnologies = [
-  "All",
-  ...Array.from(new Set(projects.flatMap(project => project.technologies))),
+  "All", "React", "Next.js", "TypeScript", "Python", "FastAPI", "Java",
+  "Spring Boot", "Go", "C++", "C", "SQL", "Docker", "AWS", "scikit-learn",
 ]
 
 export default function ProjectsPage() {
