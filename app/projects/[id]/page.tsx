@@ -404,7 +404,7 @@ const projects: Project[] = [
     description: "Formula 1 finishing-position predictor with sklearn models",
     longDescription: "A Formula 1 finishing-position prediction project that trains and compares regression models from historical race CSV data. It builds features from grid position, qualifying, pit stops, and season context, then writes metrics, plots, and interpretation artifacts from an end-to-end Python pipeline.",
     technologies: ["Python", "scikit-learn", "Pandas", "NumPy", "Matplotlib"],
-    image: "/projects/f1-predictor.svg",
+    image: "/projects/f1-predictor.png",
     githubUrl: "https://github.com/mattdomingo/f1-predictor",
     featured: true,
     features: [

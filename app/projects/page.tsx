@@ -23,7 +23,7 @@ const projects: Project[] = [
     id: 10,
     title: "QuestGPT",
     description: "AI-powered text-based RPG game",
-    technologies: ["Java", "Spring Boot", "React", "MySQL", "Docker", "JavaScript"],
+    technologies: ["Java", "Spring Boot", "React"],
     image: "/projects/questgpt.png",
     githubUrl: "https://github.com/mattdomingo/QuestGPT",
     featured: true,
@@ -33,7 +33,7 @@ const projects: Project[] = [
     id: 15,
     title: "mujoco-sandbox",
     description: "browser viewer for replaying AVP hand-tracking captures with MuJoCo physics",
-    technologies: ["TypeScript", "Three.js", "MuJoCo", "Next.js"],
+    technologies: ["TypeScript", "Three.js", "MuJoCo"],
     image: "/projects/mujoco-sandbox.png",
     video: "/projects/mujoco-sandbox.webm",
     githubUrl: "https://github.com/mattdomingo/mujoco-sandbox",
@@ -44,7 +44,7 @@ const projects: Project[] = [
     id: 13,
     title: "capture-enrichment",
     description: "AI pipeline for annotating Apple Vision Pro capture sessions",
-    technologies: ["Python", "Gemini", "FFmpeg", "AWS"],
+    technologies: ["Python", "Gemini", "FFmpeg"],
     image: "/projects/capture-enrichment.png",
     githubUrl: "https://github.com/mattdomingo/capture-enrichment",
     featured: true,
@@ -54,8 +54,8 @@ const projects: Project[] = [
     id: 16,
     title: "f1-predictor",
     description: "Formula 1 finishing-position predictor with sklearn models",
-    technologies: ["Python", "scikit-learn", "Pandas", "NumPy", "Matplotlib"],
-    image: "/projects/f1-predictor.svg",
+    technologies: ["Python", "scikit-learn", "Pandas"],
+    image: "/projects/f1-predictor.png",
     githubUrl: "https://github.com/mattdomingo/f1-predictor",
     featured: true
   },
@@ -63,7 +63,7 @@ const projects: Project[] = [
     id: 14,
     title: "connex",
     description: "invite-only relationship graph explorer with Gmail-powered tie strength",
-    technologies: ["TypeScript", "React", "Express", "SQLite", "JWT"],
+    technologies: ["TypeScript", "React", "Express"],
     image: "/projects/connex.png",
     githubUrl: "https://github.com/mattdomingo/connex",
     featured: true
@@ -90,7 +90,7 @@ const projects: Project[] = [
     id: 1,
     title: "mattdomingo.com",
     description: "minecraft-themed portfolio",
-    technologies: ["Next.js", "TypeScript", "CSS", "React"],
+    technologies: ["Next.js", "TypeScript", "React"],
     image: "/projects/mattdomingo-com.png",
     githubUrl: "https://github.com/mattdomingo/mattdomingo.com", // Replace with your actual repo
     //liveUrl: "https://mattdomingo.com",
@@ -100,7 +100,7 @@ const projects: Project[] = [
     id: 2,
     title: "ShipIt",
     description: "one-stop shop for the internship hunt",
-    technologies: ["React", "Node.js", "Python", "TypeScript"],
+    technologies: ["React", "Node.js", "Python"],
     image: "/projects/shipit.png",
     githubUrl: "https://github.com/mattdomingo/taskManager",
     featured: true
@@ -118,7 +118,7 @@ const projects: Project[] = [
     id: 4,
     title: "NewsTrader", 
     description: "news fetching and trading recommendations",
-    technologies: ["C", "Python", "JavaScript", "CSS"],
+    technologies: ["C", "Python", "JavaScript"],
     image: "/projects/newstrader.png",
     githubUrl: "https://github.com/mattdomingo/newstrader",
     featured: true
@@ -136,7 +136,7 @@ const projects: Project[] = [
     id: 6,
     title: "PomoTask", 
     description: "pomodoro timer with task management",
-    technologies: ["TypeScript", "Node.js", "Docker", "CSS"],
+    technologies: ["TypeScript", "Node.js", "Docker"],
     image: "/projects/pomotask.png",
     githubUrl: "https://github.com/mattdomingo/pomoTask",
     featured: true
@@ -162,10 +162,8 @@ const projects: Project[] = [
 ]
 
 const allTechnologies = [
-  "All", "React", "Next.js", "TypeScript", "Node.js", "Python", "JavaScript",
-  "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "WebSockets", "CI/CD",
-  "Java", "Spring Boot", "MySQL", "Gemini", "FFmpeg", "AWS", "Express", "SQLite", "JWT",
-  "Three.js", "MuJoCo", "scikit-learn", "Pandas", "NumPy", "Matplotlib"
+  "All",
+  ...Array.from(new Set(projects.flatMap(project => project.technologies))),
 ]
 
 export default function ProjectsPage() {
@@ -264,16 +262,11 @@ export default function ProjectsPage() {
                   <p className="project-description minecraft-text">{project.description}</p>
                   
                   <div className="project-technologies">
-                    {project.technologies.slice(0, 3).map((tech, index) => (
+                    {project.technologies.map((tech, index) => (
                       <span key={index} className="tech-tag minecraft-text">
                         {tech}
                       </span>
                     ))}
-                    {project.technologies.length > 3 && (
-                      <span className="tech-tag minecraft-text extra-count">
-                        +{project.technologies.length - 3}
-                      </span>
-                    )}
                   </div>
 
                   <div className="project-links">
