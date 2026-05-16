@@ -398,6 +398,35 @@ const projects: Project[] = [
       "WebXR playback mode for immersive capture review"
     ]
   },
+  {
+    id: 16,
+    title: "f1-predictor",
+    description: "Formula 1 finishing-position predictor with sklearn models",
+    longDescription: "A Formula 1 finishing-position prediction project that trains and compares regression models from historical race CSV data. It builds features from grid position, qualifying, pit stops, and season context, then writes metrics, plots, and interpretation artifacts from an end-to-end Python pipeline.",
+    technologies: ["Python", "scikit-learn", "Pandas", "NumPy", "Matplotlib"],
+    image: "/projects/f1-predictor.svg",
+    githubUrl: "https://github.com/mattdomingo/f1-predictor",
+    featured: true,
+    features: [
+      "End-to-end training entrypoint for data preparation, model fitting, evaluation, and output generation",
+      "Feature engineering across race results, qualifying, pit stops, and season context",
+      "Regression model comparison using linear, Lasso, gradient boosting, and related sklearn pipelines",
+      "Generated model metrics written to CSV for repeatable comparison",
+      "Post-hoc plots and interpretation artifacts for model analysis"
+    ],
+    challenges: [
+      "Combining multiple Formula 1 data tables into a consistent training dataset",
+      "Representing race context without leaking future result information into model features",
+      "Comparing different regression approaches on a noisy, position-based target",
+      "Producing outputs that make model performance and feature behavior easy to inspect"
+    ],
+    TODO: [
+      "Add live race prediction inputs",
+      "Expand model comparison with additional ensemble methods",
+      "Add automated data refresh for newer seasons",
+      "Publish an interactive results dashboard"
+    ]
+  },
 ]
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
@@ -580,4 +609,4 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
       </PageTransition>
     </>
   )
-} 
+}

@@ -51,6 +51,15 @@ const projects: Project[] = [
     highlighted: true
   },
   {
+    id: 16,
+    title: "f1-predictor",
+    description: "Formula 1 finishing-position predictor with sklearn models",
+    technologies: ["Python", "scikit-learn", "Pandas", "NumPy", "Matplotlib"],
+    image: "/projects/f1-predictor.svg",
+    githubUrl: "https://github.com/mattdomingo/f1-predictor",
+    featured: true
+  },
+  {
     id: 14,
     title: "connex",
     description: "invite-only relationship graph explorer with Gmail-powered tie strength",
@@ -156,7 +165,7 @@ const allTechnologies = [
   "All", "React", "Next.js", "TypeScript", "Node.js", "Python", "JavaScript",
   "CSS", "C++", "C", "Docker", "SQL", "JSON", "YAML", "HTML", "Go", "WebSockets", "CI/CD",
   "Java", "Spring Boot", "MySQL", "Gemini", "FFmpeg", "AWS", "Express", "SQLite", "JWT",
-  "Three.js", "MuJoCo"
+  "Three.js", "MuJoCo", "scikit-learn", "Pandas", "NumPy", "Matplotlib"
 ]
 
 export default function ProjectsPage() {
