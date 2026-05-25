@@ -12,6 +12,7 @@ interface Project {
   longDescription: string
   technologies: string[]
   image: string
+  video?: string
   githubUrl: string
   liveUrl?: string
   featured: boolean
@@ -26,7 +27,7 @@ const projects: Project[] = [
     title: "mattdomingo.com",
     description: "minecraft-themed portfolio",
     longDescription: "A unique portfolio website built with a Minecraft aesthetic, featuring interactive elements, smooth animations, and a fully functional contact form. The site showcases my projects and skills in a creative, gaming-inspired interface.",
-    technologies: ["Next.js", "TypeScript", "CSS", "React"],
+    technologies: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
     image: "/projects/mattdomingo-com.png",
     githubUrl: "https://github.com/mattdomingo/mattdomingo.com",
     featured: true,
@@ -51,7 +52,7 @@ const projects: Project[] = [
     title: "ShipIt",
     description: "one-stop shop for the internship hunt",
     longDescription: "A comprehensive platform designed to streamline the internship application process. Features job tracking, application management, and automated workflow tools to help students efficiently manage their internship search.",
-    technologies: ["React", "Node.js", "Python", "TypeScript"],
+    technologies: ["Python", "FastAPI", "React Native", "Expo"],
     image: "/projects/shipit.png",
     githubUrl: "https://github.com/mattdomingo/shipIt",
     featured: true,
@@ -76,7 +77,7 @@ const projects: Project[] = [
     title: "Gravity Pong", 
     description: "classic pong game with a twist",
     longDescription: "A modern take on the classic Pong game, featuring gravity mechanics that add a new dimension to gameplay. Built in C++ with custom physics engine and smooth collision detection.",
-    technologies: ["C++"],
+    technologies: ["C++", "SDL3", "CMake"],
     image: "/projects/gravity-pong.png",
     githubUrl: "https://github.com/mattdomingo/GravityPong",
     featured: true,
@@ -101,7 +102,7 @@ const projects: Project[] = [
     title: "NewsTrader", 
     description: "news fetching and trading recommendations",
     longDescription: "An intelligent trading recommendation system that analyzes news sentiment and market data to provide actionable trading insights. Combines real-time news processing with financial data analysis.",
-    technologies: ["C", "Python", "JavaScript", "CSS"],
+    technologies: ["C", "Python", "React", "Hugging Face"],
     image: "/projects/newstrader.png",
     githubUrl: "https://github.com/mattdomingo/newstrader",
     featured: true,
@@ -126,7 +127,7 @@ const projects: Project[] = [
     title: "Task Manager", 
     description: "self explanatory",
     longDescription: "A comprehensive task management application with modern UI/UX design. Features project organization, deadline tracking, team collaboration tools, and productivity analytics.",
-    technologies: ["TypeScript", "Node.js", "CSS"],
+    technologies: ["TypeScript", "React", "Vite"],
     image: "/projects/task-manager.png",
     githubUrl: "https://github.com/mattdomingo/taskManager",
     featured: true,
@@ -151,7 +152,7 @@ const projects: Project[] = [
     title: "PomoTask", 
     description: "pomodoro timer with task management",
     longDescription: "A productivity application that combines the Pomodoro Technique with task management. Features customizable timers, task tracking, and productivity analytics to help users stay focused and productive.",
-    technologies: ["TypeScript", "Node.js", "Docker", "CSS"],
+    technologies: ["TypeScript", "React", "Vite", "Docker"],
     image: "/projects/pomotask.png",
     githubUrl: "https://github.com/mattdomingo/pomoTask",
     featured: true,
@@ -176,7 +177,7 @@ const projects: Project[] = [
     title: "Sheets Project", 
     description: "data pipeline for google sheets integration",
     longDescription: "A robust data pipeline system for Google Sheets integration, enabling automated data processing, transformation, and synchronization. Built with scalability and reliability in mind.",
-    technologies: ["SQL", "JSON", "YAML"],
+    technologies: ["SQL", "BigQuery", "Google Cloud Scheduler"],
     image: "/projects/sheets-project.png",
     githubUrl: "https://github.com/mattdomingo/sheetsProject",
     featured: true,
@@ -201,7 +202,7 @@ const projects: Project[] = [
     title: "Label Automation", 
     description: "scan directory and identify sensitive files",
     longDescription: "An automated file classification system that scans directories and identifies sensitive files based on content analysis. Helps organizations maintain data security and compliance.",
-    technologies: ["HTML", "Python"],
+    technologies: ["Python", "Tesseract OCR", "Tkinter"],
     image: "/projects/label-automation.png",
     githubUrl: "https://github.com/mattdomingo/label-automation-v2",
     featured: true,
@@ -226,7 +227,7 @@ const projects: Project[] = [
     title: "TruWeaveTrader",
     description: "blazing-fast terminal trading app with sub-150ms latency",
     longDescription: "A high-performance terminal trading application for ultra-low latency financial trading. Features real-time WebSocket streaming, intelligent caching, and comprehensive risk management with sub-150ms quote fetching and sub-100ms trade execution.",
-    technologies: ["Go", "WebSockets", "CI/CD"],
+    technologies: ["Go", "WebSockets", "Alpaca API"],
     image: "/projects/truweavetrader.png",
     githubUrl: "https://github.com/mattdomingo/TruWeaveTrader",
     featured: true,
@@ -257,7 +258,7 @@ const projects: Project[] = [
     title: "QuestGPT",
     description: "AI-powered text-based RPG game",
     longDescription: "A dynamic text-based RPG game powered by AI for content generation. Built with Spring Boot and React, featuring combat systems, shop mechanics, leveling progression, and enemy scaling. Players can choose builds and fight increasingly challenging enemies in an AI-driven adventure.",
-    technologies: ["Java", "Spring Boot", "React", "MySQL", "Docker", "JavaScript"],
+    technologies: ["Java", "Spring Boot", "React", "SQL", "MySQL"],
     image: "/projects/questgpt.png",
     githubUrl: "https://github.com/mattdomingo/QuestGPT",
     featured: true,
@@ -291,7 +292,7 @@ const projects: Project[] = [
     title: "mingo-mail",
     description: "basic email agent used for teaching anthropicclaude builder club",
     longDescription: "A basic email agent used for teaching anthropic claude builder club. Categorizes, summarizes, and creates drafts of emails based on urgency",
-    technologies: ["Python", "Claude Haiku"],
+    technologies: ["Python", "Claude API"],
     image: "/projects/mingo-mail.png",
     githubUrl: "https://github.com/mattdomingo/mingo-mail",
     featured: true,
@@ -309,6 +310,122 @@ const projects: Project[] = [
     TODO: [
       "Potentially make it a widget"
     ],
+  },
+  {
+    id: 13,
+    title: "capture-enrichment",
+    description: "AI pipeline for annotating Apple Vision Pro capture sessions",
+    longDescription: "Ingests Apple Vision Pro .capture packages and produces structured, timestamped activity annotations. Uses a two-pass Gemini pipeline to annotate events and segment them into semantic chapters, with JPEG thumbnail frames extracted at each event's timecode via FFmpeg.",
+    technologies: ["Python", "Gemini", "FFmpeg", "AWS"],
+    image: "/projects/capture-enrichment.png",
+    githubUrl: "https://github.com/mattdomingo/capture-enrichment",
+    featured: true,
+    features: [
+      "Two-pass Gemini pipeline: parallel chunk annotation then semantic chapter segmentation",
+      "Structured telemetry context: head movement, pinch gestures, tracked objects, transcript",
+      "Overlapping chunk processing with cross-boundary event deduplication",
+      "JPEG thumbnail extraction at each event timecode via FFmpeg",
+      "Lightweight static viewer for browsing sessions and thumbnails side-by-side"
+    ],
+    challenges: [
+      "Deduplicating events at chunk overlap boundaries without discarding real events",
+      "Extracting meaningful telemetry signals (pinch gestures, head movement) from raw CSV data",
+      "Managing Gemini file upload lifecycle and retrying on rate limit responses",
+      "Aligning telemetry timestamps with video chunks across multiple data sources"
+    ],
+    TODO: [
+      "AWS Lambda container deployment for scalable cloud processing",
+      "AWS Step Functions for parallel chunk annotation on long sessions",
+      "Async concurrent Pass 1 chunk processing via asyncio",
+      "Sub-second thumbnail precision using millisecond-level event timestamps"
+    ]
+  },
+  {
+    id: 14,
+    title: "connex",
+    description: "invite-only relationship graph explorer with Gmail-powered tie strength",
+    longDescription: "An invite-only relationship graph app for mapping real-world connections. Full-stack TypeScript MVP with degree-based access gating, Gmail sync for tie-strength scoring, and interactive force-directed graph visualization using d3-force.",
+    technologies: ["TypeScript", "React", "Express", "SQLite"],
+    image: "/projects/connex.png",
+    githubUrl: "https://github.com/mattdomingo/connex",
+    featured: true,
+    features: [
+      "Interactive force-directed graph visualization with d3-force",
+      "Degree-based access gating: free tier sees up to 2nd-degree connections",
+      "Gmail sync for computing tie-strength scores from email metadata only",
+      "Invite-only registration with code expiration and per-code usage limits",
+      "Google OAuth for both authentication and Gmail integration",
+      "AES-256-GCM encrypted OAuth token storage at rest"
+    ],
+    challenges: [
+      "Separating entitlement policy from BFS traversal to allow clean monetization hooks",
+      "Encrypting OAuth tokens at rest without exposing keys in logs or API responses",
+      "Handling pending vs accepted connections consistently across graph traversal and shortest-path",
+      "Designing tie-strength scoring that rewards bidirectional communication over one-sided threads"
+    ],
+    TODO: [
+      "Wire degree gating to a real subscription and payment system",
+      "Automated fuzzy email-to-person matching on new user signup",
+      "Streaming graph updates as Gmail sync progresses in real time"
+    ]
+  },
+  {
+    id: 15,
+    title: "mujoco-sandbox",
+    description: "browser viewer for replaying AVP hand-tracking captures with MuJoCo physics",
+    longDescription: "Browser-based viewer for replaying Holos .capture folders with MuJoCo WASM physics and Three.js rendering. Drives a humanoid model from Apple Vision Pro hand-tracking data with synchronized video playback, inverse kinematics overlays, and live pressure HUDs.",
+    technologies: ["TypeScript", "Next.js", "Three.js", "MuJoCo"],
+    image: "/projects/mujoco-sandbox.png",
+    video: "/projects/mujoco-sandbox.webm",
+    githubUrl: "https://github.com/mattdomingo/mujoco-sandbox",
+    featured: true,
+    features: [
+      "MuJoCo WASM physics with raw mocap and physics-resolved rendering modes",
+      "Synchronized video playback aligned frame-accurately to capture timeline",
+      "Humanoid inverse kinematics overlay driven by hand and device pose data",
+      "Ball pressure and inter-hand pressure HUDs updated in real time",
+      "Folder drag-and-drop with play, pause, and timeline scrubbing controls",
+      "Playwright end-to-end tests with a dedicated MuJoCo WASM integration test harness"
+    ],
+    challenges: [
+      "Initializing MuJoCo WASM in the browser with SharedArrayBuffer (COOP/COEP headers required)",
+      "Aligning hand-tracking CSV timestamps with video playback at frame-accurate precision",
+      "Graceful fallback to raw capture rendering when MuJoCo fails to initialize",
+      "Building a Playwright test harness for physics simulation in a headless browser"
+    ],
+    TODO: [
+      "Support for full-body pose reconstruction beyond arms and torso",
+      "WebXR playback mode for immersive capture review"
+    ]
+  },
+  {
+    id: 16,
+    title: "f1-predictor",
+    description: "Formula 1 finishing-position predictor with sklearn models",
+    longDescription: "A Formula 1 finishing-position prediction project that trains and compares regression models from historical race CSV data. It builds features from grid position, qualifying, pit stops, and season context, then writes metrics, plots, and interpretation artifacts from an end-to-end Python pipeline.",
+    technologies: ["Python", "scikit-learn", "Pandas"],
+    image: "/projects/f1-predictor.png",
+    githubUrl: "https://github.com/mattdomingo/f1-predictor",
+    featured: true,
+    features: [
+      "End-to-end training entrypoint for data preparation, model fitting, evaluation, and output generation",
+      "Feature engineering across race results, qualifying, pit stops, and season context",
+      "Regression model comparison using linear, Lasso, gradient boosting, and related sklearn pipelines",
+      "Generated model metrics written to CSV for repeatable comparison",
+      "Post-hoc plots and interpretation artifacts for model analysis"
+    ],
+    challenges: [
+      "Combining multiple Formula 1 data tables into a consistent training dataset",
+      "Representing race context without leaking future result information into model features",
+      "Comparing different regression approaches on a noisy, position-based target",
+      "Producing outputs that make model performance and feature behavior easy to inspect"
+    ],
+    TODO: [
+      "Add live race prediction inputs",
+      "Expand model comparison with additional ensemble methods",
+      "Add automated data refresh for newer seasons",
+      "Publish an interactive results dashboard"
+    ]
   },
 ]
 
@@ -388,11 +505,25 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             {/* Project Header */}
             <div className="project-header">
               <div className="project-image-section">
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  className="project-detail-image"
-                />
+                {project.video ? (
+                  <video
+                    className="project-detail-image"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    poster={project.image}
+                  >
+                    <source src={project.video} type="video/webm" />
+                    <source src={project.video.replace('.webm', '.mp4')} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="project-detail-image"
+                  />
+                )}
               </div>
               
               <div className="project-title-section">
@@ -478,4 +609,4 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
       </PageTransition>
     </>
   )
-} 
+}

@@ -1656,6 +1656,11 @@ body {
   image-rendering: crisp-edges;
 }
 
+.project-image-container video.project-image {
+  display: block;
+  image-rendering: auto;
+}
+
 .project-image-placeholder {
   font-size: 48px;
   opacity: 0.5;
@@ -2577,6 +2582,11 @@ body {
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+video.project-detail-image {
+  display: block;
+  image-rendering: auto;
 }
 
 .project-title-section {
