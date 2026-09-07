@@ -1,6 +1,3 @@
-import LoadingScreen from "@/components/loading-screen";
-
 export default function Loading() {
-  return <LoadingScreen />;
+  return <div className="route-loading page-shell" role="status"><span className="eyebrow">MATT DOMINGO</span><p>Loading…</p></div>
 }
-

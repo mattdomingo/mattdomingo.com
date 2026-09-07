@@ -1,111 +1,14 @@
-'use client'
-
-import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import PageTransition from '@/components/page-transition'
-import LoadingScreen from '@/components/loading-screen'
+import { ArrowDown, ArrowUpRight } from 'lucide-react'
 
 export default function HomePage() {
-  const [lookingForWorkText, setLookingForWorkText] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
-  const [loadingProgress, setLoadingProgress] = useState(0)
-  const landingPageRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const lookingForWorkPhrases = [
-      "Also try... hiring me!",
-      "Also try... hiring me!",
-      "Also try... hiring me!",
-      "Also try... hiring me!",
-      "Also try... hiring me!",
-      "Looking for opportunities!",
-      "Open to new roles!",
-      "Seeking employment!",
-      "Available for work!",
-      "Ready to contribute!",
-      "Exploring opportunities!",
-      "Open for business!",
-      "Actively job hunting!",
-      "Ready for challenges!",
-      "Seeking new adventures!",
-      "Available for hire!"
-    ]
-    
-    const randomPhrase = lookingForWorkPhrases[Math.floor(Math.random() * lookingForWorkPhrases.length)]
-    setLookingForWorkText(randomPhrase)
-  }, [])
-
-  useEffect(() => {
-    const xhr = new XMLHttpRequest()
-    xhr.open('GET', '/textures/landing1.gif', true)
-    xhr.responseType = 'blob'
-
-    xhr.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const progress = (event.loaded / event.total) * 100
-        setLoadingProgress(progress)
-      }
-    }
-
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const blob = xhr.response
-        const url = URL.createObjectURL(blob)
-        
-        // Set the CSS variable on the document root or the specific element
-        // We use the document root so ::before pseudo-element can pick it up
-        document.documentElement.style.setProperty('--landing-bg', `url(${url})`)
-        
-        setLoadingProgress(100)
-        
-        // Slight delay to let 100% sink in
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 500)
-      } else {
-        // Fallback if load fails
-        setIsLoading(false)
-      }
-    }
-
-    xhr.onerror = () => {
-      setIsLoading(false)
-    }
-
-    xhr.send()
-
-    return () => {
-      xhr.abort()
-      // We don't revoke the object URL immediately as it's needed for the page
-      // It will be cleaned up on page refresh
-    }
-  }, [])
-
-  if (isLoading) return <LoadingScreen progress={loadingProgress} />
-
-  return (
-    <PageTransition>
-      <div className="landing-page" ref={landingPageRef}>
-        {/* Yellow pulsing text */}
-        {lookingForWorkText && (
-          <div className="minecraft-splash-text">
-            {lookingForWorkText}
-          </div>
-        )}
-        
-        <h1 className="minecraft-text title">MATT DOMINGO</h1>
-        <h2 className="minecraft-text subtitle">SOFTWARE ENGINEER</h2>
-        
-        <div className="minecraft-chat-box">
-          <p>Welcome to my world! I craft digital experiences with code.</p>
-        </div>
-
-        <div className="button-container">
-          <Link href="/about" className="minecraft-button">ABOUT ME</Link>
-          <Link href="/projects" className="minecraft-button">MY PROJECTS</Link>
-          <Link href="/contact" className="minecraft-button">CONTACT</Link>
-        </div>
-      </div>
-    </PageTransition>
-  )
+  return <>
+    <section className="hero section-grid" aria-labelledby="hero-title">
+      <div className="hero-topline mono"><span><i className="status-dot" /> SOFTWARE ENGINEER & CO-FOUNDER</span><span>DENVER, CO / 2026</span></div>
+      <div className="spatial-fallback" aria-hidden="true"><div /><div /><div /></div>
+      <div className="hero-copy"><p className="eyebrow">IDEAS → SYSTEMS → IMPACT</p><h1 id="hero-title">Complexity.<br /><span className="outline-type">Meet clarity.</span></h1><div className="hero-summary"><p>I’m Matt. I build software that connects ambitious ideas to the real world.</p><Link className="button button-accent" href="#work">Explore my work <ArrowDown size={17} /></Link></div></div>
+      <div className="hero-bottom mono"><span>ENGINEERING AT VISA<br />BUILDING OPENFLOOR</span><span className="hero-scroll"><span>SCROLL TO EXPLORE</span><ArrowDown size={17} /></span><span className="hero-coordinate">01 — AN INTRODUCTION</span></div>
+    </section>
+    <section id="work" className="section-pad foundation-work"><p className="eyebrow">01 / SELECTED WORK</p><div className="section-heading"><h2>Built to do<br /><em>something real.</em></h2><p>From reliable payment systems to shared workspaces for AI agents and tools for physical AI.</p></div><div className="foundation-links"><Link href="/projects/17"><span className="mono">01 / CO-FOUNDER & CTO</span><h3>Openfloor</h3><p>A shared workspace for people and AI coding agents.</p><ArrowUpRight /></Link><Link href="/projects/15"><span className="mono">02 / PHYSICAL AI</span><h3>Holos</h3><p>From spatial captures to simulation and understanding.</p><ArrowUpRight /></Link></div></section>
+  </>
 }
