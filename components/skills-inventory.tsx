@@ -1,68 +1,47 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-
-const skills = [
-  { name: "Python", level: 90, type: "language", icon: "🐍" },
-  { name: "Java", level: 85, type: "language", icon: "☕" },
-  { name: "Go", level: 82, type: "language", icon: "🚀" },
-  { name: "C", level: 80, type: "language", icon: "⚙️" },
-  { name: "TypeScript", level: 88, type: "language", icon: "🔷" },
-  { name: "JavaScript", level: 90, type: "language", icon: "🟨" },
-  { name: "C#", level: 82, type: "language", icon: "🔹" },
-  { name: "C++", level: 78, type: "language", icon: "🔧" },
-  { name: "SQL", level: 85, type: "language", icon: "🗃️" },
-  { name: "R", level: 75, type: "language", icon: "📊" },
-  { name: "HTML/CSS", level: 92, type: "language", icon: "🌐" },
-  { name: "AWS", level: 80, type: "tool", icon: "☁️" },
-  { name: "Google Cloud", level: 75, type: "tool", icon: "🌤️" },
-  { name: "Azure DevOps", level: 70, type: "tool", icon: "🔄" },
-  { name: "CI/CD Pipeline", level: 78, type: "tool", icon: "🔧" },
-  { name: "WebSockets", level: 85, type: "tool", icon: "🔌" },
-  { name: "Power Automate", level: 68, type: "tool", icon: "⚡" },
-  { name: "Figma", level: 78, type: "tool", icon: "🎨" },
-]
+import { useState } from "react";
+import { skillGroups } from "@/lib/profile";
 
 export default function SkillsInventory() {
-  const [filter, setFilter] = useState("all")
-
-  const filteredSkills = filter === "all" ? skills : skills.filter((skill) => skill.type === filter)
-
+  const [filter, setFilter] = useState("All");
+  const groups =
+    filter === "All"
+      ? skillGroups
+      : skillGroups.filter((group) => group.name === filter);
   return (
-    <div className="skills-inventory-container">
-      <h3 className="skills-inventory-title">SKILLS INVENTORY</h3>
-
-      <div className="skills-filter-container">
-        {["all", "language", "tool"].map((type) => (
+    <section className="skills-section" aria-labelledby="skills-title">
+      <p className="eyebrow">02 / THE TOOLKIT</p>
+      <h2 id="skills-title">
+        Choose the right tool.
+        <br />
+        <em>Know what’s underneath.</em>
+      </h2>
+      <div className="skill-filters" role="group" aria-label="Filter skills">
+        {["All", ...skillGroups.map((group) => group.name)].map((name) => (
           <button
-            key={type}
-            onClick={() => setFilter(type)}
-            className={`skills-filter-button ${filter === type ? 'active' : ''}`}
+            key={name}
+            onClick={() => setFilter(name)}
+            aria-pressed={filter === name}
           >
-            {type}
+            {name}
           </button>
         ))}
       </div>
-
-      <div className="minecraft-inventory">
-        <div className="skills-grid">
-          {filteredSkills.map((skill, index) => (
-            <div key={index} className="minecraft-item">
-              <span className="skill-icon">{skill.icon}</span>
-              <span className="skill-name">{skill.name}</span>
-              
-              <div className="skill-tooltip">
-                {skill.name} {/* {skill.level}/100 */}
-              </div>
+      <div className="skills-groups">
+        {groups.map((group) => (
+          <div key={group.name}>
+            <h3>{group.name}</h3>
+            <div className="tag-list">
+              {group.skills.map((skill) => (
+                <span key={skill} className="tag">
+                  {skill}
+                </span>
+              ))}
             </div>
-          ))}
-
-          {/* Empty slots to fill the grid */}
-          {Array.from({ length: Math.max(0, 24 - filteredSkills.length) }).map((_, i) => (
-            <div key={`empty-${i}`} className="minecraft-item-empty"></div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    </div>
-  )
+    </section>
+  );
 }

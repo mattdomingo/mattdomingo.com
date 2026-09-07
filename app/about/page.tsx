@@ -1,172 +1,138 @@
-'use client'
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import SkillsInventory from "@/components/skills-inventory";
+import SpotifyMusic from "@/components/spotify-music";
+import { leadership, profile } from "@/lib/profile";
 
-import { useState, useEffect, useRef } from 'react'
-import SkillsInventory from "@/components/skills-inventory"
-import MinecraftNavbar from "@/components/minecraft-navbar"
-import PageTransition from "@/components/page-transition"
-
-type MiniTrack = {
-  name: string
-  artistNames: string
-  albumName: string
-  albumImageUrl: string | null
-  url: string
-}
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Meet Matt Domingo: Denver-based software engineer, Openfloor co-founder, UW–Madison graduate, and curious builder.",
+};
 
 export default function AboutPage() {
-  const [currentSection, setCurrentSection] = useState(0)
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const [lastPlayed, setLastPlayed] = useState<MiniTrack | null>(null)
-
-  const scrollToSection = (sectionIndex: number) => {
-    const container = containerRef.current
-    const section = container?.querySelector(`#section-${sectionIndex}`) as HTMLElement | null
-    if (container && section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      setCurrentSection(sectionIndex)
-    }
-  }
-
-  useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-    const handleScroll = () => {
-      const newSection = Math.round(el.scrollTop / el.clientHeight)
-      setCurrentSection(newSection)
-    }
-    el.addEventListener('scroll', handleScroll)
-    return () => el.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    let cancelled = false
-    async function loadLastPlayed() {
-      try {
-        const res = await fetch('/api/spotify/now-playing', { cache: 'no-store' })
-        if (!res.ok) return
-        const data = await res.json()
-        const t = data?.track
-        if (!t) return
-        const mini: MiniTrack = {
-          name: t.name ?? 'Unknown',
-          artistNames: t.artistNames ?? 'Unknown',
-          albumName: t.albumName ?? 'Unknown',
-          albumImageUrl: t.albumImageUrl ?? null,
-          url: t.url ?? '#'
-        }
-        if (!cancelled) setLastPlayed(mini)
-      } catch {
-        // ignore network errors
-      }
-    }
-    loadLastPlayed()
-    return () => { cancelled = true }
-  }, [])
-
   return (
-    <>
-      <MinecraftNavbar />
-      <PageTransition>
-        <div ref={containerRef} className="fullpage-container page-with-navbar">
-        {/* Section 1: Character Stats */}
-        <section id="section-0" className="fullpage-section character-stats-section">
-        <div className="character-stats-container">
-          <h1 className="minecraft-text character-stats-title">CHARACTER STATS</h1>
-          
-          <div className="character-layout">
-            {/* Left side - Profile */}
-            <div className="character-profile">
-              <div className="profile-frame">
-                <div className="profile-image-border">
-                  <img
-                    src="/profile.png"
-                    alt="Matt Domingo profile picture"
-                    className="profile-image"
-                  />
-                </div>
-              </div>
-              <div className="profile-info">
-                <h2 className="minecraft-text profile-name">MATT DOMINGO</h2>
-                <p className="minecraft-text profile-level">CS @ UW-Madison</p>
-                {lastPlayed && (
-                  <div className="last-played-mini">
-                    <div className="mini-title minecraft-text">Last Played</div>
-                    <a className="mini-row" href={lastPlayed.url} target="_blank" rel="noreferrer">
-                      {lastPlayed.albumImageUrl && (
-                        <img className="mini-image" src={lastPlayed.albumImageUrl} alt={`Album art for ${lastPlayed.albumName}`} />
-                      )}
-                      <div className="mini-info">
-                        <div className="mini-track minecraft-text">{lastPlayed.name}</div>
-                        <div className="mini-artist">{lastPlayed.artistNames}</div>
-                        <div className="mini-album">{lastPlayed.albumName}</div>
-                      </div>
-                    </a>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Right side - Description and Achievements */}
-            <div className="character-details">
-              <div className="character-description">
-                <p>I&apos;m a passionate software engineer with a love for problem solving. Just like in Minecraft, I enjoy building things block by block, turning ideas into reality.</p>
-                <br />
-                <p>When I&apos;m not coding, you can find me making videos, DJing, or trying to figure out my golf swing!</p>
-              </div>
-
-              <div className="achievements">
-                <div className="achievement-box">
-                  <h4 className="achievement-title">ACHIEVEMENT UNLOCKED</h4>
-                  <p className="achievement-text">Bachelor&apos;s in Computer Science</p>
-                  <p className="achievement-text">Minors in Mathematics, Economics, and Statistics</p>
-                </div>
-                <div className="achievement-box">
-                  <h4 className="achievement-title">ACHIEVEMENT UNLOCKED</h4>
-                  <p className="achievement-text">Intern @ Magnet-Schultz of America</p>
-                  <p className="achievement-text">Intern @ Pharus.ai</p>
-                  <p className="achievement-text">Intern @ TruStage</p>
-                  <p className="achievement-text">AI Analyst @ DataAnnotation</p>
-                </div>
-              </div>
-            </div>
+    <div className="page-shell about-page">
+      <p className="eyebrow">THE PERSON / THE PRACTICE</p>
+      <h1 className="page-heading">
+        Engineer by trade.
+        <br />
+        <em>Builder by nature.</em>
+      </h1>
+      <div className="about-opening">
+        <div className="about-photo">
+          <Image
+            src="/profile.png"
+            alt="Matt Domingo"
+            width={900}
+            height={1000}
+            sizes="(max-width: 800px) 90vw, 40vw"
+            priority
+          />
+          <div className="mono">
+            <span>MATT DOMINGO</span>
+            <span>DENVER, CO</span>
           </div>
         </div>
-        
+        <div className="about-story">
+          <p className="about-lead">
+            I’m interested in what happens when you connect things that weren’t
+            built to work together.
+          </p>
+          <p>
+            People and AI agents. Spatial data and physics. A complex system and
+            the person trying to understand it. That’s the thread through my
+            work.
+          </p>
+          <p>
+            I’m a software engineer on Visa’s Vital Signs team, working on
+            VisaNet reliability and observability. I’m also the co-founder and
+            CTO of Openfloor, where I take ideas from product direction through
+            engineering, beta launch, and customer conversations.
+          </p>
+          <p>
+            Before that, I built cloud tools at TruStage, AI-powered business
+            intelligence at Pharus.ai, and worked on infrastructure and security
+            at Magnet-Schultz of America.
+          </p>
+          <Link className="text-link" href="/#experience">
+            Explore my experience <ArrowUpRight size={18} />
+          </Link>
+          <SpotifyMusic />
+        </div>
+      </div>
+      <section className="education-section">
+        <div>
+          <p className="eyebrow">01 / FOUNDATION</p>
+          <h2>
+            Wisconsin roots.
+            <br />
+            <em>A broader lens.</em>
+          </h2>
+        </div>
+        <div>
+          <h3>University of Wisconsin–Madison</h3>
+          <p>Bachelor of Science in Computer Science · {profile.graduated}</p>
+          <p className="muted">Minors in {profile.minors.join(", ")}.</p>
+          <div className="education-detail">
+            <span className="mono">SELECTED COURSEWORK</span>
+            <p>{profile.coursework.join(" · ")}</p>
+          </div>
+          <div className="education-detail">
+            <span className="mono">CERTIFICATIONS</span>
+            <p>
+              AWS Certified Cloud Practitioner
+              <br />
+              Microsoft Power Automate Essentials
+            </p>
+          </div>
+          <div className="education-detail">
+            <span className="mono">LEADERSHIP</span>
+            <ul>
+              {leadership.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </section>
-      {/* Down Arrow */}
-      {currentSection === 0 && (
-        <button 
-          className="scroll-arrow scroll-arrow-down"
-          onClick={() => scrollToSection(1)}
-          aria-label="Scroll to Skills"
+      <SkillsInventory />
+      <section className="beyond-section">
+        <p className="eyebrow">03 / OFFLINE, TOO</p>
+        <h2>
+          A little less screen time.
+          <br />
+          <em>A little more altitude.</em>
+        </h2>
+        <div className="interest-grid">
+          <div>
+            <span className="mono">01 / OUTSIDE</span>
+            <h3>Find a different view.</h3>
+            <p>
+              Running and hiking around Colorado. Learning the rhythm of life in
+              Denver. Still trying to figure out my golf swing.
+            </p>
+          </div>
+          <div>
+            <span className="mono">02 / CREATIVE</span>
+            <h3>Make something move.</h3>
+            <p>
+              Making videos, DJing, and finding music worth sharing. I like
+              building experiences outside the browser, too.
+            </p>
+          </div>
+        </div>
+        <a
+          href={profile.instagram}
+          className="text-link"
+          target="_blank"
+          rel="noreferrer"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-      )}
-
-      {/* Section 2: Skills Inventory */}
-      <section id="section-1" className="fullpage-section skills-section">
-        <div className="skills-section-container">
-          <SkillsInventory />
-        </div>
-
-        {/* Up Arrow */}
-        {currentSection === 1 && (
-          <button 
-            className="scroll-arrow scroll-arrow-up"
-            onClick={() => scrollToSection(0)}
-            aria-label="Scroll to Character Stats"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17 14l-5-5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        )}
-        </section>
-        </div>
-      </PageTransition>
-    </>
-  )
+          A glimpse outside the work <ArrowUpRight size={18} />
+        </a>
+      </section>
+    </div>
+  );
 }

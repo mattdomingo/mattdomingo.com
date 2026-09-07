@@ -1,346 +1,65 @@
-'use client'
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { ContactForm } from "@/components/contact-form";
+import { profile } from "@/lib/profile";
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import emailjs from '@emailjs/browser'
-import MinecraftNavbar from "@/components/minecraft-navbar"
-import PageTransition from "@/components/page-transition"
-
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Get in touch with Matt Domingo about engineering roles, ambitious teams, and interesting software problems.",
+};
 export default function ContactPage() {
-  const router = useRouter()
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<
-    'idle' | 'success' | 'error' | 'validation_error' | 'feature_retired'
-  >('idle')
-  const [cooldownEndTime, setCooldownEndTime] = useState<number | null>(null)
-  const [remainingTime, setRemainingTime] = useState<number>(0)
-
-  // Check for existing cooldown on component mount
-  useEffect(() => {
-    const storedCooldownEnd = localStorage.getItem('contactFormCooldownEnd')
-    if (storedCooldownEnd) {
-      const endTime = parseInt(storedCooldownEnd)
-      const now = Date.now()
-      if (endTime > now) {
-        setCooldownEndTime(endTime)
-        setRemainingTime(Math.ceil((endTime - now) / 1000))
-      } else {
-        localStorage.removeItem('contactFormCooldownEnd')
-      }
-    }
-  }, [])
-
-  // Update remaining time every second during cooldown
-  useEffect(() => {
-    if (cooldownEndTime) {
-      const interval = setInterval(() => {
-        const now = Date.now()
-        const remaining = Math.ceil((cooldownEndTime - now) / 1000)
-        
-        if (remaining <= 0) {
-          setCooldownEndTime(null)
-          setRemainingTime(0)
-          localStorage.removeItem('contactFormCooldownEnd')
-          clearInterval(interval)
-        } else {
-          setRemainingTime(remaining)
-        }
-      }, 1000)
-
-      return () => clearInterval(interval)
-    }
-  }, [cooldownEndTime])
-
-  const formatTime = (seconds: number): string => {
-    const minutes = Math.floor(seconds / 60)
-    const remainingSeconds = seconds % 60
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-    // Clear status when user starts typing again
-    if (submitStatus !== 'idle') {
-      setSubmitStatus('idle')
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // Same as before: POST name + message to /api/auth; on success show message instead of navigating to /secret
-    try {
-      const authResponse = await fetch('/api/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          message: formData.message,
-        }),
-      })
-
-      const authData = await authResponse.json()
-
-      if (authData.success) {
-        setSubmitStatus('feature_retired')
-        return
-      }
-    } catch (error) {
-      console.error('Authentication check failed:', error)
-      // Continue with normal form submission if auth check fails
-    }
-
-    // Custom validation for normal form submissions
-    if (!formData.email.trim()) {
-      setSubmitStatus('validation_error')
-      return
-    }
-    
-    // Check if user is in cooldown
-    if (cooldownEndTime && Date.now() < cooldownEndTime) {
-      setSubmitStatus('error')
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitStatus('idle')
-
-    try {
-      // EmailJS configuration
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-
-
-
-      if (!serviceId || !templateId || !publicKey) {
-        const missingVars = []
-        if (!serviceId) missingVars.push('NEXT_PUBLIC_EMAILJS_SERVICE_ID')
-        if (!templateId) missingVars.push('NEXT_PUBLIC_EMAILJS_TEMPLATE_ID')
-        if (!publicKey) missingVars.push('NEXT_PUBLIC_EMAILJS_PUBLIC_KEY')
-        
-        throw new Error(`EmailJS configuration is missing: ${missingVars.join(', ')}. Please check your environment variables.`)
-      }
-
-      // Template parameters for EmailJS (matching your template variables)
-      const templateParams = {
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-        time: new Date().toLocaleString(), // Current date and time
-      }
-
-      // Send email using EmailJS
-      await emailjs.send(
-        serviceId,
-        templateId,
-        templateParams,
-        publicKey
-      )
-
-      setSubmitStatus('success')
-      setFormData({ name: '', email: '', message: '' })
-      
-      // Set 10-minute cooldown
-      const cooldownEnd = Date.now() + 600000 // 10 minutes in milliseconds
-      setCooldownEndTime(cooldownEnd)
-      setRemainingTime(600) // 10 minutes in seconds
-      localStorage.setItem('contactFormCooldownEnd', cooldownEnd.toString())
-    } catch (error) {
-      console.error('Failed to send message:', error)
-      
-      // Check if it's a configuration error
-      if (error instanceof Error && error.message.includes('EmailJS configuration is missing')) {
-        console.error('Environment variables are not properly configured in the hosting environment')
-      }
-      
-      setSubmitStatus('error')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const handleResumeDownload = () => {
-    const link = document.createElement('a')
-    link.href = '/documents/resume.pdf'
-    link.download = 'Matt_Domingo_Resume.pdf'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
-  const handleResumeView = () => {
-    router.push('/resume')
-  }
-
   return (
-    <>
-      <MinecraftNavbar />
-      <PageTransition>
-        <div className="trading-post-page page-with-navbar">
-        <h1 className="trading-post-title minecraft-text">TRADING POST</h1>
-        
-        <div className="trading-post-container">
-          <div className="trading-post-main">
-            {/* Left Side - Trade Info */}
-            <div className="trade-section">
-              <div className="trade-with-me-box">
-                <h2 className="trade-section-title minecraft-text">TRADE WITH ME</h2>
-                <p className="trade-description minecraft-text">
-                  I&apos;m always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
-                </p>
-                <p className="trade-description minecraft-text">
-                  Fill out the form with your message, and I&apos;ll get back to you as soon as possible!
-                </p>
-              </div>
-              
-              <div className="resume-download-box">
-                <h3 className="resume-section-title minecraft-text">RESUME</h3>
-                <div className="resume-buttons">
-                  <button 
-                    onClick={handleResumeView}
-                    className="resume-view-btn minecraft-text"
-                  >
-                    👁️ VIEW RESUME
-                  </button>
-                  <button 
-                    onClick={handleResumeDownload}
-                    className="resume-download-btn minecraft-text"
-                  >
-                    📄 DOWNLOAD
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Side - Contact Form */}
-            <div className="contact-form-section">
-              <form onSubmit={handleSubmit} className="contact-form">
-                <div className="form-group">
-                  <label className="form-label minecraft-text">YOUR NAME</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="form-input"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label minecraft-text">YOUR EMAIL</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="form-input"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label minecraft-text">YOUR MESSAGE</label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    className="form-textarea"
-                    rows={5}
-                    required
-                  />
-                </div>
-
-                <button 
-                  type="submit" 
-                  disabled={isSubmitting || (cooldownEndTime !== null && Date.now() < cooldownEndTime)}
-                  className={`send-message-btn minecraft-text ${
-                    (isSubmitting || (cooldownEndTime !== null && Date.now() < cooldownEndTime)) 
-                      ? 'opacity-50 cursor-not-allowed' 
-                      : ''
-                  }`}
-                >
-                  {isSubmitting 
-                    ? 'SENDING...' 
-                    : cooldownEndTime !== null && Date.now() < cooldownEndTime
-                      ? `COOLDOWN: ${formatTime(remainingTime)}`
-                      : 'SEND MESSAGE'
-                  }
-                </button>
-
-                {/* Status Messages */}
-                {submitStatus === 'success' && (
-                  <div className="status-message success minecraft-text">
-                    ✅ Message sent successfully! I&apos;ll get back to you soon.
-                    <br />
-                    <small>⏰ You can send another message in 10 minutes.</small>
-                  </div>
-                )}
-                
-                {submitStatus === 'validation_error' && (
-                  <div className="status-message error minecraft-text">
-                    📧 Please enter your email address to send a message.
-                  </div>
-                )}
-
-                {submitStatus === 'feature_retired' && (
-                  <div className="status-message error minecraft-text">
-                    Sorry, this feature is no longer available :(
-                  </div>
-                )}
-                
-                {submitStatus === 'error' && (
-                  <div className="status-message error minecraft-text">
-                    {cooldownEndTime !== null && Date.now() < cooldownEndTime
-                      ? `⏰ Please wait ${formatTime(remainingTime)} before sending another message.`
-                      : '❌ Failed to send message. Please try again or email me directly.'
-                    }
-                  </div>
-                )}
-              </form>
-            </div>
-          </div>
-        </div>
-
-        {/* Social Links Section */}
-        <div className="find-me-section">
-          <h3 className="find-me-title minecraft-text">FIND ME ONLINE</h3>
-          <div className="social-links">
-            <a href="https://github.com/mattdomingo" target="_blank" rel="noopener noreferrer" className="social-link github">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="social-icon">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-              </svg>
+    <div className="page-shell contact-page">
+      <p className="eyebrow">GOOD THINGS START WITH A CONVERSATION</p>
+      <h1 className="page-heading">
+        What are
+        <br />
+        <em>you building?</em>
+      </h1>
+      <div className="contact-layout">
+        <div className="contact-intro">
+          <p className="page-intro">
+            An early team finding its direction. An established one solving a
+            hard problem. I’d like to hear about it.
+          </p>
+          <a className="contact-email" href={`mailto:${profile.email}`}>
+            {profile.email}
+            <ArrowUpRight size={21} />
+          </a>
+          <div className="contact-links">
+            <a href={profile.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn <ArrowUpRight size={18} />
             </a>
-            <a href="https://linkedin.com/in/matthewgdomingo" target="_blank" rel="noopener noreferrer" className="social-link linkedin">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="social-icon">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
+            <a href={profile.github} target="_blank" rel="noreferrer">
+              GitHub <ArrowUpRight size={18} />
             </a>
-            <a href="https://instagram.com/matt_domingo" target="_blank" rel="noopener noreferrer" className="social-link instagram">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="social-icon">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-            </a>
-            <a href="mailto:matthew.domingo2022@gmail.com" className="social-link email">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="social-icon">
-                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-.904.732-1.636 1.636-1.636h3.819L12 8.773l6.545-4.952h3.819c.904 0 1.636.732 1.636 1.636z"/>
-              </svg>
+            <a href={profile.instagram} target="_blank" rel="noreferrer">
+              Instagram <ArrowUpRight size={18} />
             </a>
           </div>
+          <div className="contact-resume">
+            <span className="mono">THE BACKGROUND, AT A GLANCE</span>
+            <div className="inline-links">
+              <Link className="text-link" href="/resume">
+                View résumé <ArrowUpRight size={16} />
+              </Link>
+              <a
+                className="text-link"
+                href="/documents/resume.pdf"
+                download="Matthew_Domingo_Resume.pdf"
+              >
+                Download PDF <ArrowUpRight size={16} />
+              </a>
+            </div>
+          </div>
+          <span className="mono contact-location">
+            BASED IN DENVER, COLORADO
+          </span>
         </div>
-        </div>
-      </PageTransition>
-    </>
-  )
+        <ContactForm />
+      </div>
+    </div>
+  );
 }
