@@ -2184,5 +2184,7 @@ html[data-motion="reduced"] .work-panel {
   color: var(--text);
 }
 @media (min-width: 601px) {
-  .mobile-nav { display: none; }
+  .mobile-nav {
+    display: none;
+  }
 }

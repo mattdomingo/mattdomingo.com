@@ -3,10 +3,13 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
-const SpatialCanvas = dynamic(() => import("./spatial-canvas").catch(() => ({ default: () => null })), {
-  ssr: false,
-  loading: () => null,
-});
+const SpatialCanvas = dynamic(
+  () => import("./spatial-canvas").catch(() => ({ default: () => null })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+);
 
 export function SpatialStage() {
   const [ready, setReady] = useState(false);

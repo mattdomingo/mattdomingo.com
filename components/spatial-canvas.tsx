@@ -113,7 +113,7 @@ export default function SpatialCanvas({
         void main(){vec3 target=field; target.y+=sin(field.x*.9+time)*cos(field.z*.7+time*.4)*.15;
         vec3 p=mix(position,target,progress); vec4 mv=modelViewMatrix*vec4(p,1.); gl_Position=projectionMatrix*mv;
         gl_PointSize=clamp(11. * pixelRatio / -mv.z,1.,3.); vAlpha=.4+.6*(position.y+2.2)/4.4;}`,
-      fragmentShader: `uniform vec3 tint; varying float vAlpha; void main(){float d=length(gl_PointCoord-.5); if(d>.5) discard; gl_FragColor=vec4(tint,vAlpha*smoothstep(.5,.15,d));}`,
+      fragmentShader: `uniform vec3 tint; varying float vAlpha; void main(){float d=length(gl_PointCoord-.5); if(d>.5) discard; gl_FragColor=vec4(tint,vAlpha*(1.-smoothstep(.15,.5,d)));}`,
     });
     const points = new THREE.Points(pointGeometry, pointMaterial);
     points.frustumCulled = false;

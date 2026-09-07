@@ -8,6 +8,8 @@ import { OpenfloorDiagram } from "@/components/openfloor-diagram";
 import { ProjectVideo } from "@/components/project-video";
 
 type Props = { params: Promise<{ id: string }> };
+// The archive is a build-time catalogue. Reject unknown IDs before streaming.
+export const dynamicParams = false;
 export function generateStaticParams() {
   return projects.map((project) => ({ id: String(project.id) }));
 }

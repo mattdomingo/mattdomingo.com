@@ -1,93 +1,57 @@
-# Matt Domingo Portfolio
+# Matt Domingo — Portfolio
 
-A Minecraft-themed portfolio website built with Next.js, TypeScript, and Tailwind CSS featuring smooth page transitions and a functional contact form.
+A Next.js 15 portfolio with cinematic dark and architectural light themes, an interactive Three.js opening, native scroll choreography, and a complete project archive.
 
-## 🎮 Features
+## Run locally
 
-- **Minecraft-inspired design** with custom textures and fonts
-- **Smooth page transitions** using Framer Motion
-- **Functional contact form** with EmailJS integration
-- **Responsive layout** that works on all devices
-- **Project showcase** with GitHub integration
-- **Skills inventory** with interactive filtering
-- **Resume viewer** with PDF display
-- **Optimized performance** with Next.js 15
-
-## 🚀 Getting Started
-
-1. **Install dependencies:**
 ```bash
-npm install
-```
-
-2. **Set up environment variables:**
-Create a `.env.local` file in the root directory:
-```bash
-# EmailJS Configuration (required for contact form)
-NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id_here
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id_here
-NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key_here
-```
-
-3. **Run the development server:**
-```bash
+npm ci
 npm run dev
 ```
 
-4. **Open the displayed URL** (usually [http://localhost:3000](http://localhost:3000) or [http://localhost:3001](http://localhost:3001)) to view the site
+Open the URL printed by Next.js. The theme button switches between dark and light; the motion button pauses ambient animation. Both preferences persist locally. System reduced motion always takes precedence.
 
-## 📁 Project Structure
+## Content and routes
 
+- `/` — selected work, Visa and earlier experience, and a personal introduction.
+- `/projects` — the complete archive with technology filtering.
+- `/projects/[id]` — pre-rendered project details; unknown IDs return 404.
+- `/about` — biography, education, leadership, skills, interests, and Spotify listening.
+- `/resume` — Full Stack and Applied AI PDF viewers and downloads.
+- `/contact` — contact links and the existing EmailJS form.
+
+Project content lives in `lib/projects.ts`; experience, skills, education, and social links live in `lib/profile.ts`. Project IDs are stable. Add a record and rebuild to publish a new project page. Images and the Holos capture video remain in `public/projects/`.
+
+`public/documents/resume.pdf` is the current Full Stack résumé. `public/documents/resume-applied-ai.pdf` is its Applied AI counterpart. The content sources and design plan are documented in [docs/REDESIGN.md](docs/REDESIGN.md).
+
+## Integrations
+
+Copy `.env.example` to `.env.local` and configure the integrations you use. Do not commit credentials.
+
+EmailJS uses `NEXT_PUBLIC_EMAILJS_SERVICE_ID`, `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID`, and `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`. The existing template contract is `name`, `email`, `message`, and `time`. These public configuration values must be present at build time. Without them, the form explains that it is unavailable and offers direct email. A successful delivery starts a ten-minute local cooldown; this is a courtesy limit, not server-side abuse prevention. Configure origin restrictions and quotas in EmailJS as appropriate for the existing deployment.
+
+Spotify uses server-only `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, and `SPOTIFY_REFRESH_TOKEN`. The About page requests recent listening and top tracks; unavailable data does not block the page.
+
+Existing `/api/auth` (retired easter egg), `/api/dog`, and Spotify routes retain their validation and rate limiting. Optional `SECRET_NAME` and `SECRET_MESSAGE` keep the legacy retired-feature check working.
+
+## Verification
+
+```bash
+npm test -- --runInBand
+npm run lint
+npx tsc --noEmit
+npm run build
+npm start
+# In another terminal, using the server's URL:
+node scripts/smoke.mjs http://127.0.0.1:3000
 ```
-mattdomingo.com/
-├── app/                    # Next.js App Router pages
-│   ├── about/             # About page with skills
-│   ├── contact/           # Contact form with EmailJS
-│   ├── projects/          # Projects showcase
-│   ├── resume/            # Resume viewer
-│   ├── layout.tsx         # Root layout
-│   ├── page.tsx           # Home page
-│   └── globals.css        # Global styles
-├── components/            # React components
-│   ├── minecraft-navbar.tsx
-│   ├── skills-inventory.tsx
-│   └── page-transition.tsx
-├── lib/                   # Utility functions
-├── public/                # Static assets
-│   ├── fonts/            # Minecraft font
-│   ├── textures/         # Background textures
-│   ├── projects/         # Project images
-│   └── documents/        # Resume PDF
-└── Configuration files...
-```
 
-## 🎨 Customization
+The unit tests cover content destinations/assets, theme and motion preferences, mobile navigation, filters, résumé switching, and mocked contact delivery. The HTTP smoke check covers all content routes, real 404 responses, linked build assets, and both PDFs. Tests never send real messages.
 
-- **Add project images:** Place images in `public/projects/`
-- **Update projects:** Edit the projects array in `app/projects/page.tsx`
-- **Modify textures:** Replace files in `public/textures/`
-- **Update skills:** Modify the skills data in `components/skills-inventory.tsx`
-- **Contact form:** Set up EmailJS account and update environment variables
+Stop `next dev` before building or running the production server in this checkout because both use `.next`. The lint command uses ESLint 9 directly to match the project's flat configuration.
 
-## 📧 Contact Form Setup
+## Rendering and accessibility
 
-The contact form uses EmailJS for email delivery:
+Text and links render on the server. Three.js loads as an optional client chunk; a geometric fallback remains available without WebGL. The scene caps device pixel ratio, pauses rendering outside the story or in hidden tabs, and disposes GPU resources on unmount. Normal document scrolling is never intercepted. Reduced motion removes scroll transforms and automatic video playback; videos retain native playback controls where appropriate.
 
-1. Sign up at [EmailJS](https://www.emailjs.com/)
-2. Create an email service and template
-3. Add your credentials to `.env.local`
-4. The form will automatically work with your configuration
-
-## 🛠️ Built With
-
-- **Framework:** Next.js 15
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Animations:** Framer Motion
-- **Email Service:** EmailJS
-- **Font:** Custom Minecraft font
-- **Deployment:** Vercel (recommended)
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+The existing Next.js deployment model is preserved. This branch does not publish or change the live site. Browser visual and device testing, authenticated Spotify playback, and real EmailJS delivery should be checked in the configured preview environment before release.
