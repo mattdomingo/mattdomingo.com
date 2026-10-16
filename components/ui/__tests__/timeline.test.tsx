@@ -22,6 +22,8 @@ test("all dated résumé entries and supplied milestones remain readable in chro
   expect(within(timeline).getByText("openfloor · NVIDIA Inception")).toBeTruthy();
   expect(within(timeline).getByText(/managing over \$1.1M/)).toBeTruthy();
   expect(within(timeline).getByRole("heading", { name: "Eagle Scout" })).toBeTruthy();
+  expect(within(timeline).getByRole("heading", { name: "AMDG" })).toBeTruthy();
+  expect(within(timeline).getByText(/Worked on Wasted/)).toBeTruthy();
   expect(within(timeline).getByRole("img", { name: /Middle school graduation/ }).getAttribute("src")).toContain("middle-school");
   expect(within(timeline).getByRole("img", { name: /Wisconsin graduation/ }).getAttribute("src")).toContain("wisconsin");
   expect(within(timeline).getByRole("img", { name: /High school graduation/ }).getAttribute("src")).toContain("high-school");
@@ -30,5 +32,5 @@ test("all dated résumé entries and supplied milestones remain readable in chro
   expect(filmLink.getAttribute("href")).toBe("https://www.youtube.com/watch?v=DEc_Jk3I4J4");
   expect(filmLink.getAttribute("target")).toBe("_blank");
   expect(within(filmLink).getByRole("img").getAttribute("src")).toContain("DEc_Jk3I4J4");
-  expect(screen.getByText(/AWS Certified Cloud Practitioner/)).toBeTruthy();
+  expect(screen.queryByText("Along the way")).toBeNull();
 });

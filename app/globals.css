@@ -3185,7 +3185,7 @@ body:has(.folder-home) {
 body:has(.portfolio-intro) { overflow: hidden; }
 .journey-scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 1rem; color: var(--portfolio-ink); font-size: .75rem; white-space: nowrap; opacity: .6; }
 .journey-scroll-hint:hover { opacity: 1; }
-.journey-section, .journey-toolkit { color: var(--portfolio-ink); background: var(--portfolio-paper); }
+.journey-section { color: var(--portfolio-ink); background: var(--portfolio-paper); }
 .journey-section { position: relative; }
 .journey-pin { position: sticky; top: 0; height: 100svh; overflow: hidden; }
 .journey-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; padding: clamp(1.5rem, 4vh, 3rem) 6vw 0; }
@@ -3222,13 +3222,7 @@ body:has(.portfolio-intro) { overflow: hidden; }
 .journey-media a:hover .journey-video-label { text-decoration: underline; }
 .journey-progress { position: absolute; left: 6vw; right: 6vw; bottom: 1.5rem; height: 2px; background: var(--portfolio-line); }
 .journey-progress > span { display: block; width: 100%; height: 100%; background: #c86b48; transform-origin: left; }
-.journey-toolkit { padding: 5rem 6vw; border-top: 1px solid var(--portfolio-line); }
-.journey-toolkit h2 { margin: 0 0 3rem; font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 500; letter-spacing: -.05em; }
-.journey-toolkit > div { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3rem; }
-.journey-toolkit h3 { margin: 0 0 .8rem; font-size: .85rem; font-weight: 500; }
-.journey-toolkit article p { margin: 0; color: var(--portfolio-muted); font-size: .85rem; line-height: 1.8; }
-.journey-back { display: inline-flex; gap: 2rem; margin-top: 4rem; padding-bottom: .4rem; border-bottom: 1px solid currentColor; font-size: .8rem; color: inherit; }
-.journey-back:focus-visible, .journey-scroll-hint:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; }
+.journey-scroll-hint:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; }
 @media (max-width: 600px) {
   .journey-header { padding: 1.5rem 7vw 0; }
   .journey-track { gap: 3.5rem; padding: 0 7vw; height: calc(100svh - 8rem); }
@@ -3237,8 +3231,6 @@ body:has(.portfolio-intro) { overflow: hidden; }
   .journey-axis { left: calc(85vw + 4.5rem); right: 7vw; }
   .journey-copy h3 { font-size: 1.35rem; }
   .journey-description { font-size: .84rem; }
-  .journey-toolkit > div { grid-template-columns: 1fr; gap: 2rem; }
-  .journey-toolkit { padding: 4rem 7vw; }
 }
 @media (prefers-color-scheme: dark) { .journey-copy time { color: #e59d7e; } }
 @media (prefers-reduced-motion: reduce) {
@@ -3253,7 +3245,6 @@ body:has(.portfolio-intro) { overflow: hidden; }
   .journey-axis, .journey-dot, .journey-stem, .journey-progress, .journey-range > span { display: none; }
 }
 @media (prefers-reduced-motion: reduce) and (max-width: 600px) { .journey-track { grid-template-columns: 1fr; } }
-.journey-toolkit { position: relative; }
 body:has(.portfolio-intro) .journey-scroll-hint { opacity: 0; pointer-events: none; }
 
 /* Lock the landing pose until the user's next interaction, including native focus restoration. */
