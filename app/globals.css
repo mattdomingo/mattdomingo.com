@@ -2,6 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+body:has(.folder-home) {
+  background: #f5f5f4;
+  font-family: var(--font-geist-sans), sans-serif;
+  image-rendering: auto;
+  line-height: normal;
+}
+
+.folder-home {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  padding: 5rem 1.5rem;
+  overflow: clip;
+  background: #f5f5f4;
+}
+
+.folder-home > .gf-root {
+  transform: translateY(-27px);
+}
+
+@media (max-width: 480px) {
+  .folder-home > .gf-root {
+    transform: translateY(-21px) scale(.78);
+  }
+}
+
+@media (max-width: 350px) {
+  .folder-home > .gf-root {
+    transform: translateY(-18px) scale(.66);
+  }
+}
+
 @font-face {
   font-family: "MinecraftFont";
   src: url("/fonts/minecraft.woff2") format("woff2");

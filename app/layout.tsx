@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "mattdomingo",
-  description: "mattdomingo's website",
+  title: "Matt Domingo",
+  description: "A few things by Matt Domingo. Open the folder to explore.",
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },

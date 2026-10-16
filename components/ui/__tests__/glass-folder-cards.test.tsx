@@ -1,0 +1,42 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import GlassFolder, { createArtJob, ART_PRESETS } from "@/components/ui/glass-folder-cards";
+
+test("folder opens its real links and Escape closes it and restores focus", () => {
+  render(
+    <GlassFolder
+      label="Matt Domingo"
+      appear={false}
+      art="none"
+      action="none"
+      files={[{ name: "Résumé.pdf", href: "/documents/resume.pdf" }]}
+    />,
+  );
+  const contents = screen.getByRole("list");
+  const toggle = screen.getByRole("button", { name: "Open Matt Domingo, 1 item" });
+  expect(contents).toHaveAttribute("inert");
+  expect(toggle).toHaveAttribute("aria-expanded", "false");
+
+  fireEvent.click(toggle);
+  expect(toggle).toHaveAttribute("aria-expanded", "true");
+  expect(contents).not.toHaveAttribute("inert");
+  const resume = screen.getByRole("link", { name: "Résumé.pdf" });
+  expect(resume).toHaveAttribute("href", "/documents/resume.pdf");
+  resume.focus();
+
+  fireEvent.keyDown(document, { key: "Escape" });
+  expect(toggle).toHaveAttribute("aria-expanded", "false");
+  expect(contents).toHaveAttribute("inert");
+  expect(toggle).toHaveFocus();
+});
+
+test("folder art finishes as opaque, repeatable pixels", () => {
+  const draw = () => {
+    const job = createArtJob(24, 20, ART_PRESETS.aurora, 3);
+    for (let i = 0; i < 20 && !job.step(4); i++) { /* finish the queued rows */ }
+    expect(job.step(4)).toBe(true);
+    expect(job.pixels).toHaveLength(24 * 20 * 4);
+    expect(job.pixels.filter((_, i) => i % 4 === 3).every((a) => a === 255)).toBe(true);
+    return job.pixels;
+  };
+  expect(draw()).toEqual(draw());
+});
