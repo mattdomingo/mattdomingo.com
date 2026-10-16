@@ -1,10 +1,10 @@
 import PortfolioFolders from "@/components/portfolio-folders";
-import { GridPulse } from "@/components/ui/grid-pulse";
+import HalftoneFlow from "@/components/ui/halftone-flow";
 
 export default function HomePage() {
   return (
     <main className="folder-home" aria-label="Matt Domingo's portfolio">
-      <GridPulse className="folder-background" />
+      <HalftoneFlow className="folder-background" />
       <PortfolioFolders />
     </main>
   );
