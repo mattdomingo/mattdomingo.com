@@ -3,8 +3,10 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
+import { Volume2, VolumeX } from "lucide-react";
 import { cardReturnTransform, createCardReturn, type CardBounds } from "@/lib/card-motion";
 import { getRandomCodingJoke } from "@/lib/coding-jokes";
+import { usePortfolioAudio } from "@/hooks/use-portfolio-audio";
 import GlassFolder, { type FolderFile } from "@/components/ui/glass-folder-cards";
 
 import RepositoryLink from "@/components/repository-link";
@@ -57,6 +59,7 @@ const RETURN_DURATION = .68;
 const RETURN_EASE = [.4, 0, .2, 1] as const;
 
 export default function PortfolioFolders() {
+  const sound = usePortfolioAudio();
   const darkMode = useSyncExternalStore(subscribeTheme, getDarkMode, () => false);
   const tone = darkMode ? "dark" : "light";
   const clearRestoration = useRef<() => void>(() => {});
@@ -80,6 +83,7 @@ export default function PortfolioFolders() {
   const isProject = Boolean(previewFile?.project || previewFile?.github);
   const reduceMotion = useReducedMotion();
   const openPreview = (file: PreviewFile, source: HTMLElement) => {
+    sound.play("card-open");
     if (file.github) shuffleGithubJoke();
     clearRestoration.current();
     const rect = source.getBoundingClientRect();
@@ -107,6 +111,7 @@ export default function PortfolioFolders() {
   useEffect(() => () => { clearRestoration.current(); sourceRef.current?.removeAttribute("data-preview-source"); }, []);
   const closePreview = () => {
     if (closing) return;
+    sound.play("card-close");
     const from = (revealed ? viewerRef.current : flightRef.current ?? viewerRef.current)?.getBoundingClientRect();
     const source = sourceRef.current;
     if (reduceMotion || !from?.width || !source) { setPreviewOpen(false); return; }
@@ -145,9 +150,23 @@ export default function PortfolioFolders() {
   return (
     <>
       <PortfolioIntro onComplete={finishIntro} />
+      <button
+        type="button"
+        role="switch"
+        className="sound-toggle"
+        data-ready={introComplete || undefined}
+        aria-label="Sound effects"
+        aria-checked={sound.enabled}
+        title={sound.enabled ? "Mute sounds" : "Enable sounds"}
+        disabled={!introComplete}
+        onClick={sound.toggle}
+      >
+        {sound.enabled ? <Volume2 size={18} aria-hidden="true" /> : <VolumeX size={18} aria-hidden="true" />}
+      </button>
       <div className="portfolio-folders" data-intro-complete={introComplete || undefined} inert={!introComplete}>
         <GlassFolder
           label="Matt Domingo"
+          onOpenChange={(open) => sound.play(open ? "folder-open" : "folder-close")}
           className="personal-folder"
           onFileSelect={(_, index, source) => openPreview(PERSONAL_FILES[index], source)}
           tone={tone}
@@ -157,6 +176,7 @@ export default function PortfolioFolders() {
         />
         <GlassFolder
           label="Projects"
+          onOpenChange={(open) => sound.play(open ? "folder-open" : "folder-close")}
           className="project-folder"
           tone={tone}
           art="aurora"
@@ -167,6 +187,8 @@ export default function PortfolioFolders() {
         />
         <GlassFolder
           label="Connect"
+          onOpenChange={(open) => sound.play(open ? "folder-open" : "folder-close")}
+          onFileSelect={() => sound.play("card-open")}
           tone={tone}
           art="aurora"
           action="none"
