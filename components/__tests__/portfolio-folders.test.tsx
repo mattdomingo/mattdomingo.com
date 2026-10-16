@@ -95,3 +95,20 @@ test("repository icon shares the tags row and dismissing a preview starts its re
   unmount();
   bounds.mockRestore();
 });
+
+test("return animates transforms without resizing the card and releases its landing lock on interaction", () => {
+  const bounds = jest.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ x: 100, y: 100, left: 100, top: 100, right: 372, bottom: 284, width: 272, height: 184, toJSON: () => ({}) });
+  const { container, unmount } = render(<PortfolioFolders />);
+  fireEvent.click(screen.getByRole("button", { name: "Open Project, 5 items" }));
+  const source = screen.getByRole("button", { name: "QuestGPT GitHub" });
+  fireEvent.click(source);
+  fireEvent.click(screen.getByRole("button", { name: "Close project" }));
+  const flight = container.querySelector<HTMLElement>(".preview-flight-return");
+  expect(flight?.style.width).toBe("272px");
+  expect(flight?.style.height).toBe("184px");
+  expect(source.hasAttribute("data-preview-restoring")).toBe(true);
+  fireEvent.keyDown(source, { key: "Tab" });
+  expect(source.hasAttribute("data-preview-restoring")).toBe(false);
+  unmount();
+  bounds.mockRestore();
+});

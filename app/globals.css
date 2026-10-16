@@ -3178,8 +3178,8 @@ body:has(.folder-home) {
 .project-tags .project-repository { padding: 0; border: 0; }
 .project-repository .repository-link { width: 32px; height: 32px; margin: 0; }
 .project-repository .repository-link svg { width: 18px; height: 18px; }
-.resume-dialog[data-returning]::backdrop { animation: preview-backdrop-out .8s ease forwards; }
-@keyframes preview-backdrop-out { to { background: transparent; backdrop-filter: blur(0); } }
+.resume-dialog[data-returning]::backdrop { animation: preview-backdrop-out .68s cubic-bezier(.4, 0, .2, 1) forwards; }
+@keyframes preview-backdrop-out { to { opacity: 0; } }
 
 .portfolio-page { width: 100%; }
 body:has(.portfolio-intro) { overflow: hidden; }
@@ -3245,3 +3245,11 @@ body:has(.portfolio-intro) { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) and (max-width: 600px) { .journey-track { grid-template-columns: 1fr; } }
 .journey-toolkit { position: relative; }
 body:has(.portfolio-intro) .journey-scroll-hint { opacity: 0; pointer-events: none; }
+
+/* Lock the landing pose until the user's next interaction, including native focus restoration. */
+.gf-sheet[data-preview-restoring] { transform: var(--preview-rest-transform) !important; transition: none !important; }
+.gf-root:has([data-preview-restoring]) .gf-tilt { transform: none; transition: none; }
+.preview-flight-return { will-change: transform, opacity; backface-visibility: hidden; border-radius: 16px; }
+.resume-dialog[data-returning] .resume-viewer { will-change: transform, opacity; transform-origin: 50% 50%; }
+/* Keep folder coordinates stable when the modal locks and restores page scrolling. */
+html:has(.folder-home) { scrollbar-gutter: stable; }

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
+import { cardReturnTransform, createCardReturn, type CardBounds } from "@/lib/card-motion";
 import GlassFolder, { type FolderFile } from "@/components/ui/glass-folder-cards";
 
 import RepositoryLink from "@/components/repository-link";
@@ -51,16 +52,19 @@ const PROJECT_FILES: PreviewFile[] = [
   { name: "GitHub", meta: "Projects", image: "/previews/github.svg", width: 544, height: 368, github: true },
 ];
 
-type CardBounds = { x: number; y: number; width: number; height: number };
-type CardFlight = { from: CardBounds; to: CardBounds };
+type CardFlight = { from: CardBounds; to: CardBounds; returnMotion?: ReturnType<typeof createCardReturn> };
+const RETURN_DURATION = .68;
+const RETURN_EASE = [.4, 0, .2, 1] as const;
 
 export default function PortfolioFolders() {
   const darkMode = useSyncExternalStore(subscribeTheme, getDarkMode, () => false);
   const tone = darkMode ? "dark" : "light";
+  const clearRestoration = useRef<() => void>(() => {});
   const sourceRef = useRef<HTMLElement | null>(null);
   const sourceBounds = useRef<CardBounds | null>(null);
   const flightRef = useRef<HTMLDivElement>(null);
   const [closing, setClosing] = useState(false);
+  const [settled, setSettled] = useState(false);
   const viewerRef = useRef<HTMLDivElement>(null);
   const [flight, setFlight] = useState<CardFlight | null>(null);
   const [revealed, setRevealed] = useState(false);
@@ -74,11 +78,13 @@ export default function PortfolioFolders() {
   const isProject = Boolean(previewFile?.project || previewFile?.github);
   const reduceMotion = useReducedMotion();
   const openPreview = (file: PreviewFile, source: HTMLElement) => {
+    clearRestoration.current();
     const rect = source.getBoundingClientRect();
     sourceRef.current = source;
     sourceBounds.current = rect.width ? { x: rect.x, y: rect.y, width: rect.width, height: rect.height } : null;
     source.setAttribute("data-preview-source", "");
     setClosing(false);
+    setSettled(false);
     setRevealed(Boolean(reduceMotion || !rect.width));
     setFlight(null);
     setPreviewFile(file);
@@ -95,18 +101,38 @@ export default function PortfolioFolders() {
     if (!rect) return;
     setFlight({ from: sourceBounds.current, to: { x: rect.x, y: rect.y, width: rect.width, height: rect.height } });
   }, [previewOpen, previewFile, reduceMotion, closing]);
-  useEffect(() => () => { sourceRef.current?.removeAttribute("data-preview-source"); }, []);
+  useEffect(() => () => { clearRestoration.current(); sourceRef.current?.removeAttribute("data-preview-source"); }, []);
   const closePreview = () => {
     if (closing) return;
-    const from = (flightRef.current ?? viewerRef.current)?.getBoundingClientRect();
-    const to = sourceRef.current?.getBoundingClientRect();
-    if (reduceMotion || !from?.width || !to?.width) { setPreviewOpen(false); return; }
-    setFlight({ from: { x: from.x, y: from.y, width: from.width, height: from.height }, to: { x: to.x, y: to.y, width: to.width, height: to.height } });
+    const from = (revealed ? viewerRef.current : flightRef.current ?? viewerRef.current)?.getBoundingClientRect();
+    const source = sourceRef.current;
+    if (reduceMotion || !from?.width || !source) { setPreviewOpen(false); return; }
+    // Keep focus restoration and pointer parallax from changing the destination during the handoff.
+    const restingTransform = getComputedStyle(source).transform || "none";
+    source.style.setProperty("--preview-rest-transform", restingTransform);
+    source.setAttribute("data-preview-restoring", "");
+    const pointerSurface = source.closest(".gf-root") ?? source;
+    const release = () => {
+      source.removeAttribute("data-preview-restoring");
+      source.style.removeProperty("--preview-rest-transform");
+      pointerSurface.removeEventListener("pointermove", release);
+      source.removeEventListener("blur", release);
+      source.removeEventListener("keydown", release);
+    };
+    clearRestoration.current = release;
+    pointerSurface.addEventListener("pointermove", release, { once: true });
+    source.addEventListener("blur", release, { once: true });
+    source.addEventListener("keydown", release, { once: true });
+    const to = source.getBoundingClientRect();
+    if (!to.width) { release(); setPreviewOpen(false); return; }
+    const returnMotion = createCardReturn(from, to, { width: source.offsetWidth || to.width, height: source.offsetHeight || to.height }, restingTransform);
+    setFlight({ from, to: returnMotion.to, returnMotion });
+    setSettled(false);
     setClosing(true);
-    setRevealed(false);
   };
   const finishClose = () => {
     setClosing(false);
+    setSettled(false);
     sourceRef.current?.removeAttribute("data-preview-source");
     setFlight(null);
     dialogRef.current?.close();
@@ -170,17 +196,18 @@ export default function PortfolioFolders() {
           if (event.target === event.currentTarget) closePreview();
         }}
       >
-        <AnimatePresence onExitComplete={finishClose}>
+        <AnimatePresence onExitComplete={() => { if (!previewOpen) finishClose(); }}>
           {previewOpen && previewFile && (
             <motion.div
+              transformTemplate={closing ? cardReturnTransform : undefined}
               ref={viewerRef}
               key={previewFile.image}
               className="resume-viewer"
               initial={{ opacity: 0 }}
-              animate={{ opacity: revealed ? 1 : 0 }}
-              exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.94, y: reduceMotion ? 0 : 18 }}
-              transition={{ duration: reduceMotion ? 0 : .18 }}
-              style={{ pointerEvents: revealed ? "auto" : "none" }}
+              animate={closing && flight?.returnMotion ? { ...flight.returnMotion.viewer, opacity: 0 } : { opacity: revealed ? 1 : 0 }}
+              exit={{ opacity: 0, scale: closing || reduceMotion ? 1 : 0.94, y: closing || reduceMotion ? 0 : 18, transition: { duration: closing || reduceMotion ? 0 : .18 } }}
+              transition={closing ? { duration: RETURN_DURATION, ease: RETURN_EASE, opacity: { duration: .2, delay: .18 } } : { duration: reduceMotion ? 0 : .18 }}
+              style={{ pointerEvents: revealed && !closing ? "auto" : "none" }}
             >
               <header className="resume-toolbar">
                 <h2 id="resume-title">{isResume ? "Matt Domingo · Résumé" : previewFile.name}</h2>
@@ -236,17 +263,16 @@ export default function PortfolioFolders() {
         </AnimatePresence>
         {previewOpen && previewFile && flight && (
           <motion.div
+            transformTemplate={closing ? cardReturnTransform : undefined}
             ref={flightRef}
             key={closing ? "return" : "lift"}
             className={`preview-flight-card${closing ? " preview-flight-return" : ""}`}
             aria-hidden="true"
-            initial={{ ...flight.from, opacity: closing ? 0 : 1 }}
-            animate={closing ? {
-              x: [flight.from.x, flight.to.x, flight.to.x],
-              y: [flight.from.y, Math.max(16, flight.to.y - 90), flight.to.y],
-              width: [flight.from.width, flight.to.width, flight.to.width],
-              height: [flight.from.height, flight.to.height, flight.to.height],
-              opacity: [0, 1, 1],
+            style={closing && flight.returnMotion ? { width: flight.returnMotion.cardSize.width, height: flight.returnMotion.cardSize.height, transformOrigin: "50% 50%" } : undefined}
+            initial={closing && flight.returnMotion ? { ...flight.returnMotion.start, opacity: revealed ? 0 : 1 } : { ...flight.from, opacity: 1 }}
+            animate={closing && flight.returnMotion ? {
+              ...flight.returnMotion.end,
+              opacity: settled ? 0 : revealed ? [0, 0, 1, 1] : 1,
             } : revealed ? { ...flight.to, opacity: 0 } : {
               x: [flight.from.x, flight.from.x, flight.to.x],
               y: [flight.from.y, Math.max(16, flight.from.y - 90), flight.to.y],
@@ -254,8 +280,8 @@ export default function PortfolioFolders() {
               height: [flight.from.height, flight.from.height, flight.to.height],
               opacity: 1,
             }}
-            transition={closing ? { duration: .65, times: [0, .7, 1], ease: [[.22, 1, .36, 1], "easeInOut"] } : revealed ? { duration: .18 } : { duration: .65, times: [0, .3, 1], ease: ["easeOut", [.22, 1, .36, 1]] }}
-            onAnimationComplete={() => { if (closing) { sourceRef.current?.removeAttribute("data-preview-source"); setPreviewOpen(false); } else if (revealed) setFlight(null); else setRevealed(true); }}
+            transition={closing && settled ? { duration: .1 } : closing ? { duration: RETURN_DURATION, ease: RETURN_EASE, opacity: { duration: RETURN_DURATION, times: [0, .25, .6, 1], ease: "linear" } } : revealed ? { duration: .18 } : { duration: .65, times: [0, .3, 1], ease: ["easeOut", [.22, 1, .36, 1]] }}
+            onAnimationComplete={() => { if (closing && !settled) { sourceRef.current?.removeAttribute("data-preview-source"); setSettled(true); } else if (closing) { setPreviewOpen(false); finishClose(); } else if (revealed) setFlight(null); else setRevealed(true); }}
           >
             {/* The flight keeps the same artwork and label as the selected folder card. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
