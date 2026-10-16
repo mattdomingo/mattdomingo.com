@@ -5,7 +5,7 @@ import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const MORPH_TIME = 1100;
-const HOLD_TIME = 450;
+const HOLD_TIME = 1200;
 
 // The supplied liquid-text blur/threshold effect, played through once for the intro.
 export function MorphingText({ texts, className, onComplete }: { texts: string[]; className?: string; onComplete?: () => void }) {
@@ -27,8 +27,10 @@ export function MorphingText({ texts, className, onComplete }: { texts: string[]
       return;
     }
     let frame = 0;
-    const startedAt = performance.now();
+    let startedAt: number | null = null;
     const animate = (now: number) => {
+      // Loading or a background tab can delay the first frame; it must still start at the beginning.
+      startedAt ??= now;
       const elapsed = now - startedAt;
       const index = Math.min(texts.length - 2, Math.floor(elapsed / (MORPH_TIME + HOLD_TIME)));
       const fraction = Math.min(1, (elapsed - index * (MORPH_TIME + HOLD_TIME)) / MORPH_TIME);

@@ -1,4 +1,4 @@
-import { act, renderHook } from "@testing-library/react";
+import { act, fireEvent, render, renderHook } from "@testing-library/react";
 import { usePortfolioAudio } from "@/hooks/use-portfolio-audio";
 import { playPortfolioSound } from "@/lib/portfolio-sounds";
 
@@ -28,5 +28,35 @@ test("sounds start on interaction even with an old mute preference, and release 
   } finally {
     window.AudioContext = original;
     localStorage.clear();
+  }
+});
+
+test("background music waits for interaction, retries blocked playback, and stops on unmount", async () => {
+  let paused = true;
+  const play = jest.spyOn(HTMLMediaElement.prototype, "play")
+    .mockImplementation(() => { paused = false; return Promise.resolve(); })
+    .mockRejectedValueOnce(new Error("Playback blocked"));
+  const pause = jest.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => { paused = true; });
+  jest.spyOn(HTMLMediaElement.prototype, "paused", "get").mockImplementation(() => paused);
+  function Player() {
+    const { musicRef } = usePortfolioAudio();
+    return <audio ref={musicRef} />;
+  }
+  const { unmount } = render(<Player />);
+  try {
+    expect(play).not.toHaveBeenCalled();
+    await act(async () => { fireEvent.click(window); });
+    expect(play).toHaveBeenCalledTimes(1);
+    await act(async () => { fireEvent.keyDown(window, { key: "Enter" }); });
+    expect(play).toHaveBeenCalledTimes(2);
+    fireEvent.click(window);
+    expect(play).toHaveBeenCalledTimes(2);
+    unmount();
+    expect(pause).toHaveBeenCalledTimes(1);
+    fireEvent.click(window);
+    expect(play).toHaveBeenCalledTimes(2);
+  } finally {
+    unmount();
+    jest.restoreAllMocks();
   }
 });

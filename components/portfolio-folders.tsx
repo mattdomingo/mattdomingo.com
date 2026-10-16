@@ -163,6 +163,7 @@ export default function PortfolioFolders() {
 
   return (
     <>
+      <audio ref={sound.musicRef} src="/audio/background-music.mp3" loop preload="none" hidden />
       <PortfolioIntro onComplete={finishIntro} />
       <div ref={foldersRef} className="portfolio-folders" style={{ "--folder-scale": folderWidth / 340 } as CSSProperties} data-intro-complete={introComplete || undefined} inert={!introComplete}>
         <GlassFolder

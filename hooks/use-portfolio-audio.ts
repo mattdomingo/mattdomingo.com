@@ -5,6 +5,7 @@ import { playPortfolioSound, type PortfolioSound } from "@/lib/portfolio-sounds"
 
 export function usePortfolioAudio() {
   const audio = useRef<AudioContext | null>(null);
+  const musicRef = useRef<HTMLAudioElement>(null);
   const stop = useCallback(() => {
     const context = audio.current;
     audio.current = null;
@@ -12,6 +13,22 @@ export function usePortfolioAudio() {
   }, []);
 
   useEffect(() => stop, [stop]);
+
+  useEffect(() => {
+    const track = musicRef.current;
+    if (!track) return;
+    const start = () => {
+      if (!track.paused) return;
+      void track.play().catch(() => {});
+    };
+    window.addEventListener("click", start);
+    window.addEventListener("keydown", start);
+    return () => {
+      window.removeEventListener("click", start);
+      window.removeEventListener("keydown", start);
+      if (!track.paused) track.pause();
+    };
+  }, []);
 
   const play = useCallback((sound: PortfolioSound) => {
     if (typeof window.AudioContext !== "function") return;
@@ -22,5 +39,5 @@ export function usePortfolioAudio() {
       playPortfolioSound(context, sound);
     } catch { /* Optional audio must never interrupt navigation. */ }
   }, []);
-  return { play };
+  return { play, musicRef };
 }

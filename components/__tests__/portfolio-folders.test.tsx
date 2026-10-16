@@ -9,6 +9,8 @@ let dark = false;
 let changeTheme: (() => void) | undefined;
 beforeEach(() => {
   dark = false;
+  HTMLMediaElement.prototype.play = jest.fn().mockResolvedValue(undefined);
+  HTMLMediaElement.prototype.pause = jest.fn();
   global.fetch = jest.fn(() => new Promise(() => {})) as unknown as typeof fetch;
   window.matchMedia = jest.fn(() => ({ matches: dark, media: "", onchange: null, addListener: jest.fn(), removeListener: jest.fn(), addEventListener: (_type: string, callback: () => void) => { changeTheme = callback; }, removeEventListener: jest.fn(), dispatchEvent: jest.fn() })) as unknown as typeof window.matchMedia;
   HTMLDialogElement.prototype.showModal = function () { this.setAttribute("open", ""); };

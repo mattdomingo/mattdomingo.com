@@ -1,7 +1,7 @@
 "use client";
 
 // Adapted from Variable Proximity by Cojeev (MIT), using the portfolio's variable font and styles.
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type PointerEvent } from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,8 @@ type VariableProximityProps = {
 export function VariableProximity({ text, className, radius = 120, fromWeight = 400, toWeight = 800, paused = false }: VariableProximityProps) {
   const host = useRef<HTMLSpanElement>(null);
   const frame = useRef(0);
+  const sweepFrame = useRef(0);
+  const releaseTimer = useRef<number | undefined>(undefined);
   const point = useRef<{ x: number; y: number } | null>(null);
   const reducedMotion = useReducedMotion();
   const running = !reducedMotion && !paused;
@@ -34,24 +36,58 @@ export function VariableProximity({ text, className, radius = 120, fromWeight = 
     });
   }, [from, to, radius, running]);
 
-  useEffect(() => {
+  const stopSweep = useCallback(() => {
+    cancelAnimationFrame(sweepFrame.current);
+    sweepFrame.current = 0;
+  }, []);
+  const reset = useCallback(() => {
+    stopSweep();
+    cancelAnimationFrame(frame.current);
+    frame.current = 0;
+    window.clearTimeout(releaseTimer.current);
     point.current = null;
     paint();
-    return () => { cancelAnimationFrame(frame.current); frame.current = 0; };
-  }, [paint, text]);
+  }, [paint, stopSweep]);
+
+  useEffect(() => {
+    reset();
+    if (!running) return reset;
+    let startedAt: number | null = null;
+    const sweep = (now: number) => {
+      startedAt ??= now;
+      const progress = Math.min(1, (now - startedAt) / 1000);
+      const rect = host.current?.getBoundingClientRect();
+      if (!rect) return;
+      point.current = { x: rect.left - radius + (rect.width + radius * 2) * progress, y: rect.top + rect.height / 2 };
+      paint();
+      if (progress < 1) sweepFrame.current = requestAnimationFrame(sweep);
+      else { sweepFrame.current = 0; point.current = null; paint(); }
+    };
+    sweepFrame.current = requestAnimationFrame(sweep);
+    return reset;
+  }, [paint, radius, reset, running, text]);
+
+  const trackPointer = (event: PointerEvent<HTMLSpanElement>, immediate = false) => {
+    if (!running) return;
+    stopSweep();
+    window.clearTimeout(releaseTimer.current);
+    point.current = { x: event.clientX, y: event.clientY };
+    if (immediate) paint();
+    else if (!frame.current) frame.current = requestAnimationFrame(() => { frame.current = 0; paint(); });
+  };
 
   return (
     <span
       ref={host}
       className={cn("variable-proximity", className)}
       data-running={running}
-      onPointerMove={(event) => {
-        if (event.pointerType === "touch" || !running) return;
-        point.current = { x: event.clientX, y: event.clientY };
-        if (frame.current) return;
-        frame.current = requestAnimationFrame(() => { frame.current = 0; paint(); });
+      onPointerDown={(event) => trackPointer(event, true)}
+      onPointerMove={(event) => trackPointer(event)}
+      onPointerUp={(event) => {
+        if (running && event.pointerType === "touch") releaseTimer.current = window.setTimeout(reset, 250);
       }}
-      onPointerLeave={() => { point.current = null; cancelAnimationFrame(frame.current); frame.current = 0; paint(); }}
+      onPointerCancel={reset}
+      onPointerLeave={(event) => { if (event.pointerType !== "touch") reset(); }}
     >
       <span className="variable-proximity__accessible">{text}</span>
       <span aria-hidden="true">

@@ -13,7 +13,8 @@ test("the intro keeps the name as a heading and reveals folders only after it re
   const complete = jest.fn();
   const { container } = render(<PortfolioIntro onComplete={complete} />);
   const header = container.querySelector("header")!;
-  act(() => tick(1550));
+  act(() => tick(0));
+  act(() => tick(2300));
   expect(header.hasAttribute("data-settled")).toBe(true);
   expect(complete).not.toHaveBeenCalled();
   const landed = createEvent.transitionEnd(header);
