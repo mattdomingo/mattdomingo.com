@@ -9,11 +9,11 @@ type PreviewFile = FolderFile & { image: string; width: number; height: number }
 
 const PERSONAL_FILES: PreviewFile[] = [
   { name: "Résumé.pdf", meta: "PDF", image: "/documents/resume-preview.webp", width: 1360, height: 1760 },
-  { name: "Apple Vision Pro Enthusiast", image: "/photos/img_4991.webp", width: 1350, height: 1800 },
-  { name: "Trustage SWE Internship", image: "/photos/internship.webp", width: 1800, height: 961 },
   { name: "Go Badgers", image: "/photos/img_3219.webp", width: 1350, height: 1800 },
   { name: "Holos", image: "/photos/img_5819.webp", width: 1350, height: 1800 },
-  { name: "Love Climbing Mountains", image: "/photos/img_8427.webp", width: 1350, height: 1800 },
+  { name: "Trustage SWE Internship", image: "/photos/internship.webp", width: 1800, height: 961 },
+  { name: "Mountains", image: "/photos/img_8427.webp", width: 1350, height: 1800 },
+  { name: "Apple Vision Pro Enthusiast", image: "/photos/img_4991.webp", width: 1350, height: 1800 },
 ];
 
 export default function PortfolioFolders() {
@@ -43,12 +43,17 @@ export default function PortfolioFolders() {
         />
         <GlassFolder
           label="Project"
+          className="project-folder"
           tone="dark"
           art="none"
           action="none"
           appearDelay={140}
           files={[
             { name: "GitHub", meta: "Projects", image: "/previews/github.svg", href: "https://github.com/mattdomingo" },
+            { name: "openfloor", meta: "opnflr.com", image: "/previews/openfloor.svg", href: "https://opnflr.com" },
+            { name: "Multiplayer AI", meta: "Open source soon", image: "/previews/multiplayer-ai.svg", href: "https://github.com/mattdomingo/openfloor" },
+            { name: "Recall", meta: "GitHub", image: "/previews/recall.svg", href: "https://github.com/mattdomingo/speedhacks" },
+            { name: "QuestGPT", meta: "GitHub", image: "/projects/questgpt.png", href: "https://github.com/mattdomingo/QuestGPT" },
           ]}
         />
         <GlassFolder

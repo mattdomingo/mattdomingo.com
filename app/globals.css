@@ -46,7 +46,8 @@ body:has(.folder-home) {
   transform: translateY(-27px);
 }
 
-.personal-folder .gf-sheet-art {
+.personal-folder .gf-sheet-art,
+.project-folder .gf-sheet-art {
   object-fit: contain;
   object-position: center;
   background: #202023;
