@@ -1,8 +1,10 @@
 import GlassFolder from "@/components/ui/glass-folder-cards";
+import HalftoneFlow from "@/components/ui/halftone-flow";
 
 export default function HomePage() {
   return (
     <main className="folder-home" aria-label="Matt Domingo's portfolio">
+      <HalftoneFlow className="folder-background" />
       <GlassFolder
         label="Matt Domingo"
         art="aurora"
