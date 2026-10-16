@@ -15,7 +15,7 @@ test("all dated résumé entries and supplied milestones remain readable in chro
   const { container } = render(<Timeline />);
   const dates = [...container.querySelectorAll("time")].map((time) => time.dateTime);
   expect(dates).toEqual([...dates].sort());
-  expect(dates.slice(0, 9)).toEqual(["2014-10", "2018-05", "2018-06", "2021-12", "2022-02", "2022-05", "2023-02", "2023-04", "2024"]);
+  expect(dates.slice(0, 9)).toEqual(["2014-10", "2018-05", "2018-06", "2019-02", "2021-12", "2022-02", "2022-05", "2023-04", "2024"]);
   const timeline = screen.getByRole("list", { name: "Education and career timeline" });
   expect(within(timeline).getAllByRole("article")).toHaveLength(JOURNEY.length);
   expect(within(timeline).getByText("Visa · Denver")).toBeTruthy();
