@@ -81,3 +81,17 @@ test("preview flight begins at the selected card and restores it when unmounted"
   expect(card.hasAttribute("data-preview-source")).toBe(false);
   bounds.mockRestore();
 });
+
+test("repository icon shares the tags row and dismissing a preview starts its return to the source", () => {
+  const bounds = jest.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ x: 100, y: 100, left: 100, top: 100, right: 372, bottom: 284, width: 272, height: 184, toJSON: () => ({}) });
+  const { container, unmount } = render(<PortfolioFolders />);
+  fireEvent.click(screen.getByRole("button", { name: "Open Project, 5 items" }));
+  fireEvent.click(screen.getByRole("button", { name: "QuestGPT GitHub" }));
+  const repository = screen.getByRole("link", { name: "View Repository" });
+  expect(repository.closest(".project-tags")).not.toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "Close project" }));
+  expect(screen.getByRole("dialog").hasAttribute("data-returning")).toBe(true);
+  expect(container.querySelector(".preview-flight-return")).not.toBeNull();
+  unmount();
+  bounds.mockRestore();
+});

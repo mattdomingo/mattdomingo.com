@@ -59,6 +59,8 @@ export default function PortfolioFolders() {
   const tone = darkMode ? "dark" : "light";
   const sourceRef = useRef<HTMLElement | null>(null);
   const sourceBounds = useRef<CardBounds | null>(null);
+  const flightRef = useRef<HTMLDivElement>(null);
+  const [closing, setClosing] = useState(false);
   const viewerRef = useRef<HTMLDivElement>(null);
   const [flight, setFlight] = useState<CardFlight | null>(null);
   const [revealed, setRevealed] = useState(false);
@@ -76,6 +78,7 @@ export default function PortfolioFolders() {
     sourceRef.current = source;
     sourceBounds.current = rect.width ? { x: rect.x, y: rect.y, width: rect.width, height: rect.height } : null;
     source.setAttribute("data-preview-source", "");
+    setClosing(false);
     setRevealed(Boolean(reduceMotion || !rect.width));
     setFlight(null);
     setPreviewFile(file);
@@ -85,14 +88,25 @@ export default function PortfolioFolders() {
   };
   useLayoutEffect(() => {
     if (!previewOpen) return;
-    if (reduceMotion) { setFlight(null); setRevealed(true); return; }
+    if (reduceMotion) { if (closing) setPreviewOpen(false); setFlight(null); setRevealed(true); return; }
+    if (closing) return;
     if (!sourceBounds.current) return;
     const rect = viewerRef.current?.getBoundingClientRect();
     if (!rect) return;
     setFlight({ from: sourceBounds.current, to: { x: rect.x, y: rect.y, width: rect.width, height: rect.height } });
-  }, [previewOpen, previewFile, reduceMotion]);
+  }, [previewOpen, previewFile, reduceMotion, closing]);
   useEffect(() => () => { sourceRef.current?.removeAttribute("data-preview-source"); }, []);
+  const closePreview = () => {
+    if (closing) return;
+    const from = (flightRef.current ?? viewerRef.current)?.getBoundingClientRect();
+    const to = sourceRef.current?.getBoundingClientRect();
+    if (reduceMotion || !from?.width || !to?.width) { setPreviewOpen(false); return; }
+    setFlight({ from: { x: from.x, y: from.y, width: from.width, height: from.height }, to: { x: to.x, y: to.y, width: to.width, height: to.height } });
+    setClosing(true);
+    setRevealed(false);
+  };
   const finishClose = () => {
+    setClosing(false);
     sourceRef.current?.removeAttribute("data-preview-source");
     setFlight(null);
     dialogRef.current?.close();
@@ -140,19 +154,20 @@ export default function PortfolioFolders() {
         ref={dialogRef}
         className={`resume-dialog${isProject ? " project-dialog" : ""}`}
         aria-labelledby="resume-title"
+        data-returning={closing || undefined}
         onCancel={(event) => {
           event.preventDefault();
-          setPreviewOpen(false);
+          closePreview();
         }}
         onKeyDown={(event) => {
           if (event.key === "Escape") {
             event.stopPropagation();
             event.preventDefault();
-            setPreviewOpen(false);
+            closePreview();
           }
         }}
         onClick={(event) => {
-          if (event.target === event.currentTarget) setPreviewOpen(false);
+          if (event.target === event.currentTarget) closePreview();
         }}
       >
         <AnimatePresence onExitComplete={finishClose}>
@@ -183,7 +198,7 @@ export default function PortfolioFolders() {
                       {!previewZoomed && <path d="M10 7v6" />}
                     </svg>
                   </button>}
-                  <button type="button" autoFocus aria-label={isResume ? "Close résumé" : isProject ? "Close project" : "Close photo"} onClick={() => setPreviewOpen(false)}>
+                  <button type="button" autoFocus aria-label={isResume ? "Close résumé" : isProject ? "Close project" : "Close photo"} onClick={closePreview}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                       <path d="m6 6 12 12M18 6 6 18" />
                     </svg>
@@ -196,8 +211,8 @@ export default function PortfolioFolders() {
                     <p className="project-eyebrow">{previewFile.name}</p>
                     <h3>{previewFile.project.tagline}</h3>
                     <p className="project-summary">{previewFile.project.summary}</p>
-                    <ul className="project-tags" aria-label="Technologies">{previewFile.project.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>
-                    {previewFile.project.url.startsWith("https://github.com/") ? <RepositoryLink href={previewFile.project.url} /> : <a className="project-visit" href={previewFile.project.url} target="_blank" rel="noopener noreferrer">{previewFile.project.link} <span aria-hidden="true">↗</span></a>}
+                    <ul className="project-tags" aria-label="Technologies and repository">{previewFile.project.tags.map((tag) => <li key={tag}>{tag}</li>)}{previewFile.project.url.startsWith("https://github.com/") && <li className="project-repository"><RepositoryLink href={previewFile.project.url} /></li>}</ul>
+                    {!previewFile.project.url.startsWith("https://github.com/") && <a className="project-visit" href={previewFile.project.url} target="_blank" rel="noopener noreferrer">{previewFile.project.link} <span aria-hidden="true">↗</span></a>}
                   </div>
                   <figure className="project-figure">
                     <Image unoptimized src={previewFile.image} alt={previewFile.project.caption} width={previewFile.width} height={previewFile.height} />
@@ -221,18 +236,26 @@ export default function PortfolioFolders() {
         </AnimatePresence>
         {previewOpen && previewFile && flight && (
           <motion.div
-            className="preview-flight-card"
+            ref={flightRef}
+            key={closing ? "return" : "lift"}
+            className={`preview-flight-card${closing ? " preview-flight-return" : ""}`}
             aria-hidden="true"
-            initial={{ ...flight.from, opacity: 1 }}
-            animate={revealed ? { ...flight.to, opacity: 0 } : {
+            initial={{ ...flight.from, opacity: closing ? 0 : 1 }}
+            animate={closing ? {
+              x: [flight.from.x, flight.to.x, flight.to.x],
+              y: [flight.from.y, Math.max(16, flight.to.y - 90), flight.to.y],
+              width: [flight.from.width, flight.to.width, flight.to.width],
+              height: [flight.from.height, flight.to.height, flight.to.height],
+              opacity: [0, 1, 1],
+            } : revealed ? { ...flight.to, opacity: 0 } : {
               x: [flight.from.x, flight.from.x, flight.to.x],
               y: [flight.from.y, Math.max(16, flight.from.y - 90), flight.to.y],
               width: [flight.from.width, flight.from.width, flight.to.width],
               height: [flight.from.height, flight.from.height, flight.to.height],
               opacity: 1,
             }}
-            transition={revealed ? { duration: .18 } : { duration: .65, times: [0, .3, 1], ease: ["easeOut", [.22, 1, .36, 1]] }}
-            onAnimationComplete={() => { if (revealed) setFlight(null); else setRevealed(true); }}
+            transition={closing ? { duration: .65, times: [0, .7, 1], ease: [[.22, 1, .36, 1], "easeInOut"] } : revealed ? { duration: .18 } : { duration: .65, times: [0, .3, 1], ease: ["easeOut", [.22, 1, .36, 1]] }}
+            onAnimationComplete={() => { if (closing) { sourceRef.current?.removeAttribute("data-preview-source"); setPreviewOpen(false); } else if (revealed) setFlight(null); else setRevealed(true); }}
           >
             {/* The flight keeps the same artwork and label as the selected folder card. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
