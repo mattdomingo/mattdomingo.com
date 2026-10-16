@@ -60,9 +60,9 @@ test("all six files remain available, including the oldest file", () => {
   );
   expect(screen.getAllByRole("listitem")).toHaveLength(6);
   fireEvent.click(screen.getByRole("button", { name: "Photo 1" }));
-  expect(select).toHaveBeenLastCalledWith(expect.objectContaining({ name: "Photo 1" }), 0);
+  expect(select).toHaveBeenLastCalledWith(expect.objectContaining({ name: "Photo 1" }), 0, expect.any(HTMLElement));
   fireEvent.click(screen.getByRole("button", { name: "Photo 6" }));
-  expect(select).toHaveBeenLastCalledWith(expect.objectContaining({ name: "Photo 6" }), 5);
+  expect(select).toHaveBeenLastCalledWith(expect.objectContaining({ name: "Photo 6" }), 5, expect.any(HTMLElement));
 });
 
 test("folder art finishes as opaque, repeatable pixels", () => {

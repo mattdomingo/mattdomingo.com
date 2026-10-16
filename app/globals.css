@@ -3148,3 +3148,28 @@ body:has(.folder-home) {
 @media (max-width: 520px) {
   .portfolio-skyline .skyline-footer { flex-direction: column; align-items: flex-start; gap: .75rem; }
 }
+
+.portfolio-folders { opacity: 0; transition: opacity .6s ease; }
+.portfolio-folders[data-intro-complete] { opacity: 1; }
+.portfolio-intro { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; pointer-events: none; color: var(--portfolio-ink); }
+.liquid-text { position: relative; width: min(90vw, 60rem); height: 1.2em; text-align: center; font-size: clamp(2.7rem, 8vw, 6.5rem); font-weight: 600; line-height: 1.1; letter-spacing: -.065em; }
+.liquid-text > span { position: absolute; inset: 0; display: block; width: 100%; opacity: 0; white-space: nowrap; }
+.liquid-text-filters { position: absolute; pointer-events: none; }
+.gf-sheet[data-preview-source] { visibility: hidden; }
+.preview-flight-card { position: fixed; left: 0; top: 0; z-index: 10; overflow: hidden; pointer-events: none; border-radius: 12px; background: var(--portfolio-paper); box-shadow: 0 24px 70px rgb(0 0 0 / 35%); }
+.preview-flight-card > img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.preview-flight-label { position: absolute; inset: 0 0 auto; display: flex; justify-content: space-between; gap: 10px; padding: 11px 14px 32px; background: linear-gradient(var(--portfolio-paper) 0%, var(--portfolio-paper) 45%, transparent); font-size: 12.5px; color: var(--portfolio-ink); }
+.preview-flight-label > span:last-child { font-size: 10px; color: var(--portfolio-muted); }
+.github-preview { min-height: min(44rem, calc(100dvh - 6rem)); }
+.repository-link { display: inline-grid; place-items: center; width: 44px; height: 44px; margin-top: .5rem; border: 1px solid var(--portfolio-line); border-radius: 50%; color: var(--portfolio-ink); background: var(--portfolio-chip); transition: background .2s ease, transform .2s ease; }
+.repository-link:hover { background: var(--portfolio-line); transform: translateY(-2px); }
+.repository-link:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.repository-tooltip { position: fixed; left: 0; top: 0; z-index: 20; pointer-events: none; white-space: nowrap; padding: 8px 11px; border-radius: 7px; background: var(--portfolio-ink); color: var(--portfolio-paper); font-size: 12px; line-height: 1.2; box-shadow: 0 5px 20px rgb(0 0 0 / 15%); }
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-intro { display: none; }
+  .portfolio-folders, .repository-link { transition: none; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .preview-flight-card > img[src^="/previews/"] { filter: invert(.92) hue-rotate(180deg); }
+}

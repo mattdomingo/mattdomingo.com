@@ -15,9 +15,9 @@ beforeEach(() => {
 });
 
 test.each([
-  ["QuestGPT", "QuestGPT GitHub", "Explore QuestGPT", "https://github.com/mattdomingo/QuestGPT"],
-  ["Recall", "Recall GitHub", "Explore Recall", "https://github.com/mattdomingo/speedhacks"],
-  ["Multiplayer AI", "Multiplayer AI Open source soon", "View repository", "https://github.com/mattdomingo/openfloor"],
+  ["QuestGPT", "QuestGPT GitHub", "View Repository", "https://github.com/mattdomingo/QuestGPT"],
+  ["Recall", "Recall GitHub", "View Repository", "https://github.com/mattdomingo/speedhacks"],
+  ["Multiplayer AI", "Multiplayer AI Open source soon", "View Repository", "https://github.com/mattdomingo/openfloor"],
   ["openfloor", "openfloor opnflr.com", "Visit openfloor", "https://opnflr.com"],
 ])("%s opens an in-page summary and image with a new-tab destination", (name, tile, link, url) => {
   render(<PortfolioFolders />);
@@ -62,4 +62,22 @@ test("an unavailable GitHub calendar offers retry without showing sample contrib
   fireEvent.click(screen.getByRole("button", { name: "Try again" }));
   expect(screen.getByText("Loading contributions from GitHub…")).toBeTruthy();
   expect(global.fetch).toHaveBeenCalledTimes(2);
+});
+
+test("preview flight begins at the selected card and restores it when unmounted", () => {
+  const bounds = jest.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+    return { x: 140, y: 250, left: 140, top: 250, right: 412, bottom: 434, width: 272, height: 184, toJSON: () => ({}) };
+  });
+  const { container, unmount } = render(<PortfolioFolders />);
+  fireEvent.click(screen.getByRole("button", { name: "Open Project, 5 items" }));
+  const card = screen.getByRole("button", { name: "QuestGPT GitHub" });
+  fireEvent.click(card);
+  expect(card.hasAttribute("data-preview-source")).toBe(true);
+  const flight = container.querySelector<HTMLElement>(".preview-flight-card");
+  expect(flight?.style.width).toBe("272px");
+  expect(flight?.style.height).toBe("184px");
+  expect(flight?.querySelector("img")?.getAttribute("src")).toBe("/projects/questgpt.png");
+  unmount();
+  expect(card.hasAttribute("data-preview-source")).toBe(false);
+  bounds.mockRestore();
 });

@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import GlassFolder, { type FolderFile } from "@/components/ui/glass-folder-cards";
 
+import RepositoryLink from "@/components/repository-link";
+import PortfolioIntro from "@/components/portfolio-intro";
 import GitHubPreview from "@/components/github-preview";
 
 const subscribeTheme = (callback: () => void) => {
@@ -49,30 +51,62 @@ const PROJECT_FILES: PreviewFile[] = [
   { name: "GitHub", meta: "Projects", image: "/previews/github.svg", width: 544, height: 368, github: true },
 ];
 
+type CardBounds = { x: number; y: number; width: number; height: number };
+type CardFlight = { from: CardBounds; to: CardBounds };
+
 export default function PortfolioFolders() {
   const darkMode = useSyncExternalStore(subscribeTheme, getDarkMode, () => false);
   const tone = darkMode ? "dark" : "light";
+  const sourceRef = useRef<HTMLElement | null>(null);
+  const sourceBounds = useRef<CardBounds | null>(null);
+  const viewerRef = useRef<HTMLDivElement>(null);
+  const [flight, setFlight] = useState<CardFlight | null>(null);
+  const [revealed, setRevealed] = useState(false);
+  const [introComplete, setIntroComplete] = useState(false);
+  const finishIntro = useCallback(() => setIntroComplete(true), []);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewZoomed, setPreviewZoomed] = useState(false);
   const [previewFile, setPreviewFile] = useState<PreviewFile | null>(null);
   const isResume = previewFile?.name === "Résumé.pdf";
   const isProject = Boolean(previewFile?.project || previewFile?.github);
-  const openPreview = (file: PreviewFile) => {
+  const reduceMotion = useReducedMotion();
+  const openPreview = (file: PreviewFile, source: HTMLElement) => {
+    const rect = source.getBoundingClientRect();
+    sourceRef.current = source;
+    sourceBounds.current = rect.width ? { x: rect.x, y: rect.y, width: rect.width, height: rect.height } : null;
+    source.setAttribute("data-preview-source", "");
+    setRevealed(Boolean(reduceMotion || !rect.width));
+    setFlight(null);
     setPreviewFile(file);
     setPreviewZoomed(false);
     dialogRef.current?.showModal();
     setPreviewOpen(true);
   };
-  const reduceMotion = useReducedMotion();
+  useLayoutEffect(() => {
+    if (!previewOpen) return;
+    if (reduceMotion) { setFlight(null); setRevealed(true); return; }
+    if (!sourceBounds.current) return;
+    const rect = viewerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setFlight({ from: sourceBounds.current, to: { x: rect.x, y: rect.y, width: rect.width, height: rect.height } });
+  }, [previewOpen, previewFile, reduceMotion]);
+  useEffect(() => () => { sourceRef.current?.removeAttribute("data-preview-source"); }, []);
+  const finishClose = () => {
+    sourceRef.current?.removeAttribute("data-preview-source");
+    setFlight(null);
+    dialogRef.current?.close();
+  };
+
 
   return (
     <>
-      <div className="portfolio-folders">
+      <PortfolioIntro onComplete={finishIntro} />
+      <div className="portfolio-folders" data-intro-complete={introComplete || undefined} inert={!introComplete}>
         <GlassFolder
           label="Matt Domingo"
           className="personal-folder"
-          onFileSelect={(_, index) => openPreview(PERSONAL_FILES[index])}
+          onFileSelect={(_, index, source) => openPreview(PERSONAL_FILES[index], source)}
           tone={tone}
           art="aurora"
           action="none"
@@ -85,7 +119,7 @@ export default function PortfolioFolders() {
           art="aurora"
           action="none"
           appearDelay={140}
-          onFileSelect={(_, index) => openPreview(PROJECT_FILES[index])}
+          onFileSelect={(_, index, source) => openPreview(PROJECT_FILES[index], source)}
           files={PROJECT_FILES}
         />
         <GlassFolder
@@ -121,15 +155,17 @@ export default function PortfolioFolders() {
           if (event.target === event.currentTarget) setPreviewOpen(false);
         }}
       >
-        <AnimatePresence onExitComplete={() => dialogRef.current?.close()}>
+        <AnimatePresence onExitComplete={finishClose}>
           {previewOpen && previewFile && (
             <motion.div
+              ref={viewerRef}
               key={previewFile.image}
               className="resume-viewer"
-              initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.86, y: reduceMotion ? 0 : 36 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: revealed ? 1 : 0 }}
               exit={{ opacity: 0, scale: reduceMotion ? 1 : 0.94, y: reduceMotion ? 0 : 18 }}
-              transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 290, damping: 29 }}
+              transition={{ duration: reduceMotion ? 0 : .18 }}
+              style={{ pointerEvents: revealed ? "auto" : "none" }}
             >
               <header className="resume-toolbar">
                 <h2 id="resume-title">{isResume ? "Matt Domingo · Résumé" : previewFile.name}</h2>
@@ -161,7 +197,7 @@ export default function PortfolioFolders() {
                     <h3>{previewFile.project.tagline}</h3>
                     <p className="project-summary">{previewFile.project.summary}</p>
                     <ul className="project-tags" aria-label="Technologies">{previewFile.project.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>
-                    <a className="project-visit" href={previewFile.project.url} target="_blank" rel="noopener noreferrer">{previewFile.project.link} <span aria-hidden="true">↗</span></a>
+                    {previewFile.project.url.startsWith("https://github.com/") ? <RepositoryLink href={previewFile.project.url} /> : <a className="project-visit" href={previewFile.project.url} target="_blank" rel="noopener noreferrer">{previewFile.project.link} <span aria-hidden="true">↗</span></a>}
                   </div>
                   <figure className="project-figure">
                     <Image unoptimized src={previewFile.image} alt={previewFile.project.caption} width={previewFile.width} height={previewFile.height} />
@@ -183,6 +219,27 @@ export default function PortfolioFolders() {
             </motion.div>
           )}
         </AnimatePresence>
+        {previewOpen && previewFile && flight && (
+          <motion.div
+            className="preview-flight-card"
+            aria-hidden="true"
+            initial={{ ...flight.from, opacity: 1 }}
+            animate={revealed ? { ...flight.to, opacity: 0 } : {
+              x: [flight.from.x, flight.from.x, flight.to.x],
+              y: [flight.from.y, Math.max(16, flight.from.y - 90), flight.to.y],
+              width: [flight.from.width, flight.from.width, flight.to.width],
+              height: [flight.from.height, flight.from.height, flight.to.height],
+              opacity: 1,
+            }}
+            transition={revealed ? { duration: .18 } : { duration: .65, times: [0, .3, 1], ease: ["easeOut", [.22, 1, .36, 1]] }}
+            onAnimationComplete={() => { if (revealed) setFlight(null); else setRevealed(true); }}
+          >
+            {/* The flight keeps the same artwork and label as the selected folder card. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={previewFile.image} alt="" />
+            <div className="preview-flight-label"><span>{previewFile.name}</span><span>{previewFile.meta}</span></div>
+          </motion.div>
+        )}
       </dialog>
     </>
   );

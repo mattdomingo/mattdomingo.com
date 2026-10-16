@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import RepositoryLink from "@/components/repository-link";
 import dynamic from "next/dynamic";
 import type { GitHubContributions } from "@/lib/github-contributions";
 
@@ -31,7 +32,7 @@ export default function GitHubPreview() {
         <div role="alert" className="github-status"><p>GitHub activity is temporarily unavailable.</p><button type="button" onClick={() => setAttempt((value) => value + 1)}>Try again</button></div>
       ) : <p className="github-status" role="status">Loading contributions from GitHub…</p>}
       <p className="project-caption">From your public GitHub profile · refreshes hourly{calendar ? ` · through ${calendar.endDate}` : ""}</p>
-      <a className="project-visit" href="https://github.com/mattdomingo" target="_blank" rel="noopener noreferrer">Explore my GitHub <span aria-hidden="true">↗</span></a>
+      <RepositoryLink href="https://github.com/mattdomingo" label="View GitHub Profile" />
     </div>
   );
 }

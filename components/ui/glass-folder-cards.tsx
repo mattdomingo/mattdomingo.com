@@ -94,7 +94,7 @@ export type GlassFolderProps = {
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
   /** Called when a file is chosen while the folder is open. */
-  onFileSelect?: (file: FolderFile, index: number) => void
+  onFileSelect?: (file: FolderFile, index: number, source: HTMLElement) => void
   /** Width in px. Everything else scales with it; the height is 0.96 × width. */
   width?: number
   /** Assemble itself the first time it scrolls into view. */
@@ -827,11 +827,11 @@ export default function GlassFolder({
               return (
                 <div key={id} role="listitem" className="gf-sheet-slot">
                   {file.href ? (
-                    <a {...common} href={file.href} target="_blank" rel="noopener noreferrer" onClick={() => onFileSelect?.(file, start + v)}>
+                    <a {...common} href={file.href} target="_blank" rel="noopener noreferrer" onClick={(event) => onFileSelect?.(file, start + v, event.currentTarget)}>
                       {inner}
                     </a>
                   ) : (
-                    <button {...common} type="button" onClick={() => onFileSelect?.(file, start + v)}>
+                    <button {...common} type="button" onClick={(event) => onFileSelect?.(file, start + v, event.currentTarget)}>
                       {inner}
                     </button>
                   )}
