@@ -49,7 +49,7 @@ test("GitHub opens the skyline, and connect links open in a new tab with the rev
   fireEvent.click(screen.getByRole("button", { name: "GitHub Projects" }));
   expect(within(screen.getByRole("dialog", { name: "GitHub" })).getByText("Loading contributions from GitHub…")).toBeTruthy();
   const github = screen.getByRole("dialog", { name: "GitHub" });
-  expect(within(github).getByRole("heading", { name: "One fix. Three new bugs." })).toBeTruthy();
+  expect(within(github).getByRole("heading", { name: "I have a joke about UDP, but you might not get it." })).toBeTruthy();
   expect(within(github).getByRole("link", { name: "View GitHub Profile" }).closest(".github-heading")).not.toBeNull();
   expect(within(github).queryByText(/A year of building|From your public GitHub profile/)).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Open Connect, 4 items" }));

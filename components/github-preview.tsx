@@ -28,7 +28,7 @@ export default function GitHubPreview() {
     <div className="github-preview">
       <p className="project-eyebrow">@mattdomingo</p>
       <div className="github-heading">
-        <h3 className="github-intro">One fix. Three new bugs.</h3>
+        <h3 className="github-intro">I have a joke about UDP, but you might not get it.</h3>
         <RepositoryLink href="https://github.com/mattdomingo" label="View GitHub Profile" />
       </div>
       {calendar ? <ContributionSkyline data={calendar.days} endDate={calendar.endDate} className="portfolio-skyline" /> : error ? (

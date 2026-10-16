@@ -30,7 +30,7 @@ const PERSONAL_FILES: PreviewFile[] = [
 const PROJECT_FILES: PreviewFile[] = [
   { name: "QuestGPT", meta: "GitHub", image: "/projects/questgpt.png", width: 800, height: 624, project: {
     tagline: "A world that writes back.",
-    summary: "An AI-powered RPG that pairs dynamic storytelling with strategic combat. Build your character, face enemies that scale with your progress, and meet merchants with AI-generated personalities and backstories—all backed by persistent game sessions.",
+    summary: "An AI-powered RPG that pairs dynamic storytelling with strategic combat. Build your character, face enemies that scale with your progress, and meet merchants with AI-generated personalities and backstories.",
     tags: ["Generative AI", "React", "Java · Spring Boot", "MySQL"], url: "https://github.com/mattdomingo/QuestGPT", caption: "QuestGPT project artwork",
   } },
   { name: "Recall", meta: "GitHub", image: "/projects/recall.webp", width: 1600, height: 555, project: {
