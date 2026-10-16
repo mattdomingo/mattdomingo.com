@@ -3211,6 +3211,15 @@ body:has(.portfolio-intro) { overflow: hidden; }
 .journey-copy h3 { margin: 0 0 .5rem; font-size: clamp(1.2rem, 1.8vw, 1.65rem); font-weight: 500; letter-spacing: -.035em; line-height: 1.12; }
 .journey-organization { margin: 0 0 .7rem; font-size: .8rem; line-height: 1.4; }
 .journey-description { margin: 0; color: var(--portfolio-muted); font-size: clamp(.8rem, 1.05vw, .93rem); line-height: 1.55; }
+.journey-media { position: absolute; width: 100%; height: min(32%, 210px); border-radius: 8px; overflow: hidden; background: var(--portfolio-line); }
+.journey-stop-top .journey-media { top: calc(50% + 2rem); }
+.journey-stop-bottom .journey-media { bottom: calc(50% + 2rem); }
+.journey-media img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.journey-media a { position: relative; display: block; height: 100%; color: white; }
+.journey-media a:focus-visible { outline: 2px solid #c86b48; outline-offset: -3px; }
+.journey-video-label { position: absolute; inset: auto 0 0; display: flex; align-items: center; gap: .6rem; padding: 1.5rem .8rem .7rem; background: linear-gradient(transparent, rgb(0 0 0 / 80%)); font-size: .7rem; }
+.journey-video-label > span:last-child { margin-left: auto; }
+.journey-media a:hover .journey-video-label { text-decoration: underline; }
 .journey-progress { position: absolute; left: 6vw; right: 6vw; bottom: 1.5rem; height: 2px; background: var(--portfolio-line); }
 .journey-progress > span { display: block; width: 100%; height: 100%; background: #c86b48; transform-origin: left; }
 .journey-toolkit { padding: 5rem 6vw; border-top: 1px solid var(--portfolio-line); }
@@ -3240,6 +3249,7 @@ body:has(.portfolio-intro) { overflow: hidden; }
   .journey-cover { display: none; }
   .journey-stop { width: auto; }
   .journey-copy { position: static; opacity: 1 !important; transform: none !important; }
+  .journey-media { position: relative; top: auto !important; bottom: auto !important; height: 210px; margin-top: 1.25rem; }
   .journey-axis, .journey-dot, .journey-stem, .journey-progress, .journey-range > span { display: none; }
 }
 @media (prefers-reduced-motion: reduce) and (max-width: 600px) { .journey-track { grid-template-columns: 1fr; } }

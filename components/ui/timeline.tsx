@@ -38,7 +38,7 @@ export default function Timeline() {
           </header>
           <motion.ol ref={trackRef} className="journey-track" style={{ x: reduceMotion ? 0 : x }} aria-label="Education and career timeline">
             <li className="journey-cover" aria-hidden="true">
-              <Image src="/photos/img_3219.webp" alt="" width={1350} height={1800} sizes="(max-width: 600px) 80vw, 360px" />
+              <Image src="/photos/journey/portrait.webp" alt="" width={526} height={744} sizes="(max-width: 600px) 80vw, 360px" />
               <p>From the first line of code<br />to what comes next.</p>
             </li>
             <li className="journey-axis" aria-hidden="true"><motion.span style={{ scaleX: reduceMotion ? 1 : lineScale }} /></li>
@@ -55,6 +55,18 @@ export default function Timeline() {
                   {item.organization && <p className="journey-organization">{item.organization}</p>}
                   <p className="journey-description">{item.content}</p>
                 </motion.article>
+                {item.image && (
+                  <div className="journey-media">
+                    {item.link ? (
+                      <a href={item.link.href} target="_blank" rel="noopener noreferrer" aria-label={item.link.label}>
+                        <Image src={item.image.src} alt={item.image.alt} width={640} height={360} sizes="(max-width: 600px) 78vw, 370px" unoptimized />
+                        <span className="journey-video-label"><span aria-hidden="true">▶</span> Watch on YouTube <span aria-hidden="true">↗</span></span>
+                      </a>
+                    ) : (
+                      <Image src={item.image.src} alt={item.image.alt} width={740} height={500} sizes="(max-width: 600px) 78vw, 370px" />
+                    )}
+                  </div>
+                )}
               </li>
             ))}
           </motion.ol>
