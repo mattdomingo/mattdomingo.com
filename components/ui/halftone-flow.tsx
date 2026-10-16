@@ -12,6 +12,7 @@ const FRAGMENT_SHADER = `
                 precision highp float;
                 uniform vec2 u_resolution;
                 uniform float u_time;
+                uniform float u_light;
 
                 mat2 rot(float a) {
                     float s = sin(a), c = cos(a);
@@ -52,7 +53,10 @@ const FRAGMENT_SHADER = `
                     vec3 final_color = mix(vec3(0.0), fluid_color, dot_mask);
                     final_color += fluid_color * 0.15;
 
-                    gl_FragColor = vec4(final_color, 1.0);
+                    vec3 light_paper = vec3(0.98, 0.95, 0.91);
+                    vec3 light_ink = mix(vec3(0.96, 0.76, 0.65), vec3(0.84, 0.43, 0.28), intensity);
+                    vec3 light_color = mix(light_paper, light_ink, dot_mask * 0.35);
+                    gl_FragColor = vec4(mix(final_color, light_color, u_light), 1.0);
                 }
             `;
 
@@ -106,11 +110,14 @@ export default function HalftoneFlow({ className }: { className?: string }) {
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
     const resolution = gl.getUniformLocation(program, "u_resolution");
     const time = gl.getUniformLocation(program, "u_time");
+    const light = gl.getUniformLocation(program, "u_light");
+    const scheme = window.matchMedia("(prefers-color-scheme: dark)");
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const startedAt = performance.now();
     let frame = 0;
 
     const render = () => {
+      gl.uniform1f(light, scheme.matches ? 0 : 1);
       gl.uniform2f(resolution, canvas.width, canvas.height);
       gl.uniform1f(time, motion.matches ? 0 : (performance.now() - startedAt) / 1000);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -130,6 +137,7 @@ export default function HalftoneFlow({ className }: { className?: string }) {
     window.addEventListener("resize", resize);
     document.addEventListener("visibilitychange", refresh);
     motion.addEventListener("change", refresh);
+    scheme.addEventListener("change", refresh);
     resize();
 
     return () => {
@@ -137,6 +145,7 @@ export default function HalftoneFlow({ className }: { className?: string }) {
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", refresh);
       motion.removeEventListener("change", refresh);
+      scheme.removeEventListener("change", refresh);
       dispose();
     };
   }, []);

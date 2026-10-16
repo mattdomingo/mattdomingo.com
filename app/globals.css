@@ -3027,3 +3027,124 @@ video.project-detail-image {
     gap: 10px;
   }
 }
+
+/* The portfolio follows system appearance without a separate saved preference. */
+body:has(.folder-home) {
+  --portfolio-paper: #f8f6f3;
+  --portfolio-ink: #252525;
+  --portfolio-muted: #65615d;
+  --portfolio-line: rgb(0 0 0 / 12%);
+  --portfolio-chip: rgb(0 0 0 / 5%);
+  --color-background: #f8f6f3;
+  --color-foreground: #252525;
+  --color-muted-foreground: #65615d;
+  --color-border: #dedbd6;
+  color-scheme: light;
+}
+.folder-home { background: #faf2e8; }
+.resume-dialog { color: var(--portfolio-ink); }
+.resume-viewer { background: var(--portfolio-paper); border-color: var(--portfolio-line); }
+.resume-actions a { color: var(--portfolio-muted); }
+.resume-actions a:hover { color: var(--portfolio-ink); }
+.resume-actions button { background: var(--portfolio-chip); }
+.resume-actions button:hover { background: var(--portfolio-line); }
+.photo-document { background: var(--portfolio-paper); }
+.project-document {
+  max-height: calc(100dvh - 6rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.project-copy, .github-preview { padding: clamp(1.25rem, 4vw, 2.5rem); }
+.project-eyebrow { margin: 0 0 .75rem; font-size: .72rem; letter-spacing: .09em; text-transform: uppercase; color: var(--portfolio-muted); }
+.project-copy h3, .github-intro { margin: 0 0 1rem; font-size: clamp(1.65rem, 4vw, 2.5rem); line-height: 1.15; letter-spacing: -.045em; font-weight: 500; }
+.project-summary { max-width: 42rem; font-size: 1rem; line-height: 1.7; color: var(--portfolio-muted); }
+.project-tags { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; padding: 0; margin: 1.25rem 0; }
+.project-tags li { border: 1px solid var(--portfolio-line); padding: .35rem .65rem; border-radius: 6px; font-size: .72rem; }
+.project-visit { color: inherit; display: inline-flex; align-items: center; gap: 1.25rem; border-bottom: 1px solid currentColor; padding: .4rem 0; margin-top: .5rem; font-size: .9rem; }
+.project-visit:focus-visible, .github-status button:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+.project-visit:hover { opacity: .7; }
+.project-figure { margin: 0; padding: 0 clamp(1.25rem, 4vw, 2.5rem) 1.5rem; }
+.project-figure img { display: block; width: 100%; height: auto; max-height: 24rem; object-fit: contain; border: 1px solid var(--portfolio-line); border-radius: 8px; background: #f5f5f4; }
+.project-caption { font-size: .68rem; color: var(--portfolio-muted); margin-top: .75rem; line-height: 1.5; }
+.github-intro { margin-bottom: 1.5rem; }
+.github-status { padding: 2rem 0; color: var(--portfolio-muted); font-size: .9rem; }
+.github-status button { margin-top: .75rem; border-bottom: 1px solid currentColor; }
+.portfolio-skyline { font-family: inherit; }
+@media (prefers-color-scheme: dark) {
+  body:has(.folder-home) {
+    --portfolio-paper: #18181b;
+    --portfolio-ink: #f5f5f7;
+    --portfolio-muted: #a1a1aa;
+    --portfolio-line: rgb(255 255 255 / 16%);
+    --portfolio-chip: rgb(255 255 255 / 7%);
+    --color-background: #18181b;
+    --color-foreground: #f5f5f7;
+    --color-muted-foreground: #a1a1aa;
+    --color-border: #3f3f46;
+    color-scheme: dark;
+  }
+  .folder-home { background: #000; }
+  .project-folder .gf-sheet-art, .personal-folder .gf-sheet-art { background: #1a1a1d; }
+  .gf-sheet-art[src^="/previews/"] { filter: invert(.92) hue-rotate(180deg); }
+  .gf-root[data-tone="dark"] .gf-sheet--art::after { background: linear-gradient(180deg, #202023 0%, rgb(32 32 35 / 96%) 20%, transparent 40%); }
+}
+
+/* Keep the supplied skyline self-contained across the site's Tailwind versions. */
+.portfolio-skyline { padding: 1.25rem; border-radius: 12px; }
+.portfolio-skyline .m-0 { margin: 0; }
+.portfolio-skyline .mb-3 { margin-bottom: .75rem; }
+.portfolio-skyline .mt-1 { margin-top: .25rem; }
+.portfolio-skyline .mt-0\.5 { margin-top: .125rem; }
+.portfolio-skyline .mr-0\.5 { margin-right: .125rem; }
+.portfolio-skyline .ml-0\.5 { margin-left: .125rem; }
+.portfolio-skyline .p-0 { padding: 0; }
+.portfolio-skyline .p-0\.5 { padding: .125rem; }
+.portfolio-skyline .px-3 { padding-left: .75rem; padding-right: .75rem; }
+.portfolio-skyline .px-2\.5 { padding-left: .625rem; padding-right: .625rem; }
+.portfolio-skyline .py-1\.5 { padding-top: .375rem; padding-bottom: .375rem; }
+.portfolio-skyline .pt-3 { padding-top: .75rem; }
+.portfolio-skyline .pt-4 { padding-top: 1rem; }
+.portfolio-skyline .pb-1 { padding-bottom: .25rem; }
+.portfolio-skyline .pb-3 { padding-bottom: .75rem; }
+.portfolio-skyline .gap-1\.5 { gap: .375rem; }
+.portfolio-skyline .gap-x-2 { column-gap: .5rem; }
+.portfolio-skyline .gap-x-4 { column-gap: 1rem; }
+.portfolio-skyline .gap-y-2 { row-gap: .5rem; }
+.portfolio-skyline .gap-y-4 { row-gap: 1rem; }
+.portfolio-skyline .gap-5 { gap: 1.25rem; }
+.portfolio-skyline .top-0 { top: 0; }
+.portfolio-skyline .left-0 { left: 0; }
+.portfolio-skyline .top-0\.5 { top: .125rem; }
+.portfolio-skyline .bottom-0\.5 { bottom: .125rem; }
+.portfolio-skyline .left-0\.5 { left: .125rem; }
+.portfolio-skyline .top-1 { top: .25rem; }
+.portfolio-skyline .right-1 { right: .25rem; }
+.portfolio-skyline .bottom-1 { bottom: .25rem; }
+.portfolio-skyline .left-1 { left: .25rem; }
+.portfolio-skyline .top-3 { top: .75rem; }
+.portfolio-skyline .left-3 { left: .75rem; }
+.portfolio-skyline .w-8 { width: 2rem; }
+.portfolio-skyline .h-7 { height: 1.75rem; }
+.portfolio-skyline .rounded { border-radius: 4px; }
+.portfolio-skyline .rounded-md { border-radius: 6px; }
+.portfolio-skyline .rounded-lg { border-radius: 8px; }
+.portfolio-skyline .font-semibold { font-weight: 600; }
+.portfolio-skyline .font-normal { font-weight: 400; }
+.portfolio-skyline .leading-tight { line-height: 1.25; }
+.portfolio-skyline .leading-snug { line-height: 1.375; }
+.portfolio-skyline .leading-none { line-height: 1; }
+.portfolio-skyline .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.portfolio-skyline .col-span-2 { grid-column: span 2; }
+@media (min-width: 640px) {
+  .portfolio-skyline .sm\:px-4 { padding-left: 1rem; padding-right: 1rem; }
+  .portfolio-skyline .sm\:pt-4 { padding-top: 1rem; }
+  .portfolio-skyline .sm\:top-4 { top: 1rem; }
+  .portfolio-skyline .sm\:left-4 { left: 1rem; }
+}
+@media (min-width: 768px) {
+  .portfolio-skyline .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .portfolio-skyline .skyline-footer { flex-direction: column; align-items: flex-start; gap: .75rem; }
+}

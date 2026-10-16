@@ -827,7 +827,7 @@ export default function GlassFolder({
               return (
                 <div key={id} role="listitem" className="gf-sheet-slot">
                   {file.href ? (
-                    <a {...common} href={file.href} onClick={() => onFileSelect?.(file, start + v)}>
+                    <a {...common} href={file.href} target="_blank" rel="noopener noreferrer" onClick={() => onFileSelect?.(file, start + v)}>
                       {inner}
                     </a>
                   ) : (
