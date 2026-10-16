@@ -48,7 +48,7 @@ body:has(.folder-home) {
 .project-folder .gf-sheet-art {
   object-fit: contain;
   object-position: center;
-  background: #202023;
+  background: #f5f5f4;
 }
 
 body:has(.resume-dialog[open]) {
