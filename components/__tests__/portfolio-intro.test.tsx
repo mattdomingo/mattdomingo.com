@@ -23,7 +23,8 @@ test("the intro keeps the name as a heading and reveals folders only after it re
   expect(complete).toHaveBeenCalledTimes(1);
   expect(container.querySelector(".portfolio-intro")).toBeNull();
   expect(screen.getByRole("heading", { name: "Matt Domingo", level: 1 })).toBeTruthy();
-  expect(container.querySelector(".liquid-text > span:last-child")?.textContent).toBe("Matt Domingo");
+  expect(container.querySelector(".liquid-text")).toBeNull();
+  expect(container.querySelectorAll("[data-proximity-letter]")).toHaveLength(12);
 });
 
 test("reduced motion shows the name at the top and unlocks the page immediately", () => {

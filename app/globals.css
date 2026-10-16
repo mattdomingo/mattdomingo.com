@@ -41,7 +41,7 @@ body:has(.folder-home) {
 }
 
 .portfolio-folders > .gf-root {
-  transform: translateY(-27px);
+  transform: translateY(0);
 }
 
 .personal-folder .gf-sheet-art,
@@ -193,13 +193,13 @@ body:has(.resume-dialog[open]) {
   }
 
   .portfolio-folders > .gf-root {
-    transform: translateY(-21px) scale(.78);
+    transform: scale(.78);
   }
 }
 
 @media (max-width: 350px) {
   .portfolio-folders > .gf-root {
-    transform: translateY(-18px) scale(.66);
+    transform: scale(.66);
   }
 }
 
@@ -3153,12 +3153,22 @@ body:has(.folder-home) {
 
 .portfolio-folders { opacity: 0; transition: opacity .6s ease; }
 .portfolio-folders[data-intro-complete] { opacity: 1; }
-.portfolio-name { position: absolute; top: 50svh; left: 0; right: 0; z-index: 5; display: grid; place-items: center; transform: translateY(-50%); pointer-events: none; color: var(--portfolio-ink); transition: top .8s cubic-bezier(.22, 1, .36, 1), transform .8s cubic-bezier(.22, 1, .36, 1); }
+.portfolio-name { --portfolio-name-size: clamp(2rem, 4vw, 3.5rem); position: absolute; top: 50svh; left: 0; right: 0; z-index: 5; display: grid; place-items: center; transform: translateY(-50%); pointer-events: none; color: var(--portfolio-ink); transition: top .8s cubic-bezier(.22, 1, .36, 1), transform .8s cubic-bezier(.22, 1, .36, 1); }
 .portfolio-name[data-settled] { top: clamp(1.5rem, 4svh, 3rem); transform: translateY(0); }
 .portfolio-name-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.portfolio-name .liquid-text { transition: font-size .8s cubic-bezier(.22, 1, .36, 1); }
-.portfolio-name[data-settled] .liquid-text { font-size: clamp(1.35rem, 2.4vw, 1.75rem); }
-.portfolio-name:not(.portfolio-intro) .liquid-text { filter: none !important; }
+.portfolio-name-heading { margin: 0; font-size: var(--portfolio-name-size); font-weight: 400; line-height: 1.1; letter-spacing: -.065em; pointer-events: auto; }
+.portfolio-name .liquid-text { transition: font-size .8s cubic-bezier(.22, 1, .36, 1), font-weight .8s cubic-bezier(.22, 1, .36, 1); }
+.portfolio-name[data-settled] .liquid-text { font-size: var(--portfolio-name-size); font-weight: 400; }
+.variable-proximity { display: inline-block; white-space: pre; }
+.variable-proximity__accessible { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.variable-proximity__letter { display: inline-grid; }
+.variable-proximity__letter > span { grid-area: 1 / 1; }
+.variable-proximity__measure { visibility: hidden; }
+.variable-proximity [data-proximity-letter] { justify-self: center; font-synthesis: none; transition: font-variation-settings 120ms ease-out; }
+.variable-proximity[data-running="false"] [data-proximity-letter] { transition: none; }
+@media (max-width: 480px) {
+  .portfolio-name { --portfolio-name-size: clamp(1.65rem, 7.8vw, 2rem); }
+}
 .sound-toggle { position: absolute; top: clamp(1rem, 3svh, 2.5rem); right: clamp(1rem, 3vw, 2rem); z-index: 6; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--portfolio-line); border-radius: 50%; color: var(--portfolio-ink); background: color-mix(in srgb, var(--portfolio-paper) 85%, transparent); backdrop-filter: blur(10px); opacity: 0; pointer-events: none; cursor: pointer; transition: opacity .3s ease; }
 .sound-toggle[data-ready] { opacity: 1; pointer-events: auto; }
 .sound-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
@@ -3177,7 +3187,7 @@ body:has(.folder-home) {
 .repository-tooltip { position: fixed; left: 0; top: 0; z-index: 20; pointer-events: none; white-space: nowrap; padding: 8px 11px; border-radius: 7px; background: var(--portfolio-ink); color: var(--portfolio-paper); font-size: 12px; line-height: 1.2; box-shadow: 0 5px 20px rgb(0 0 0 / 15%); }
 @media (prefers-reduced-motion: reduce) {
   .portfolio-name { top: clamp(1.5rem, 4svh, 3rem); transform: none; transition: none; }
-  .portfolio-name .liquid-text { font-size: clamp(1.35rem, 2.4vw, 1.75rem); transition: none; }
+  .portfolio-name .liquid-text { font-size: var(--portfolio-name-size); transition: none; }
   .portfolio-folders, .repository-link { transition: none; }
 }
 

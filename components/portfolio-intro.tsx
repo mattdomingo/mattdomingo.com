@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { MorphingText } from "@/components/ui/liquid-text";
+import { VariableProximity } from "@/components/ui/variable-proximity";
 
 const INTRO_TEXTS = ["", "Matt Domingo"];
 
@@ -32,8 +33,10 @@ export default function PortfolioIntro({ onComplete }: { onComplete: () => void 
         if (settling && event.target === event.currentTarget && event.propertyName === "top") finish();
       }}
     >
-      <h1 className="portfolio-name-label">Matt Domingo</h1>
-      <div aria-hidden="true"><MorphingText texts={INTRO_TEXTS} onComplete={finishText} /></div>
+      <h1 className={complete ? "portfolio-name-heading" : "portfolio-name-label"}>
+        {complete ? <VariableProximity text="Matt Domingo" /> : "Matt Domingo"}
+      </h1>
+      {!complete && <div aria-hidden="true"><MorphingText texts={INTRO_TEXTS} onComplete={finishText} /></div>}
     </header>
   );
 }
