@@ -1,93 +1,106 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { ArrowUpRight, Music2 } from "lucide-react";
+import { useEffect, useState } from 'react'
 
 type Track = {
-  id?: string;
-  name: string;
-  artistNames: string;
-  albumName: string;
-  url: string;
-};
-const isTrack = (track: Track | null): track is Track =>
-  Boolean(
-    track &&
-    typeof track.url === "string" &&
-    track.url.startsWith("https://open.spotify.com/"),
-  );
+  id: string
+  name: string
+  artistNames: string
+  albumName: string
+  albumImageUrl: string | null
+  url: string
+  previewUrl: string | null
+  durationMs: number
+}
 
 export default function SpotifyMusic() {
-  const [track, setTrack] = useState<Track | null>(null);
-  const [topTracks, setTopTracks] = useState<Track[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [lastPlayed, setLastPlayed] = useState<{ track: Track | null, playedAt?: string } | null>(null)
+  const [topTracks, setTopTracks] = useState<Track[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
   useEffect(() => {
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 8000);
-    async function get(url: string) {
+    let cancelled = false
+    async function load() {
       try {
-        const response = await fetch(url, {
-          cache: "no-store",
-          signal: controller.signal,
-        });
-        return response.ok ? await response.json() : null;
-      } catch {
-        return null;
+        const [nowRes, topRes] = await Promise.all([
+          fetch('/api/spotify/now-playing', { cache: 'no-store' }),
+          fetch('/api/spotify/top-tracks?limit=5&time_range=short_term', { cache: 'no-store' })
+        ])
+        if (!nowRes.ok) throw new Error('Failed to fetch last played track')
+        if (!topRes.ok) throw new Error('Failed to fetch top tracks')
+
+        const nowJson = await nowRes.json()
+        const topJson = await topRes.json()
+
+        if (!cancelled) {
+          setLastPlayed(nowJson)
+          setTopTracks(topJson.tracks || [])
+        }
+      } catch (e) {
+        if (!cancelled) setError(e instanceof Error ? e.message : 'Something went wrong')
+      } finally {
+        if (!cancelled) setLoading(false)
       }
     }
-    let active = true;
-    async function load() {
-      const [recent, top] = await Promise.all([
-        get("/api/spotify/now-playing"),
-        get("/api/spotify/top-tracks?limit=5&time_range=short_term"),
-      ]);
-      if (!active) return;
-      if (isTrack(recent?.track)) setTrack(recent.track);
-      if (Array.isArray(top?.tracks)) setTopTracks(top.tracks.filter(isTrack));
-      setLoading(false);
-      clearTimeout(timeout);
-    }
-    load();
-    return () => {
-      active = false;
-      clearTimeout(timeout);
-      controller.abort();
-    };
-  }, []);
+    load()
+    return () => { cancelled = true }
+  }, [])
+
   return (
-    <div className="listening-card">
-      <Music2 size={22} />
-      <div>
-        <span className="mono">ON THE ROTATION / SPOTIFY</span>
-        {loading ? (
-          <p role="status">Loading recent listening…</p>
-        ) : track ? (
-          <a href={track.url} target="_blank" rel="noreferrer">
-            <strong>{track.name}</strong>
-            <span>
-              {track.artistNames} · {track.albumName}
-            </span>
-            <ArrowUpRight size={18} />
-          </a>
-        ) : (
-          <p>Recent listening is unavailable right now.</p>
-        )}
-        {topTracks.length > 0 && (
-          <details className="top-tracks">
-            <summary>Top tracks · last four weeks</summary>
-            <ol>
-              {topTracks.map((item, index) => (
-                <li key={item.id || index}>
-                  <a href={item.url} target="_blank" rel="noreferrer">
-                    <strong>{item.name}</strong>
-                    <span>{item.artistNames}</span>
+    <div className="music-section">
+      <h3 className="music-title minecraft-text">WHAT I'M LISTENING TO</h3>
+      <div className="music-stack">
+        <div className="music-card">
+          <h4 className="music-card-title">Last Played</h4>
+          {loading ? (
+            <div className="music-loading">Loading...</div>
+          ) : error ? (
+            <div className="music-error">{error}</div>
+          ) : lastPlayed?.track ? (
+            <a className="track-row last-played-row" href={lastPlayed.track.url} target="_blank" rel="noreferrer">
+              {lastPlayed.track.albumImageUrl && (
+                <img className="track-image" src={lastPlayed.track.albumImageUrl} alt={`Album art for ${lastPlayed.track.albumName}`} />
+              )}
+              <div className="track-info">
+                <div className="track-name minecraft-text">{lastPlayed.track.name}</div>
+                <div className="track-artist">{lastPlayed.track.artistNames}</div>
+                <div className="track-album">{lastPlayed.track.albumName}</div>
+              </div>
+            </a>
+          ) : (
+            <div className="music-empty">No recent playback found</div>
+          )}
+        </div>
+
+        <div className="music-card">
+          <h4 className="music-card-title">Top Tracks (last 4 weeks)</h4>
+          {loading ? (
+            <div className="music-loading">Loading...</div>
+          ) : error ? (
+            <div className="music-error">{error}</div>
+          ) : (
+            <ul className="top-tracks-list">
+              {topTracks.map((t, idx) => (
+                <li key={t.id} className="top-track-item">
+                  <a className="track-row" href={t.url} target="_blank" rel="noreferrer">
+                    <span className="track-rank">{idx + 1}.</span>
+                    {t.albumImageUrl && (
+                      <img className="track-image small" src={t.albumImageUrl} alt={`Album art for ${t.albumName}`} />
+                    )}
+                    <div className="track-info">
+                      <div className="track-name small">{t.name}</div>
+                      <div className="track-artist">{t.artistNames}</div>
+                    </div>
                   </a>
                 </li>
               ))}
-            </ol>
-          </details>
-        )}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
-  );
+  )
 }
+
+
