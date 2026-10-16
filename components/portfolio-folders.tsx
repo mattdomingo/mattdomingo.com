@@ -22,7 +22,7 @@ export default function PortfolioFolders() {
             dialogRef.current?.showModal();
             setResumeOpen(true);
           }}
-          tone="dark"
+          tone="light"
           art="aurora"
           seed={3}
           action="none"
@@ -32,7 +32,7 @@ export default function PortfolioFolders() {
         />
         <GlassFolder
           label="Project"
-          tone="dark"
+          tone="light"
           art="aurora"
           seed={3}
           action="none"
@@ -43,7 +43,7 @@ export default function PortfolioFolders() {
         />
         <GlassFolder
           label="Connect"
-          tone="dark"
+          tone="light"
           art="aurora"
           seed={3}
           action="none"

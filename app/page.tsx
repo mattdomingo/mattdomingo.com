@@ -1,10 +1,10 @@
 import PortfolioFolders from "@/components/portfolio-folders";
-import HalftoneFlow from "@/components/ui/halftone-flow";
+import TopoField from "@/components/ui/topo-field";
 
 export default function HomePage() {
   return (
     <main className="folder-home" aria-label="Matt Domingo's portfolio">
-      <HalftoneFlow className="folder-background" />
+      <TopoField className="folder-background" />
       <PortfolioFolders />
     </main>
   );
