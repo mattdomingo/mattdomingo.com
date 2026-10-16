@@ -4,6 +4,50 @@ import { playPortfolioSound } from "@/lib/portfolio-sounds";
 
 jest.mock("@/lib/portfolio-sounds", () => ({ playPortfolioSound: jest.fn() }));
 
+beforeEach(() => jest.clearAllMocks());
+
+test("every click sounds once, including stopped events, nested controls, blank space, and keyboard activation", () => {
+  const original = window.AudioContext;
+  const context = { state: "running", close: jest.fn().mockResolvedValue(undefined) } as unknown as AudioContext;
+  window.AudioContext = jest.fn(() => context) as unknown as typeof AudioContext;
+  function Page() {
+    usePortfolioAudio();
+    return <button onClick={(event) => event.stopPropagation()}><span>Tap</span></button>;
+  }
+  const { getByText, unmount } = render(<Page />);
+  try {
+    fireEvent.click(getByText("Tap"), { pointerType: "touch" });
+    fireEvent.click(document.body);
+    fireEvent.click(getByText("Tap"), { detail: 0 });
+    expect(playPortfolioSound).toHaveBeenCalledTimes(3);
+    expect(playPortfolioSound).toHaveBeenLastCalledWith(context, "click");
+    fireEvent.pointerMove(document.body);
+    fireEvent.scroll(window);
+    expect(playPortfolioSound).toHaveBeenCalledTimes(3);
+    unmount();
+    fireEvent.click(document.body);
+    expect(playPortfolioSound).toHaveBeenCalledTimes(3);
+  } finally {
+    unmount();
+    window.AudioContext = original;
+  }
+});
+
+test("unavailable audio never blocks a click handler", () => {
+  const original = window.AudioContext;
+  window.AudioContext = jest.fn(() => { throw new Error("Audio unavailable"); }) as unknown as typeof AudioContext;
+  const navigate = jest.fn();
+  function Page() { usePortfolioAudio(); return <button onClick={navigate}>Go</button>; }
+  const { getByText, unmount } = render(<Page />);
+  try {
+    fireEvent.click(getByText("Go"));
+    expect(navigate).toHaveBeenCalledTimes(1);
+  } finally {
+    unmount();
+    window.AudioContext = original;
+  }
+});
+
 test("sounds start on interaction even with an old mute preference, and release audio on unmount", () => {
   const original = window.AudioContext;
   const context = { state: "suspended", resume: jest.fn().mockResolvedValue(undefined), close: jest.fn().mockResolvedValue(undefined) } as unknown as AudioContext;

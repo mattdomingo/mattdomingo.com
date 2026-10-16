@@ -21,10 +21,10 @@ export function usePortfolioAudio() {
       if (!track.paused) return;
       void track.play().catch(() => {});
     };
-    window.addEventListener("click", start);
+    window.addEventListener("click", start, true);
     window.addEventListener("keydown", start);
     return () => {
-      window.removeEventListener("click", start);
+      window.removeEventListener("click", start, true);
       window.removeEventListener("keydown", start);
       if (!track.paused) track.pause();
     };
@@ -39,5 +39,12 @@ export function usePortfolioAudio() {
       playPortfolioSound(context, sound);
     } catch { /* Optional audio must never interrupt navigation. */ }
   }, []);
+
+  useEffect(() => {
+    const click = () => play("click");
+    // Capture links, dialogs, and taps even when a control stops propagation.
+    window.addEventListener("click", click, true);
+    return () => window.removeEventListener("click", click, true);
+  }, [play]);
   return { play, musicRef };
 }

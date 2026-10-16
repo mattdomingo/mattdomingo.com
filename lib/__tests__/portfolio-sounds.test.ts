@@ -1,6 +1,6 @@
 import { playPortfolioSound, type PortfolioSound } from "@/lib/portfolio-sounds";
 
-test.each<PortfolioSound>(["folder-open", "folder-close", "card-open", "card-close"])("%s schedules a quiet, short sound and releases its audio nodes", (sound) => {
+test.each<PortfolioSound>(["click", "folder-open", "folder-close", "card-open", "card-close"])("%s schedules a quiet, short sound and releases its audio nodes", (sound) => {
   const parameter = () => ({ setValueAtTime: jest.fn(), linearRampToValueAtTime: jest.fn(), exponentialRampToValueAtTime: jest.fn() });
   const connection = () => ({ connect: jest.fn((next) => next), disconnect: jest.fn() });
   const samples = new Float32Array(7000);
@@ -21,7 +21,12 @@ test.each<PortfolioSound>(["folder-open", "folder-close", "card-open", "card-clo
   expect(paper.stop.mock.calls[0][0]).toBeLessThanOrEqual(2.15);
   expect(samples.every((value) => Number.isFinite(value) && Math.abs(value) <= 1)).toBe(true);
   for (const gain of gains) expect(gain.linearRampToValueAtTime.mock.calls[0][0]).toBeLessThanOrEqual(.035);
-  expect(context.createOscillator).toHaveBeenCalledTimes(sound.startsWith("card") ? 1 : 0);
+  expect(context.createOscillator).toHaveBeenCalledTimes(sound.startsWith("folder") ? 0 : 1);
+  if (sound === "click") {
+    expect(paper.stop.mock.calls[0][0]).toBeLessThan(2.06);
+    expect(tone.stop.mock.calls[0][0]).toBeLessThan(2.06);
+    expect(tone.frequency.exponentialRampToValueAtTime.mock.calls[0][0]).toBeLessThan(tone.frequency.setValueAtTime.mock.calls[0][0]);
+  }
   paper.onended?.();
   tone.onended?.();
   expect(paper.disconnect).toHaveBeenCalled();

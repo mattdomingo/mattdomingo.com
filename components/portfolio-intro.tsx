@@ -30,7 +30,7 @@ export default function PortfolioIntro({ onComplete }: { onComplete: () => void 
       className={`portfolio-name${complete ? "" : " portfolio-intro"}`}
       data-settled={settling || undefined}
       onTransitionEnd={(event) => {
-        if (settling && event.target === event.currentTarget && event.propertyName === "top") finish();
+        if (settling && event.target === event.currentTarget && event.propertyName === "transform") finish();
       }}
     >
       <h1 className={complete ? "portfolio-name-heading" : "portfolio-name-label"}>
