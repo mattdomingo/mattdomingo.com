@@ -3041,7 +3041,7 @@ body:has(.folder-home) {
   --color-border: #dedbd6;
   color-scheme: light;
 }
-.folder-home { background: #faf2e8; }
+.folder-home { background: #ebe0d4; }
 .resume-dialog { color: var(--portfolio-ink); }
 .resume-viewer { background: var(--portfolio-paper); border-color: var(--portfolio-line); }
 .resume-actions a { color: var(--portfolio-muted); }
