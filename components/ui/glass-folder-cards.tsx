@@ -645,7 +645,7 @@ export default function GlassFolder({
   React.useEffect(() => {
     if (!open && !menuOpen) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape") return
+      if (e.key !== "Escape" || document.querySelector("dialog[open]")) return
       if (menuOpen) {
         setMenuOpen(false)
         keyRef.current?.focus()
@@ -655,6 +655,7 @@ export default function GlassFolder({
       }
     }
     const onDown = (e: PointerEvent) => {
+      if (document.querySelector("dialog[open]")) return
       const t = e.target as Node
       if (menuOpen && !menuRef.current?.contains(t) && !keyRef.current?.contains(t)) setMenuOpen(false)
       if (open && !menuOpen && !rootRef.current?.contains(t)) setOpen(false)

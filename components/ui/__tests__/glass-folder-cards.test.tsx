@@ -29,6 +29,22 @@ test("folder opens its real links and Escape closes it and restores focus", () =
   expect(toggle).toHaveFocus();
 });
 
+test("interacting with a dialog leaves the folder open so its file can regain focus", () => {
+  render(
+    <>
+      <GlassFolder label="Résumé" appear={false} art="none" action="none" files={[]} defaultOpen />
+      <dialog open aria-label="Résumé viewer"><button>Close viewer</button></dialog>
+    </>,
+  );
+  const toggle = screen.getByRole("button", { name: "Close Résumé, 0 items" });
+  fireEvent.pointerDown(screen.getByRole("button", { name: "Close viewer" }));
+  fireEvent.keyDown(document, { key: "Escape" });
+  expect(toggle).toHaveAttribute("aria-expanded", "true");
+  screen.getByRole("dialog").removeAttribute("open");
+  fireEvent.keyDown(document, { key: "Escape" });
+  expect(toggle).toHaveAttribute("aria-expanded", "false");
+});
+
 test("folder art finishes as opaque, repeatable pixels", () => {
   const draw = () => {
     const job = createArtJob(24, 20, ART_PRESETS.aurora, 3);
