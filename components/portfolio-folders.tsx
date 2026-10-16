@@ -204,9 +204,9 @@ export default function PortfolioFolders() {
               key={previewFile.image}
               className="resume-viewer"
               initial={{ opacity: 0 }}
-              animate={closing && flight?.returnMotion ? { ...flight.returnMotion.viewer, opacity: 0 } : { opacity: revealed ? 1 : 0 }}
+              animate={closing && flight?.returnMotion ? { ...flight.returnMotion.viewer, opacity: revealed ? [1, 1, 0, 0] : 0 } : { opacity: revealed ? 1 : 0 }}
               exit={{ opacity: 0, scale: closing || reduceMotion ? 1 : 0.94, y: closing || reduceMotion ? 0 : 18, transition: { duration: closing || reduceMotion ? 0 : .18 } }}
-              transition={closing ? { duration: RETURN_DURATION, ease: RETURN_EASE, opacity: { duration: .2, delay: .18 } } : { duration: reduceMotion ? 0 : .18 }}
+              transition={closing ? { duration: RETURN_DURATION, ease: RETURN_EASE, opacity: { duration: RETURN_DURATION, times: [0, .55, .7, 1], ease: "linear" } } : { duration: reduceMotion ? 0 : .18 }}
               style={{ pointerEvents: revealed && !closing ? "auto" : "none" }}
             >
               <header className="resume-toolbar">

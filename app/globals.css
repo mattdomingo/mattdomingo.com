@@ -3253,3 +3253,7 @@ body:has(.portfolio-intro) .journey-scroll-hint { opacity: 0; pointer-events: no
 .resume-dialog[data-returning] .resume-viewer { will-change: transform, opacity; transform-origin: 50% 50%; }
 /* Keep folder coordinates stable when the modal locks and restores page scrolling. */
 html:has(.folder-home) { scrollbar-gutter: stable; }
+
+.resume-dialog[data-returning] .resume-toolbar,
+.resume-dialog[data-returning] .project-document,
+.resume-dialog[data-returning] .resume-document { opacity: 0; transition: opacity .12s ease-out; }
