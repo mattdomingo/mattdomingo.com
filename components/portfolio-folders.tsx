@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExter
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { cardReturnTransform, createCardReturn, type CardBounds } from "@/lib/card-motion";
+import { getRandomCodingJoke } from "@/lib/coding-jokes";
 import GlassFolder, { type FolderFile } from "@/components/ui/glass-folder-cards";
 
 import RepositoryLink from "@/components/repository-link";
@@ -73,10 +74,13 @@ export default function PortfolioFolders() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewZoomed, setPreviewZoomed] = useState(false);
   const [previewFile, setPreviewFile] = useState<PreviewFile | null>(null);
+  const [githubJoke, setGithubJoke] = useState(() => getRandomCodingJoke());
+  const shuffleGithubJoke = () => setGithubJoke(getRandomCodingJoke(githubJoke));
   const isResume = previewFile?.name === "Résumé.pdf";
   const isProject = Boolean(previewFile?.project || previewFile?.github);
   const reduceMotion = useReducedMotion();
   const openPreview = (file: PreviewFile, source: HTMLElement) => {
+    if (file.github) shuffleGithubJoke();
     clearRestoration.current();
     const rect = source.getBoundingClientRect();
     sourceRef.current = source;
@@ -231,7 +235,7 @@ export default function PortfolioFolders() {
                   </button>
                 </div>
               </header>
-              {previewFile.github ? <div className="project-document"><GitHubPreview /></div> : previewFile.project ? (
+              {previewFile.github ? <div className="project-document"><GitHubPreview joke={githubJoke} onShuffle={shuffleGithubJoke} /></div> : previewFile.project ? (
                 <article className="project-document">
                   <div className="project-copy">
                     <p className="project-eyebrow">{previewFile.name}</p>

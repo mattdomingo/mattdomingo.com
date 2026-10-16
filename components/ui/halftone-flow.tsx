@@ -55,7 +55,7 @@ const FRAGMENT_SHADER = `
 
                     vec3 light_paper = vec3(0.92, 0.88, 0.83);
                     vec3 light_ink = mix(vec3(0.92, 0.72, 0.61), vec3(0.80, 0.39, 0.24), intensity);
-                    vec3 light_color = mix(light_paper, light_ink, dot_mask * 0.35);
+                    vec3 light_color = mix(light_paper, light_ink, dot_mask * 0.55);
                     gl_FragColor = vec4(mix(final_color, light_color, u_light), 1.0);
                 }
             `;

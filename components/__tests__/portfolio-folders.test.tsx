@@ -1,6 +1,7 @@
 import { expect, test, beforeEach } from "@jest/globals";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import PortfolioFolders from "@/components/portfolio-folders";
+import { CODING_JOKES } from "@/lib/coding-jokes";
 
 
 
@@ -49,12 +50,30 @@ test("GitHub opens the skyline, and connect links open in a new tab with the rev
   fireEvent.click(screen.getByRole("button", { name: "GitHub Projects" }));
   expect(within(screen.getByRole("dialog", { name: "GitHub" })).getByText("Loading contributions from GitHub…")).toBeTruthy();
   const github = screen.getByRole("dialog", { name: "GitHub" });
-  expect(within(github).getByRole("heading", { name: "I have a joke about UDP, but you might not get it." })).toBeTruthy();
+  expect(CODING_JOKES).toContain(within(github).getByRole("heading", { level: 3 }).textContent);
   expect(within(github).getByRole("link", { name: "View GitHub Profile" }).closest(".github-heading")).not.toBeNull();
   expect(within(github).queryByText(/A year of building|From your public GitHub profile/)).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Open Connect, 4 items" }));
   expect(screen.getByRole("link", { name: "Email" }).getAttribute("href")).toBe("mailto:matthew.domingo2022@gmail.com");
   for (const anchor of screen.getAllByRole("link")) expect(anchor.getAttribute("target")).toBe("_blank");
+});
+
+test("clicking the GitHub card and headline each chooses a new joke, even with the same random value", () => {
+  const random = jest.spyOn(Math, "random").mockReturnValue(0);
+  try {
+    render(<PortfolioFolders />);
+    fireEvent.click(screen.getByRole("button", { name: "Open Projects, 5 items" }));
+    fireEvent.click(screen.getByRole("button", { name: "GitHub Projects" }));
+    const dialog = screen.getByRole("dialog", { name: "GitHub" });
+    const firstJoke = within(dialog).getByRole("heading", { level: 3 }).textContent!;
+    expect(firstJoke).not.toBe(CODING_JOKES[0]);
+    fireEvent.click(within(dialog).getByRole("button", { name: firstJoke }));
+    const secondJoke = within(dialog).getByRole("heading", { level: 3 }).textContent!;
+    expect(CODING_JOKES).toContain(secondJoke);
+    expect(secondJoke).not.toBe(firstJoke);
+  } finally {
+    random.mockRestore();
+  }
 });
 
 

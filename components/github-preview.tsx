@@ -7,7 +7,7 @@ import type { GitHubContributions } from "@/lib/github-contributions";
 
 const ContributionSkyline = dynamic(() => import("@/components/ui/contribution-skyline"), { ssr: false, loading: () => <p role="status">Building your skyline…</p> });
 
-export default function GitHubPreview() {
+export default function GitHubPreview({ joke, onShuffle }: { joke: string; onShuffle: () => void }) {
   const [calendar, setCalendar] = useState<GitHubContributions | null>(null);
   const [error, setError] = useState(false);
   const [attempt, setAttempt] = useState(0);
@@ -28,7 +28,7 @@ export default function GitHubPreview() {
     <div className="github-preview">
       <p className="project-eyebrow">@mattdomingo</p>
       <div className="github-heading">
-        <h3 className="github-intro">I have a joke about UDP, but you might not get it.</h3>
+        <h3 className="github-intro" aria-live="polite"><button type="button" className="github-joke" onClick={onShuffle} title="Click for another coding joke">{joke}</button></h3>
         <RepositoryLink href="https://github.com/mattdomingo" label="View GitHub Profile" />
       </div>
       {calendar ? <ContributionSkyline data={calendar.days} endDate={calendar.endDate} className="portfolio-skyline" /> : error ? (
