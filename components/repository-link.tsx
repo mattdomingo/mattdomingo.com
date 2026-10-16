@@ -3,9 +3,10 @@
 import { useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, useMotionValue } from "framer-motion";
-import { Github } from "lucide-react";
+import { Github, Globe } from "lucide-react";
 
-export default function RepositoryLink({ href, label = "View Repository" }: { href: string; label?: string }) {
+export default function RepositoryLink({ href, label = href.startsWith("https://github.com/") ? "View Repository" : "Visit Website" }: { href: string; label?: string }) {
+  const Icon = href.startsWith("https://github.com/") ? Github : Globe;
   const id = useId();
   const tooltipRef = useRef<HTMLSpanElement>(null);
   const [host, setHost] = useState<Element | null>(null);
@@ -43,7 +44,7 @@ export default function RepositoryLink({ href, label = "View Repository" }: { hr
         }}
         onBlur={() => setVisible(false)}
       >
-        <Github size={22} strokeWidth={1.7} aria-hidden="true" />
+        <Icon size={22} strokeWidth={1.7} aria-hidden="true" />
       </a>
       {visible && host && createPortal(
         <motion.span ref={tooltipRef} id={id} role="tooltip" className="repository-tooltip" style={{ x, y }}>{label}</motion.span>, host,

@@ -166,7 +166,7 @@ body:has(.resume-dialog[open]) {
   background: #121214;
 }
 
-.photo-document:not([data-zoomed]) img {
+.photo-document img {
   max-height: calc(100dvh - 6rem);
   object-fit: contain;
 }
@@ -3060,9 +3060,7 @@ body:has(.folder-home) {
 .project-summary { max-width: 42rem; font-size: 1rem; line-height: 1.7; color: var(--portfolio-muted); }
 .project-tags { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; padding: 0; margin: 1.25rem 0; }
 .project-tags li { border: 1px solid var(--portfolio-line); padding: .35rem .65rem; border-radius: 6px; font-size: .72rem; }
-.project-visit { color: inherit; display: inline-flex; align-items: center; gap: 1.25rem; border-bottom: 1px solid currentColor; padding: .4rem 0; margin-top: .5rem; font-size: .9rem; }
-.project-visit:focus-visible, .github-status button:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
-.project-visit:hover { opacity: .7; }
+.github-status button:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
 .project-figure { margin: 0; padding: 0 clamp(1.25rem, 4vw, 2.5rem) 1.5rem; }
 .project-figure img { display: block; width: 100%; height: auto; max-height: 24rem; object-fit: contain; border: 1px solid var(--portfolio-line); border-radius: 8px; background: #f5f5f4; }
 .project-caption { font-size: .68rem; color: var(--portfolio-muted); margin-top: .75rem; line-height: 1.5; }

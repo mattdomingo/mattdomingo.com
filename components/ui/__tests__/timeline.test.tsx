@@ -24,6 +24,9 @@ test("all dated résumé entries and supplied milestones remain readable in chro
   expect(within(timeline).getByRole("heading", { name: "Eagle Scout" })).toBeTruthy();
   expect(within(timeline).getByRole("heading", { name: "AMDG" })).toBeTruthy();
   expect(within(timeline).getByText(/Worked on Wasted/)).toBeTruthy();
+  expect(within(timeline).getByText(/2nd place at the Regional Illinois Science Fair/)).toBeTruthy();
+  expect(within(timeline).getByText(/Immaculate Conception Saint Joseph in Chicago/)).toBeTruthy();
+  expect(within(timeline).getByText(/Graduated from Saint Ignatius College Prep/)).toBeTruthy();
   expect(within(timeline).getByRole("img", { name: /Middle school graduation/ }).getAttribute("src")).toContain("middle-school");
   expect(within(timeline).getByRole("img", { name: /Wisconsin graduation/ }).getAttribute("src")).toContain("wisconsin");
   expect(within(timeline).getByRole("img", { name: /High school graduation/ }).getAttribute("src")).toContain("high-school");

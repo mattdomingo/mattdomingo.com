@@ -32,7 +32,7 @@ export default function Timeline() {
     <section ref={sectionRef} id="journey" className="journey-section" aria-labelledby="journey-title" style={{ height: reduceMotion ? "auto" : `calc(100svh + ${travel}px)` }}>
       <div ref={pinRef} className="journey-pin">
         <header className="journey-header">
-          <div><p className="journey-eyebrow">The journey</p><h2 id="journey-title">Always building.</h2></div>
+          <div><p className="journey-eyebrow">My Timeline</p><h2 id="journey-title">Always building.</h2></div>
           <p className="journey-range">2014 — 2026<span>Keep scrolling <span aria-hidden="true">→</span></span></p>
         </header>
         <motion.ol ref={trackRef} className="journey-track" style={{ x: reduceMotion ? 0 : x }} aria-label="Education and career timeline">

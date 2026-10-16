@@ -17,17 +17,16 @@ export default function HomePage() {
       <HalftoneWordmarkFooter
         wordmark="domingo"
         label="Matt Domingo"
-        meta="Software · AI · Film"
+        meta="Chicago · Madison · Denver"
         height="clamp(500px, 44vw, 620px)"
         columns={[
           { title: "Work", links: [
             { label: "GitHub", href: "https://github.com/mattdomingo" },
             { label: "openfloor", href: "https://opnflr.com" },
-            { label: "Wasted", href: "https://www.youtube.com/watch?v=DEc_Jk3I4J4" },
           ] },
           { title: "Connect", links: [
             { label: "LinkedIn", href: "https://linkedin.com/in/matthewgdomingo" },
-            { label: "Say wassup", href: "mailto:matthew.domingo2022@gmail.com" },
+            { label: "Email", href: "mailto:matthew.domingo2022@gmail.com" },
           ] },
           { title: "Elsewhere", links: [
             { label: "Instagram", href: "https://www.instagram.com/matt_domingo/" },

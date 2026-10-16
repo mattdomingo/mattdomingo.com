@@ -18,10 +18,10 @@ test.each([
   ["QuestGPT", "QuestGPT GitHub", "View Repository", "https://github.com/mattdomingo/QuestGPT"],
   ["Recall", "Recall GitHub", "View Repository", "https://github.com/mattdomingo/speedhacks"],
   ["Multiplayer AI", "Multiplayer AI Open source soon", "View Repository", "https://github.com/mattdomingo/openfloor"],
-  ["openfloor", "openfloor opnflr.com", "Visit openfloor", "https://opnflr.com"],
+  ["Physical AI", "Physical AI opnflr.com", "Visit Website", "https://opnflr.com"],
 ])("%s opens an in-page summary and image with a new-tab destination", (name, tile, link, url) => {
   render(<PortfolioFolders />);
-  fireEvent.click(screen.getByRole("button", { name: "Open Project, 5 items" }));
+  fireEvent.click(screen.getByRole("button", { name: "Open Projects, 5 items" }));
   fireEvent.click(screen.getByRole("button", { name: tile, exact: true }));
   const dialog = screen.getByRole("dialog", { name });
   expect(within(dialog).getByRole("heading", { level: 3 })).toBeTruthy();
@@ -29,15 +29,27 @@ test.each([
   const destination = within(dialog).getByRole("link", { name: new RegExp(link) });
   expect(destination.getAttribute("href")).toBe(url);
   expect(destination.getAttribute("target")).toBe("_blank");
+  expect(destination.closest(".project-tags")).not.toBeNull();
+});
+
+test("photo previews keep the fitted image and close control without a zoom button", () => {
+  render(<PortfolioFolders />);
+  fireEvent.click(screen.getByRole("button", { name: "Open Matt Domingo, 5 items" }));
+  fireEvent.click(screen.getByRole("button", { name: "Go Badgers", exact: true }));
+  const dialog = screen.getByRole("dialog", { name: "Go Badgers" });
+  expect(within(dialog).getByRole("img")).toBeTruthy();
+  expect(within(dialog).getByRole("button", { name: "Close photo" })).toBeTruthy();
+  expect(within(dialog).queryByRole("button", { name: /zoom/i })).toBeNull();
+  expect(within(dialog).getByRole("region", { name: "Photo preview" }).hasAttribute("data-zoomed")).toBe(false);
 });
 
 test("GitHub opens the skyline, and connect links open in a new tab with the revised email label", () => {
   render(<PortfolioFolders />);
-  fireEvent.click(screen.getByRole("button", { name: "Open Project, 5 items" }));
+  fireEvent.click(screen.getByRole("button", { name: "Open Projects, 5 items" }));
   fireEvent.click(screen.getByRole("button", { name: "GitHub Projects" }));
   expect(within(screen.getByRole("dialog", { name: "GitHub" })).getByText("Loading contributions from GitHub…")).toBeTruthy();
   fireEvent.click(screen.getByRole("button", { name: "Open Connect, 4 items" }));
-  expect(screen.getByRole("link", { name: "Email Say wassup" }).getAttribute("href")).toBe("mailto:matthew.domingo2022@gmail.com");
+  expect(screen.getByRole("link", { name: "Email" }).getAttribute("href")).toBe("mailto:matthew.domingo2022@gmail.com");
   for (const anchor of screen.getAllByRole("link")) expect(anchor.getAttribute("target")).toBe("_blank");
 });
 
@@ -55,7 +67,7 @@ test("folder tone reacts to changes in the system appearance", () => {
 test("an unavailable GitHub calendar offers retry without showing sample contributions", async () => {
   global.fetch = jest.fn().mockRejectedValueOnce(new Error("GitHub unavailable")).mockImplementation(() => new Promise(() => {})) as unknown as typeof fetch;
   render(<PortfolioFolders />);
-  fireEvent.click(screen.getByRole("button", { name: "Open Project, 5 items" }));
+  fireEvent.click(screen.getByRole("button", { name: "Open Projects, 5 items" }));
   fireEvent.click(screen.getByRole("button", { name: "GitHub Projects" }));
   expect(await screen.findByRole("alert")).toBeTruthy();
   expect(screen.queryByRole("img")).toBeNull();
@@ -69,7 +81,7 @@ test("preview flight begins at the selected card and restores it when unmounted"
     return { x: 140, y: 250, left: 140, top: 250, right: 412, bottom: 434, width: 272, height: 184, toJSON: () => ({}) };
   });
   const { container, unmount } = render(<PortfolioFolders />);
-  fireEvent.click(screen.getByRole("button", { name: "Open Project, 5 items" }));
+  fireEvent.click(screen.getByRole("button", { name: "Open Projects, 5 items" }));
   const card = screen.getByRole("button", { name: "QuestGPT GitHub" });
   fireEvent.click(card);
   expect(card.hasAttribute("data-preview-source")).toBe(true);
@@ -85,7 +97,7 @@ test("preview flight begins at the selected card and restores it when unmounted"
 test("repository icon shares the tags row and dismissing a preview starts its return to the source", () => {
   const bounds = jest.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ x: 100, y: 100, left: 100, top: 100, right: 372, bottom: 284, width: 272, height: 184, toJSON: () => ({}) });
   const { container, unmount } = render(<PortfolioFolders />);
-  fireEvent.click(screen.getByRole("button", { name: "Open Project, 5 items" }));
+  fireEvent.click(screen.getByRole("button", { name: "Open Projects, 5 items" }));
   fireEvent.click(screen.getByRole("button", { name: "QuestGPT GitHub" }));
   const repository = screen.getByRole("link", { name: "View Repository" });
   expect(repository.closest(".project-tags")).not.toBeNull();
@@ -99,7 +111,7 @@ test("repository icon shares the tags row and dismissing a preview starts its re
 test("return animates transforms without resizing the card and releases its landing lock on interaction", () => {
   const bounds = jest.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ x: 100, y: 100, left: 100, top: 100, right: 372, bottom: 284, width: 272, height: 184, toJSON: () => ({}) });
   const { container, unmount } = render(<PortfolioFolders />);
-  fireEvent.click(screen.getByRole("button", { name: "Open Project, 5 items" }));
+  fireEvent.click(screen.getByRole("button", { name: "Open Projects, 5 items" }));
   const source = screen.getByRole("button", { name: "QuestGPT GitHub" });
   fireEvent.click(source);
   fireEvent.click(screen.getByRole("button", { name: "Close project" }));

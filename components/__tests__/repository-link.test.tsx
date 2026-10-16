@@ -4,13 +4,18 @@ import RepositoryLink from "@/components/repository-link";
 
 beforeEach(() => { window.PointerEvent = MouseEvent as unknown as typeof PointerEvent; });
 
-test("repository button has an accessible name and tracks the cursor without intercepting it", async () => {
-  render(<dialog open><RepositoryLink href="https://github.com/mattdomingo/QuestGPT" /></dialog>);
-  const link = screen.getByRole("link", { name: "View Repository" });
+test.each([
+  ["https://github.com/mattdomingo/QuestGPT", "View Repository", ".lucide-github"],
+  ["https://opnflr.com", "Visit Website", ".lucide-globe"],
+])("%s has the matching icon and tracks the cursor without intercepting it", async (href, label, icon) => {
+  render(<dialog open><RepositoryLink href={href} /></dialog>);
+  const link = screen.getByRole("link", { name: label });
+  expect(link.querySelector(icon)).not.toBeNull();
   expect(link.textContent).toBe("");
   expect(link.getAttribute("target")).toBe("_blank");
   fireEvent.pointerEnter(link, { clientX: 100, clientY: 100 });
   const tip = screen.getByRole("tooltip");
+  expect(tip.textContent).toBe(label);
   expect(tip.closest("dialog")).not.toBeNull();
   expect(tip.getAttribute("style")).toContain("114px");
   fireEvent.pointerMove(link, { clientX: 150, clientY: 180 });
