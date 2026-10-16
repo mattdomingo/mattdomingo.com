@@ -45,6 +45,26 @@ test("interacting with a dialog leaves the folder open so its file can regain fo
   expect(toggle).toHaveAttribute("aria-expanded", "false");
 });
 
+test("all six files remain available, including the oldest file", () => {
+  const select = jest.fn();
+  render(
+    <GlassFolder
+      label="Photos"
+      appear={false}
+      art="none"
+      action="none"
+      defaultOpen
+      onFileSelect={select}
+      files={Array.from({ length: 6 }, (_, i) => ({ name: `Photo ${i + 1}`, image: `/photo-${i}.webp` }))}
+    />,
+  );
+  expect(screen.getAllByRole("listitem")).toHaveLength(6);
+  fireEvent.click(screen.getByRole("button", { name: "Photo 1" }));
+  expect(select).toHaveBeenLastCalledWith(expect.objectContaining({ name: "Photo 1" }), 0);
+  fireEvent.click(screen.getByRole("button", { name: "Photo 6" }));
+  expect(select).toHaveBeenLastCalledWith(expect.objectContaining({ name: "Photo 6" }), 5);
+});
+
 test("folder art finishes as opaque, repeatable pixels", () => {
   const draw = () => {
     const job = createArtJob(24, 20, ART_PRESETS.aurora, 3);

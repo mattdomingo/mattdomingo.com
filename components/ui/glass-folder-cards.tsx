@@ -519,7 +519,7 @@ const FRONT_PATH =
   (FRONT_H - 22) +
   "Z"
 
-const MAX_VISIBLE = 4
+const MAX_VISIBLE = 6
 
 const SAMPLE_FILES: FolderFile[] = [
   { name: "Cover — final", meta: "PNG · 4.8 MB", art: "ember" },

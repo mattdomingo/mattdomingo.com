@@ -46,8 +46,10 @@ body:has(.folder-home) {
   transform: translateY(-27px);
 }
 
-.resume-folder .gf-sheet-art {
-  object-position: top;
+.personal-folder .gf-sheet-art {
+  object-fit: contain;
+  object-position: center;
+  background: #202023;
 }
 
 body:has(.resume-dialog[open]) {
@@ -159,6 +161,15 @@ body:has(.resume-dialog[open]) {
 .resume-document[data-zoomed] img {
   width: max(100%, 68rem);
   max-width: none;
+}
+
+.photo-document {
+  background: #121214;
+}
+
+.photo-document:not([data-zoomed]) img {
+  max-height: calc(100dvh - 6rem);
+  object-fit: contain;
 }
 
 @media (max-width: 1199px) {
