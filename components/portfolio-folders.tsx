@@ -8,12 +8,12 @@ import GlassFolder, { type FolderFile } from "@/components/ui/glass-folder-cards
 type PreviewFile = FolderFile & { image: string; width: number; height: number };
 
 const PERSONAL_FILES: PreviewFile[] = [
-  { name: "Résumé.pdf", meta: "PDF", image: "/documents/resume-preview.webp", width: 1360, height: 1760 },
-  { name: "Go Badgers", image: "/photos/img_3219.webp", width: 1350, height: 1800 },
-  { name: "Holos", image: "/photos/img_5819.webp", width: 1350, height: 1800 },
-  { name: "Trustage SWE Internship", image: "/photos/internship.webp", width: 1800, height: 961 },
-  { name: "Mountains", image: "/photos/img_8427.webp", width: 1350, height: 1800 },
   { name: "Apple Vision Pro Enthusiast", image: "/photos/img_4991.webp", width: 1350, height: 1800 },
+  { name: "Mountains", image: "/photos/img_8427.webp", width: 1350, height: 1800 },
+  { name: "Trustage SWE Internship", image: "/photos/internship.webp", width: 1800, height: 961 },
+  { name: "Holos", image: "/photos/img_5819.webp", width: 1350, height: 1800 },
+  { name: "Go Badgers", image: "/photos/img_3219.webp", width: 1350, height: 1800 },
+  { name: "Résumé.pdf", meta: "PDF", image: "/documents/resume-preview.webp", width: 1360, height: 1760 },
 ];
 
 export default function PortfolioFolders() {
@@ -36,37 +36,37 @@ export default function PortfolioFolders() {
             dialogRef.current?.showModal();
             setPreviewOpen(true);
           }}
-          tone="dark"
-          art="none"
+          tone="light"
+          art="aurora"
           action="none"
           files={PERSONAL_FILES}
         />
         <GlassFolder
           label="Project"
           className="project-folder"
-          tone="dark"
-          art="none"
+          tone="light"
+          art="aurora"
           action="none"
           appearDelay={140}
           files={[
-            { name: "GitHub", meta: "Projects", image: "/previews/github.svg", href: "https://github.com/mattdomingo" },
-            { name: "openfloor", meta: "opnflr.com", image: "/previews/openfloor.svg", href: "https://opnflr.com" },
-            { name: "Multiplayer AI", meta: "Open source soon", image: "/previews/multiplayer-ai.svg", href: "https://github.com/mattdomingo/openfloor" },
-            { name: "Recall", meta: "GitHub", image: "/previews/recall.svg", href: "https://github.com/mattdomingo/speedhacks" },
             { name: "QuestGPT", meta: "GitHub", image: "/projects/questgpt.png", href: "https://github.com/mattdomingo/QuestGPT" },
+            { name: "Recall", meta: "GitHub", image: "/previews/recall.svg", href: "https://github.com/mattdomingo/speedhacks" },
+            { name: "Multiplayer AI", meta: "Open source soon", image: "/previews/multiplayer-ai.svg", href: "https://github.com/mattdomingo/openfloor" },
+            { name: "openfloor", meta: "opnflr.com", image: "/previews/openfloor.svg", href: "https://opnflr.com" },
+            { name: "GitHub", meta: "Projects", image: "/previews/github.svg", href: "https://github.com/mattdomingo" },
           ]}
         />
         <GlassFolder
           label="Connect"
-          tone="dark"
-          art="none"
+          tone="light"
+          art="aurora"
           action="none"
           appearDelay={280}
           files={[
-            { name: "LinkedIn", meta: "Connect", image: "/previews/linkedin.svg", href: "https://linkedin.com/in/matthewgdomingo" },
-            { name: "Email", meta: "Say hello", image: "/previews/email.svg", href: "mailto:matthew.domingo2022@gmail.com" },
             { name: "Instagram", meta: "@matt_domingo", image: "/previews/instagram.svg", href: "https://www.instagram.com/matt_domingo/" },
             { name: "X", meta: "@opnflr_cto", image: "/previews/x.svg", href: "https://x.com/opnflr_cto" },
+            { name: "Email", meta: "Say hello", image: "/previews/email.svg", href: "mailto:matthew.domingo2022@gmail.com" },
+            { name: "LinkedIn", meta: "Connect", image: "/previews/linkedin.svg", href: "https://linkedin.com/in/matthewgdomingo" },
           ]}
         />
       </div>
