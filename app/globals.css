@@ -3169,9 +3169,6 @@ body:has(.folder-home) {
 @media (max-width: 480px) {
   .portfolio-name { --portfolio-name-size: clamp(1.65rem, 7.8vw, 2rem); }
 }
-.sound-toggle { position: absolute; top: clamp(1rem, 3svh, 2.5rem); right: clamp(1rem, 3vw, 2rem); z-index: 6; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--portfolio-line); border-radius: 50%; color: var(--portfolio-ink); background: color-mix(in srgb, var(--portfolio-paper) 85%, transparent); backdrop-filter: blur(10px); opacity: 0; pointer-events: none; cursor: pointer; transition: opacity .3s ease; }
-.sound-toggle[data-ready] { opacity: 1; pointer-events: auto; }
-.sound-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 .liquid-text { position: relative; width: min(90vw, 60rem); height: 1.2em; text-align: center; font-size: clamp(2.7rem, 8vw, 6.5rem); font-weight: 600; line-height: 1.1; letter-spacing: -.065em; }
 .liquid-text > span { position: absolute; inset: 0; display: block; width: 100%; opacity: 0; white-space: nowrap; }
 .liquid-text-filters { position: absolute; pointer-events: none; }
@@ -3282,3 +3279,36 @@ html:has(.folder-home) { scrollbar-gutter: stable; }
 .resume-dialog[data-returning] .resume-toolbar,
 .resume-dialog[data-returning] .project-document,
 .resume-dialog[data-returning] .resume-document { opacity: 0; transition: opacity .12s ease-out; }
+
+/* Reserve the first screen for all three folders, including phone browser chrome. */
+@media (max-width: 1199px), (max-height: 600px) {
+  .folder-home {
+    box-sizing: border-box;
+    overflow-anchor: none;
+    height: 100svh;
+    grid-template-rows: minmax(0, 1fr);
+    padding: clamp(5rem, 12svh, 6.5rem) 1rem 4rem;
+  }
+  .portfolio-folders {
+    --folder-columns: 1;
+    height: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    align-items: center;
+  }
+  .portfolio-folders > .gf-root { transform: none; }
+  .portfolio-folders > .gf-root:last-child { grid-column: auto; }
+  .portfolio-folders .gf-label { max-width: calc(100% - 56px); }
+  .portfolio-folders .gf-title { font-size: max(18px, calc(14px / var(--folder-scale))); }
+  .portfolio-folders .gf-meta { font-size: max(12px, calc(10px / var(--folder-scale))); }
+  .journey-scroll-hint { bottom: 1rem; }
+}
+@media (max-width: 1199px) and (orientation: landscape), (max-height: 600px) and (orientation: landscape) {
+  .folder-home { padding-top: clamp(6.5rem, 32svh, 8rem); padding-bottom: clamp(2.75rem, 14svh, 3.5rem); }
+  .portfolio-folders { --folder-columns: 3; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); }
+}
+@media (max-width: 600px), (max-height: 500px) {
+  .portfolio-folders .gf-sheet-name { font-size: max(12.5px, calc(12px / var(--folder-scale))); }
+  .portfolio-folders .gf-sheet-meta { display: none; }
+}

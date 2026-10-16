@@ -86,6 +86,11 @@ test("folder tone reacts to changes in the system appearance", () => {
   expect(container.querySelector(".gf-root")?.getAttribute("data-tone")).toBe("light");
 });
 
+test("sound is automatic and the old mute control is absent", () => {
+  render(<PortfolioFolders />);
+  expect(screen.queryByRole("switch", { name: "Sound effects" })).toBeNull();
+});
+
 
 test("an unavailable GitHub calendar offers retry without showing sample contributions", async () => {
   global.fetch = jest.fn().mockRejectedValueOnce(new Error("GitHub unavailable")).mockImplementation(() => new Promise(() => {})) as unknown as typeof fetch;

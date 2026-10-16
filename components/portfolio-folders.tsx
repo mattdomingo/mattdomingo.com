@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import { Volume2, VolumeX } from "lucide-react";
 import { cardReturnTransform, createCardReturn, type CardBounds } from "@/lib/card-motion";
 import { getRandomCodingJoke } from "@/lib/coding-jokes";
+import { fitFolderWidth } from "@/lib/folder-layout";
 import { usePortfolioAudio } from "@/hooks/use-portfolio-audio";
 import GlassFolder, { type FolderFile } from "@/components/ui/glass-folder-cards";
 
@@ -60,6 +60,20 @@ const RETURN_EASE = [.4, 0, .2, 1] as const;
 
 export default function PortfolioFolders() {
   const sound = usePortfolioAudio();
+  const foldersRef = useRef<HTMLDivElement>(null);
+  const [folderWidth, setFolderWidth] = useState(340);
+  useEffect(() => {
+    const element = foldersRef.current;
+    if (!element || typeof ResizeObserver === "undefined") return;
+    const resize = () => {
+      const style = getComputedStyle(element);
+      setFolderWidth(fitFolderWidth(element.clientWidth, element.clientHeight, Number(style.getPropertyValue("--folder-columns")), parseFloat(style.columnGap) || 0));
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(element);
+    resize();
+    return () => observer.disconnect();
+  }, []);
   const darkMode = useSyncExternalStore(subscribeTheme, getDarkMode, () => false);
   const tone = darkMode ? "dark" : "light";
   const clearRestoration = useRef<() => void>(() => {});
@@ -150,21 +164,9 @@ export default function PortfolioFolders() {
   return (
     <>
       <PortfolioIntro onComplete={finishIntro} />
-      <button
-        type="button"
-        role="switch"
-        className="sound-toggle"
-        data-ready={introComplete || undefined}
-        aria-label="Sound effects"
-        aria-checked={sound.enabled}
-        title={sound.enabled ? "Mute sounds" : "Enable sounds"}
-        disabled={!introComplete}
-        onClick={sound.toggle}
-      >
-        {sound.enabled ? <Volume2 size={18} aria-hidden="true" /> : <VolumeX size={18} aria-hidden="true" />}
-      </button>
-      <div className="portfolio-folders" data-intro-complete={introComplete || undefined} inert={!introComplete}>
+      <div ref={foldersRef} className="portfolio-folders" style={{ "--folder-scale": folderWidth / 340 } as CSSProperties} data-intro-complete={introComplete || undefined} inert={!introComplete}>
         <GlassFolder
+          width={folderWidth}
           label="Matt Domingo"
           onOpenChange={(open) => sound.play(open ? "folder-open" : "folder-close")}
           className="personal-folder"
@@ -175,6 +177,7 @@ export default function PortfolioFolders() {
           files={PERSONAL_FILES}
         />
         <GlassFolder
+          width={folderWidth}
           label="Projects"
           onOpenChange={(open) => sound.play(open ? "folder-open" : "folder-close")}
           className="project-folder"
@@ -186,6 +189,7 @@ export default function PortfolioFolders() {
           files={PROJECT_FILES}
         />
         <GlassFolder
+          width={folderWidth}
           label="Connect"
           onOpenChange={(open) => sound.play(open ? "folder-open" : "folder-close")}
           onFileSelect={() => sound.play("card-open")}
