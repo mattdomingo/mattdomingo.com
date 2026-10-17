@@ -34,7 +34,7 @@ export default function PortfolioIntro({ onComplete }: { onComplete: () => void 
       }}
     >
       <h1 className={complete ? "portfolio-name-heading" : "portfolio-name-label"}>
-        {complete ? <VariableProximity text="Matt Domingo" /> : "Matt Domingo"}
+        {complete ? <VariableProximity text="Matt Domingo" fromWeight={380} toWeight={560} /> : "Matt Domingo"}
       </h1>
       {!complete && <div aria-hidden="true"><MorphingText texts={INTRO_TEXTS} onComplete={finishText} /></div>}
     </header>
